@@ -1,0 +1,39 @@
+.container {
+    display: flex;
+    justify-content: center; /* Center the main content horizontally */
+}
+
+.hero-body {
+    flex: 1; /* Take remaining height of hero section */
+}
+
+.main-content {
+    flex: 2; /* Adjust flex value to occupy more space */
+    padding-right: 20px;
+}
+
+.sidebar {
+    flex: 1; /* Adjust flex value to define width of sidebar */
+    padding-left: 20px; /* Add spacing for content within sidebar */
+}
+
+.category {
+    background-color: #f4f4f4;
+    padding: 10px;
+    margin-top: 20px; /* Add margin to separate from main content */
+}
+
+.category h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category li {
+    margin-bottom: 5px;
+}
