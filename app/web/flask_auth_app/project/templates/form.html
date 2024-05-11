@@ -5,12 +5,12 @@
   Welcome, fill in the form {{ name }}!
 </h1>
 
-<form action="/submit" method="post">
+<form action="{{ url_for('convertor.submit_form') }}" method="post">
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title" required><br><br>
     
-    <label for="image">Image:</label><br>
-    <input type="text" id="image" name="image"><br><br>
+    <label for="image_url">Image URL:</label><br>
+    <input type="text" id="image_url" name="image_url"><br><br>
     
     <label for="imageAttribution">Image Attribution:</label><br>
     <input type="text" id="imageAttribution" name="imageAttribution"><br><br>
