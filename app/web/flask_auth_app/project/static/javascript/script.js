@@ -1,10 +1,10 @@
 // script.js
 
 // Import the populateCategoryList function from category.js
-import { populateCategoryList } from './components/category.js';
+//import { populateCategoryList } from './components/category.js';
 
 // Call the function to populate category list
-populateCategoryList();
+//populateCategoryList();
 
 // Fetch JSON data from the server and display markdown content (without category)
 fetch('markdown_output.json') // Adjusted path to include the root directory
