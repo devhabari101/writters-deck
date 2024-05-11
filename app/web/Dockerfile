@@ -1,6 +1,9 @@
 # Use a minimal Ubuntu base image
 FROM ubuntu:latest
 
+# Set the working directory
+WORKDIR /web
+
 # Set noninteractive mode to prevent prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -35,12 +38,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libffi-dev \
     openssh-server \
     unzip \
-    liblzma-dev
+    liblzma-dev 
+    
+    
 
 # Set up SSH
-RUN mkdir -p /var/run/sshd && chmod 755 /var/run/sshd \
-    && [ ! -d "/root/.ssh" ] && mkdir /root/.ssh && chown root. /root/.ssh && chmod 700 /root/.ssh \
-    && ssh-keygen -A \
+RUN mkdir /var/run/sshd && chmod 755 /var/run/sshd \
+    #&& mkdir /root/.ssh && chown root. /root/.ssh && chmod 700 /root/.ssh \
+   # && ssh-keygen -A \
     && echo 'root:test' | chpasswd \
     && echo "PermitRootLogin yes" >> /etc/ssh/sshd_config \
     && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
@@ -52,21 +57,22 @@ RUN mkdir -p /var/run/sshd && chmod 755 /var/run/sshd \
     && echo "X11UseLocalhost no" >> /etc/ssh/sshd_config \
     && echo "LD_LIBRARY_PATH=/usr/lib64-nvidia" >> /root/.bashrc \
     && echo "export LD_LIBRARY_PATH" >> /root/.bashrc
+      
 
 # Install pyenv
 ENV PYENV_ROOT /opt/pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN curl https://pyenv.run | bash \
-    && echo 'eval "$(pyenv init --path)"' >> /root/.bashrc
+    && echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
 
 # Install Python 3.10 and set it as the default version
 RUN pyenv install 3.10.0 \
-    && pyenv global 3.10.0
-
+    && pyenv global 3.10.0 
+    
 # Use nvm to install Node.js version 18
 # Install nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
-    && export NVM_DIR="/root/.nvm" \
+    && export NVM_DIR="$HOME/.nvm" \
     && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
     && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
     && nvm install 18 \
@@ -83,6 +89,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     # Install rtlcss
     && npm install -g rtlcss
 
+
 # Copy the supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -93,5 +100,8 @@ COPY entrypoint.sh /web/entrypoint.sh
 RUN chmod 755 /web \
     && chmod +x /web/entrypoint.sh
 
-# Set the default command to run when the container starts
+# Copy the rest of your application code
+COPY . /web/
+
+# Set the entrypoint script as the default command to run when the container starts
 CMD ["/web/entrypoint.sh"]
