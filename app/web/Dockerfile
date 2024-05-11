@@ -44,8 +44,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Set up SSH
 RUN mkdir /var/run/sshd && chmod 755 /var/run/sshd \
-    #&& mkdir /root/.ssh && chown root. /root/.ssh && chmod 700 /root/.ssh \
-   # && ssh-keygen -A \
     && echo 'root:test' | chpasswd \
     && echo "PermitRootLogin yes" >> /etc/ssh/sshd_config \
     && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
