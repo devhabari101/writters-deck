@@ -92,7 +92,7 @@ def submit_form():
         "topPick": request.form.get("topPick"),
         "popular": request.form.get("popular"),
         "link": request.form.get("link"),
-        "content": request.form.get("content")
+        "content": request.form.get("content"),
         "metadata": {
             "title": request.form.get("title"),
             "category": request.form.get("category"),
