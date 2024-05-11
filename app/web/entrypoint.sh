@@ -7,8 +7,8 @@ set -e
 if ! command -v cmake &> /dev/null; then
     apt-get update
     apt-get install -y --no-install-recommends wget gnupg
-    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc | apt-key add -
-    apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
+    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc | sudo apt-key add -
+    sudo apt-add-repository "deb https://apt.kitware.com/ubuntu/ $UBUNTU_CODENAME main"
     apt-get update
     apt-get install -y cmake
 fi
