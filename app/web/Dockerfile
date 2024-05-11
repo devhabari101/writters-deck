@@ -51,7 +51,7 @@ RUN mkdir /var/run/sshd && chmod 755 /var/run/sshd \
     && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
     && echo "ServerAliveInterval 60" >> /etc/ssh/ssh_config \
     && echo "ServerAliveCountMax 120" >> /etc/ssh/ssh_config \
-    && echo "Port 2222" >> /etc/ssh/sshd_config \
+    && echo "Port 6000" >> /etc/ssh/sshd_config \
     && echo "X11Forwarding yes" >> /etc/ssh/sshd_config \
     && echo "X11DisplayOffset 10" >> /etc/ssh/sshd_config \
     && echo "X11UseLocalhost no" >> /etc/ssh/sshd_config \
