@@ -21,16 +21,19 @@ def save_to_markdown(data, user_id):
     filename = os.path.join(markdown_dir, f"{data['title']}.md")
     # Write form data to Markdown file
     with open(filename, "w") as file:
-        file.write("---\n")
+        file.write(f"---\n")
+        file.write(f"title: {data['title']}\n")
+        file.write(f"image_url: {data['image_url']}\n")  # Include image URL field
+        file.write(f"imageAttribution: {data['imageAttribution']}\n")
+        file.write(f"date: {data['date']}\n")
+        file.write(f"category: {data['category']}\n")
+        file.write(f"trending: {data['trending']}\n")
+        file.write(f"topPick: {data['topPick']}\n")
+        file.write(f"popular: {data['popular']}\n")
+        file.write(f"link: {data['link']}\n")
+        file.write(f"body: {data['body']}\n")
         file.write(f"user_id: {user_id}\n")
-        file.write(f"title: {data['metadata']['title']}\n")
-        file.write(f"category: {data['metadata']['category']}\n")
-        file.write(f"date: {data['metadata']['date']}\n")
-        file.write(f"trending: {data['metadata']['trending']}\n")
-        file.write(f"topPick: {data['metadata']['topPick']}\n")
-        file.write(f"popular: {data['metadata']['popular']}\n")
-        file.write(f"link: {data['metadata']['link']}\n")
-        file.write("---\n\n{data['content']}")
+        file.write(f"---\n\n{data['content']}")
     print(f"Markdown file saved: {filename}")
 
 # Function to convert Markdown to HTML and update JSON file
@@ -82,30 +85,49 @@ def form_admin():
 @convertor_blueprint.route("/submit", methods=["POST"])
 @login_required
 def submit_form():
-    form_data = {
-        "title": request.form.get("title"),
-        "Image": request.form.get("Image"),
-        "imageAttribution": request.form.get("imageAttribution"),
-        "category": request.form.get("category"),
-        "date": request.form.get("date"),
-        "trending": request.form.get("trending"),
-        "topPick": request.form.get("topPick"),
-        "popular": request.form.get("popular"),
-        "link": request.form.get("link"),
-        "content": request.form.get("content"),
-        "metadata": {
-            "title": request.form.get("title"),
-            "category": request.form.get("category"),
-            "date": request.form.get("date"),
-            "trending": request.form.get("trending"),
-            "topPick": request.form.get("topPick"),
-            "popular": request.form.get("popular"),
-            "link": request.form.get("link")
-        }
-    }
+    # Get the title, category, content, and metadata from the form
+    title = request.form.get("title")
+    image_url = request.form.get("image_url", "")  # Initialize with empty string if not provided
+    imageAttribution = request.form.get("imageAttribution", "")  # Initialize with empty string if not provided
+    date = request.form.get("date")
+    category = request.form.get("category")
+    content = request.form.get("content")
+    
+    # Get additional metadata fields from the form
+    trending = request.form.get("trending")
+    top_pick = request.form.get("topPick")
+    popular = request.form.get("popular")
+    link = request.form.get("link")
+    body = request.form.get("body", "")  # Initialize with empty string if not provided
     user_id = current_user.id
-    save_to_markdown(form_data, user_id)
+    
+    # Construct the form data dictionary including all fields
+    form_data = {
+        "title": title,
+        "image_url": image_url,
+        "imageAttribution": imageAttribution,
+        "date": date,
+        "category": category,
+        "content": content,
+        "trending": trending,
+        "topPick": top_pick,
+        "popular": popular,
+        "link": link,
+        "body": body,
+        "user_id": user_id
+    }
+
+    # Save the form data to Markdown file
+    try:
+        save_to_markdown(form_data, user_id)
+    except Exception as e:
+        # Handle file save error gracefully
+        print(f"Error saving Markdown file: {e}")
+        return "An error occurred while saving the form data.", 500
+    
+    # Redirect to the index page
     return redirect(url_for("main.index"))
+
 
 @convertor_blueprint.route('/markdown_output.json')
 def get_markdown_output():
