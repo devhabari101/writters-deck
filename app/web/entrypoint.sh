@@ -8,7 +8,7 @@ if ! command -v cmake &> /dev/null; then
     apt-get update
     apt-get install -y --no-install-recommends wget gnupg
     wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc | apt-key add -
-    apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
+    apt-add-repository "https://apt.kitware.com/ubuntu/focal main"
     apt-get update
     apt-get install -y cmake
 fi
