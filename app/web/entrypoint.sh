@@ -8,7 +8,7 @@ if ! command -v cmake &> /dev/null; then
     apt-get update
     apt-get install -y --no-install-recommends wget gnupg
     wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc | apt-key add -
-    apt-add-repository https://apt.kitware.com/ubuntu/ jammy main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null
+    apt-add-repository "https://apt.kitware.com/ubuntu/ jammy main" | tee /etc/apt/sources.list.d/kitware.list >/dev/null
     apt-get update
     apt-get install -y cmake
 fi
