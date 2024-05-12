@@ -1,12 +1,5 @@
-// script.js
 
-// Import the populateCategoryList function from category.js
-//import { populateCategoryList } from './components/category.js';
-
-// Call the function to populate category list
-//populateCategoryList();
-
-// Fetch JSON data from the server and display markdown content (without category)
+// Fetch JSON data from the server and render markdown content
 fetch('markdown_output.json') // Adjusted path to include the root directory
     .then(response => response.json())
     .then(data => {
@@ -15,42 +8,45 @@ fetch('markdown_output.json') // Adjusted path to include the root directory
 
         // Iterate over each item in the JSON data
         data.forEach(item => {
-            // Create elements for title and content
+            // Create elements for each field
             const titleElement = document.createElement('h2');
+            const imageElement = document.createElement('img');
+            const attributionElement = document.createElement('div');
+             const dateElement = document.createElement('h2');
+            const categoryElement = document.createElement('div');
             const contentElement = document.createElement('div');
+            const trendingElement = document.createElement('div');
+            const topPickElement = document.createElement('div');
+            const popularElement = document.createElement('div');
+            const linkElement = document.createElement('a');
+            const bodyElement = document.createElement('div');
 
-            // Set title text
+            // Set values for each field
             titleElement.textContent = item.metadata.title;
+            imageElement.src = item.metadata.image_url;
+            attributionElement.textContent = `Image Attribution: ${item.metadata.imageAttribution}`;
+            dateElement.textContent = `date: ${item.metadata.date}`;
+            categoryElement.textContent = `Category: ${item.metadata.category}`;
+            contentElement.innerHTML = item.metadata.content;
+            trendingElement.textContent = `Trending: ${item.metadata.trending}`;
+            topPickElement.textContent = `Top Pick: ${item.metadata.topPick}`;
+            popularElement.textContent = `Popular: ${item.metadata.popular}`;
+            linkElement.href = item.metadata.link;
+            linkElement.textContent = 'Link';
+            bodyElement.textContent = item.metadata.body;
 
-            // Create metadata information and append to the content
-            const metadataInfo = document.createElement('ul');
-            metadataInfo.innerHTML = `
-                <li><strong>Date:</strong> ${item.metadata.date}</li>
-                <li><strong>Category:</strong> ${item.metadata.category}</li>
-                <li><strong>Trending:</strong> ${item.metadata.trending}</li>
-                <li><strong>Top Pick:</strong> ${item.metadata.topPick}</li>
-                <li><strong>Popular:</strong> ${item.metadata.popular}</li>
-                <li><strong>Link:</strong> ${item.metadata.link}</li>
-            `;
-            markdownContentDiv.appendChild(metadataInfo);
-
-            // Create image element if image metadata is available
-            if (item.metadata.image) {
-                const imageElement = document.createElement('img');
-                imageElement.src = item.metadata.image;
-                if (item.metadata.imageAttribution) {
-                    imageElement.setAttribute('alt', item.metadata.title);
-                    imageElement.setAttribute('title', item.metadata.imageAttribution);
-                }
-                markdownContentDiv.appendChild(imageElement);
-            }
-
-            // Set content HTML
-            contentElement.innerHTML = item.content;
-
-            // Append title and content to the markdownContentDiv
+            // Append elements to the markdownContentDiv
             markdownContentDiv.appendChild(titleElement);
+            markdownContentDiv.appendChild(imageElement);
+            markdownContentDiv.appendChild(attributionElement);
+            markdownContentDiv.appendChild(dateElement);
+            markdownContentDiv.appendChild(categoryElement);
             markdownContentDiv.appendChild(contentElement);
+            markdownContentDiv.appendChild(trendingElement);
+            markdownContentDiv.appendChild(topPickElement);
+            markdownContentDiv.appendChild(popularElement);
+            markdownContentDiv.appendChild(linkElement);
+            markdownContentDiv.appendChild(bodyElement);
         });
     })
     .catch(error => console.error('Error fetching JSON:', error));
