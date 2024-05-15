@@ -14,7 +14,7 @@ fetch('markdown_output.json')
         data.forEach(item => {
             // Create article element for each item
             const articleElement = document.createElement('article');
-            articleElement.className = 'card card-bg card-shadow recent-article-mb';
+            articleElement.className = 'card'; // Using Bulma card class
 
             // Create elements for each field
             const titleElement = document.createElement('h2');
