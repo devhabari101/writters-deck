@@ -7,6 +7,9 @@ fetch('markdown_output.json')
         // Get the div element to display the markdown content
         const markdownContentDiv = document.getElementById('markdown-content');
 
+        // Create a new instance of Showdown converter
+        const converter = new showdown.Converter();
+
         // Iterate over each item in the JSON data
         data.forEach(item => {
             // Create elements for each field
@@ -35,8 +38,9 @@ fetch('markdown_output.json')
             linkElement.textContent = 'Link';
             bodyElement.textContent = item.metadata.body;
 
-            // Convert Markdown content to HTML using marked.js
-            contentElement.innerHTML = marked(item.content);
+            // Convert Markdown content to HTML using showdown.js
+            const htmlContent = converter.makeHtml(item.content);
+            contentElement.innerHTML = htmlContent;
 
             // Append elements to the markdownContentDiv
             markdownContentDiv.appendChild(titleElement);
