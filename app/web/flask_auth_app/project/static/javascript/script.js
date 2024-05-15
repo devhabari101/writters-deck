@@ -4,6 +4,8 @@ import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
 fetch('markdown_output.json')
     .then(response => response.json())
     .then(data => {
+        console.log('Fetched data:', data); // Debugging: Log fetched data
+
         // Get the div element to display the markdown content
         const markdownContentDiv = document.getElementById('markdown-content');
 
