@@ -1,5 +1,3 @@
-import marked from 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
-
 // Fetch JSON data from the server and render markdown content
 fetch('markdown_output.json')
     .then(response => response.json())
