@@ -37,8 +37,8 @@ fetch('markdown_output.json')
             linkElement.textContent = 'Link';
 
             // Set width and height of the image
-            imageElement.width = 1400;
-            imageElement.height = 980;
+        //    imageElement.width = 1400;
+      //      imageElement.height = 980;
 
             // Convert Markdown content to HTML using showdown.js
             const htmlContent = converter.makeHtml(item.content);
