@@ -12,6 +12,10 @@ fetch('markdown_output.json')
 
         // Iterate over each item in the JSON data
         data.forEach(item => {
+            // Create article element for each item
+            const articleElement = document.createElement('article');
+            articleElement.className = 'card card-bg card-shadow recent-article-mb';
+
             // Create elements for each field
             const titleElement = document.createElement('h2');
             const imageElement = document.createElement('img');
@@ -29,7 +33,7 @@ fetch('markdown_output.json')
             imageElement.src = item.metadata.image_url;
             imageElement.classList.add('image', 'is-16by9'); // Add Bulma classes for image aspect ratio
             attributionElement.textContent = `Image Attribution: ${item.metadata.imageAttribution}`;
-            dateElement.textContent = `date: ${item.metadata.date}`;
+            dateElement.textContent = `Date: ${item.metadata.date}`;
             categoryElement.textContent = `Category: ${item.metadata.category}`;
             trendingElement.textContent = `Trending: ${item.metadata.trending}`;
             topPickElement.textContent = `Top Pick: ${item.metadata.topPick}`;
@@ -41,17 +45,22 @@ fetch('markdown_output.json')
             const htmlContent = converter.makeHtml(item.content);
             contentElement.innerHTML = htmlContent;
 
-            // Append elements to the markdownContentDiv
-            markdownContentDiv.appendChild(titleElement);
-            markdownContentDiv.appendChild(imageElement);
-            markdownContentDiv.appendChild(attributionElement);
-            markdownContentDiv.appendChild(dateElement);
-            markdownContentDiv.appendChild(categoryElement);
-            markdownContentDiv.appendChild(trendingElement);
-            markdownContentDiv.appendChild(topPickElement);
-            markdownContentDiv.appendChild(popularElement);
-            markdownContentDiv.appendChild(linkElement);
-            markdownContentDiv.appendChild(contentElement);
+            // Append elements to the article element
+            articleElement.appendChild(titleElement);
+            articleElement.appendChild(imageElement);
+            articleElement.appendChild(attributionElement);
+            articleElement.appendChild(dateElement);
+            articleElement.appendChild(categoryElement);
+            articleElement.appendChild(trendingElement);
+            articleElement.appendChild(topPickElement);
+            articleElement.appendChild(popularElement);
+            articleElement.appendChild(linkElement);
+            
+            // Append content element (markdown) to the article element
+            articleElement.appendChild(contentElement);
+
+            // Append article element to the markdownContentDiv
+            markdownContentDiv.appendChild(articleElement);
         });
         
         // Adjust width of the image
