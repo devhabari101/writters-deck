@@ -1,6 +1,5 @@
-
 // Fetch JSON data from the server and render markdown content
-fetch('markdown_output.json') // Adjusted path to include the root directory
+fetch('markdown_output.json')
     .then(response => response.json())
     .then(data => {
         // Get the div element to display the markdown content
@@ -12,7 +11,7 @@ fetch('markdown_output.json') // Adjusted path to include the root directory
             const titleElement = document.createElement('h2');
             const imageElement = document.createElement('img');
             const attributionElement = document.createElement('div');
-             const dateElement = document.createElement('h2');
+            const dateElement = document.createElement('h2');
             const categoryElement = document.createElement('div');
             const contentElement = document.createElement('div');
             const trendingElement = document.createElement('div');
@@ -27,13 +26,15 @@ fetch('markdown_output.json') // Adjusted path to include the root directory
             attributionElement.textContent = `Image Attribution: ${item.metadata.imageAttribution}`;
             dateElement.textContent = `date: ${item.metadata.date}`;
             categoryElement.textContent = `Category: ${item.metadata.category}`;
-            contentElement.innerHTML = item.content; // Corrected to access item.content directly
             trendingElement.textContent = `Trending: ${item.metadata.trending}`;
             topPickElement.textContent = `Top Pick: ${item.metadata.topPick}`;
             popularElement.textContent = `Popular: ${item.metadata.popular}`;
             linkElement.href = item.metadata.link;
             linkElement.textContent = 'Link';
             bodyElement.textContent = item.metadata.body;
+
+            // Convert Markdown content to HTML using marked.js
+            contentElement.innerHTML = marked(item.content);
 
             // Append elements to the markdownContentDiv
             markdownContentDiv.appendChild(titleElement);
