@@ -27,7 +27,7 @@ fetch('markdown_output.json') // Adjusted path to include the root directory
             attributionElement.textContent = `Image Attribution: ${item.metadata.imageAttribution}`;
             dateElement.textContent = `date: ${item.metadata.date}`;
             categoryElement.textContent = `Category: ${item.metadata.category}`;
-            contentElement.innerHTML = item.metadata.content;
+            contentElement.innerHTML = item.content; // Corrected to access item.content directly
             trendingElement.textContent = `Trending: ${item.metadata.trending}`;
             topPickElement.textContent = `Top Pick: ${item.metadata.topPick}`;
             popularElement.textContent = `Popular: ${item.metadata.popular}`;
