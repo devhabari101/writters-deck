@@ -18,12 +18,12 @@ fetch('markdown_output.json')
             const attributionElement = document.createElement('div');
             const dateElement = document.createElement('h2');
             const categoryElement = document.createElement('div');
-            const contentElement = document.createElement('div');
             const trendingElement = document.createElement('div');
             const topPickElement = document.createElement('div');
             const popularElement = document.createElement('div');
             const linkElement = document.createElement('a');
             const bodyElement = document.createElement('div');
+            const contentElement = document.createElement('div');
 
             // Set values for each field
             titleElement.textContent = item.metadata.title;
@@ -36,7 +36,6 @@ fetch('markdown_output.json')
             popularElement.textContent = `Popular: ${item.metadata.popular}`;
             linkElement.href = item.metadata.link;
             linkElement.textContent = 'Link';
-            bodyElement.textContent = item.metadata.body;
 
             // Convert Markdown content to HTML using showdown.js
             const htmlContent = converter.makeHtml(item.content);
@@ -48,12 +47,11 @@ fetch('markdown_output.json')
             markdownContentDiv.appendChild(attributionElement);
             markdownContentDiv.appendChild(dateElement);
             markdownContentDiv.appendChild(categoryElement);
-            markdownContentDiv.appendChild(contentElement);
             markdownContentDiv.appendChild(trendingElement);
             markdownContentDiv.appendChild(topPickElement);
             markdownContentDiv.appendChild(popularElement);
             markdownContentDiv.appendChild(linkElement);
-            markdownContentDiv.appendChild(bodyElement);
+            markdownContentDiv.appendChild(contentElement);
         });
     })
     .catch(error => console.error('Error fetching JSON:', error));
