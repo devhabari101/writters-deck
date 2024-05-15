@@ -22,7 +22,6 @@ fetch('markdown_output.json')
             const topPickElement = document.createElement('div');
             const popularElement = document.createElement('div');
             const linkElement = document.createElement('a');
-            const bodyElement = document.createElement('div');
             const contentElement = document.createElement('div');
 
             // Set values for each field
