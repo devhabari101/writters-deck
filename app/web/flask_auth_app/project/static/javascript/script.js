@@ -27,6 +27,7 @@ fetch('markdown_output.json')
             // Set values for each field
             titleElement.textContent = item.metadata.title;
             imageElement.src = item.metadata.image_url;
+            imageElement.classList.add('image', 'is-16by9'); // Add Bulma classes for image aspect ratio
             attributionElement.textContent = `Image Attribution: ${item.metadata.imageAttribution}`;
             dateElement.textContent = `date: ${item.metadata.date}`;
             categoryElement.textContent = `Category: ${item.metadata.category}`;
@@ -35,7 +36,6 @@ fetch('markdown_output.json')
             popularElement.textContent = `Popular: ${item.metadata.popular}`;
             linkElement.href = item.metadata.link;
             linkElement.textContent = 'Link';
-
 
             // Convert Markdown content to HTML using showdown.js
             const htmlContent = converter.makeHtml(item.content);
@@ -52,6 +52,12 @@ fetch('markdown_output.json')
             markdownContentDiv.appendChild(popularElement);
             markdownContentDiv.appendChild(linkElement);
             markdownContentDiv.appendChild(contentElement);
+        });
+        
+        // Adjust width of the image
+        const images = document.querySelectorAll('.image');
+        images.forEach(image => {
+            image.style.width = '75%';
         });
     })
     .catch(error => console.error('Error fetching JSON:', error));
