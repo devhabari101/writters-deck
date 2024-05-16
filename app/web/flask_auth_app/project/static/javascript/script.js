@@ -7,12 +7,20 @@ fetch('markdown_output.json')
         // Get the div element to display the markdown content
         const markdownContentDiv = document.getElementById('markdown-content');
 
+        // Create section element
+        const section = document.createElement('section');
+        section.classList.add('bg0', 'p-t-62', 'p-b-60');
+
+        // Create container element
+        const containerDiv = document.createElement('div');
+        containerDiv.classList.add('container');
+
+        // Append container element to section
+        section.appendChild(containerDiv);
+
         // Iterate over each item in the JSON data
         data.forEach(item => {
             // Create container, row, and column elements
-            const containerDiv = document.createElement('div');
-            containerDiv.classList.add('container');
-
             const rowDiv = document.createElement('div');
             rowDiv.classList.add('row');
 
@@ -27,7 +35,7 @@ fetch('markdown_output.json')
             rowDiv.appendChild(columnDiv);
             containerDiv.appendChild(rowDiv);
             columnDiv.appendChild(innerColumnDiv);
-            markdownContentDiv.appendChild(containerDiv);
+            markdownContentDiv.appendChild(section);
 
             // Create article element for each item
             const articleElement = document.createElement('article');
