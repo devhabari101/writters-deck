@@ -7,6 +7,9 @@ fetch('markdown_output.json')
         // Get the div element to display the markdown content
         const markdownContentDiv = document.getElementById('markdown-content');
 
+        // Create a new instance of Showdown converter
+        const converter = new showdown.Converter(); // Define and initialize converter
+        
         // Create section element
         const section = document.createElement('section');
         section.classList.add('bg0', 'p-t-62', 'p-b-60');
