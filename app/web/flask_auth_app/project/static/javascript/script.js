@@ -7,11 +7,28 @@ fetch('markdown_output.json')
         // Get the div element to display the markdown content
         const markdownContentDiv = document.getElementById('markdown-content');
 
-        // Create a new instance of Showdown converter
-        const converter = new showdown.Converter();
-
         // Iterate over each item in the JSON data
         data.forEach(item => {
+            // Create container, row, and column elements
+            const containerDiv = document.createElement('div');
+            containerDiv.classList.add('container');
+
+            const rowDiv = document.createElement('div');
+            rowDiv.classList.add('row');
+
+            const columnDiv = document.createElement('div');
+            columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
+            columnDiv.style.paddingRight = '45px'; // Applying inline style
+
+            const innerColumnDiv = document.createElement('div');
+            innerColumnDiv.classList.add('p-r-0-lg');
+
+            // Append column elements to row and row to container
+            rowDiv.appendChild(columnDiv);
+            containerDiv.appendChild(rowDiv);
+            columnDiv.appendChild(innerColumnDiv);
+            markdownContentDiv.appendChild(containerDiv);
+
             // Create article element for each item
             const articleElement = document.createElement('article');
             articleElement.className = 'card'; // Using Bulma card class
@@ -59,8 +76,8 @@ fetch('markdown_output.json')
             // Append content element (markdown) to the article element
             articleElement.appendChild(contentElement);
 
-            // Append article element to the markdownContentDiv
-            markdownContentDiv.appendChild(articleElement);
+            // Append article element to the inner column div
+            innerColumnDiv.appendChild(articleElement);
         });
         
         // Adjust width of the image
