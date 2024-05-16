@@ -59,7 +59,7 @@ fetch('markdown_output.json')
             // Set values for each field
             titleElement.textContent = item.metadata.title;
             imageElement.src = item.metadata.image_url;
-            imageElement.classList.add('image', 'is-16by9'); // Add Bulma classes for image aspect ratio
+            imageElement.classList.add('hov-img0', 'how-pos5-parent', 'is-16by9'); // Add Bulma classes for image aspect ratio
             attributionElement.textContent = `Image Attribution: ${item.metadata.imageAttribution}`;
             dateElement.textContent = `Date: ${item.metadata.date}`;
             categoryElement.textContent = `Category: ${item.metadata.category}`;
@@ -94,7 +94,7 @@ fetch('markdown_output.json')
         // Adjust width of the image
         const images = document.querySelectorAll('.image');
         images.forEach(image => {
-            image.style.width = '75%';
+            // image.style.width = '75%';
         });
     })
     .catch(error => console.error('Error fetching JSON:', error));
