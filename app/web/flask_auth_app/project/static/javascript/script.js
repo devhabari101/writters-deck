@@ -66,11 +66,11 @@ fetch('markdown_output.json')
 
             const daySpan = document.createElement('span');
             daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
-            daySpan.textContent = day;
+            daySpan.textContent = isNaN(day) ? '' : day;
 
             const monthYearSpan = document.createElement('span');
             monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
-            monthYearSpan.textContent = `${month} ${year}`;
+            monthYearSpan.textContent = isNaN(year) ? '' : `${month} ${year}`;
 
             dateDiv.appendChild(daySpan);
             dateDiv.appendChild(monthYearSpan);
@@ -111,9 +111,13 @@ fetch('markdown_output.json')
 
             authorCategoryDiv.appendChild(authorDiv);
 
+            // Create category element
+            const categoryElement = document.createElement('div');
+            categoryElement.textContent = `Category: ${item.metadata.category}`;
+
             // Dynamically create category elements
             if (item.metadata.categories && item.metadata.categories.length > 0) {
-                const categoriesDiv = document.createElement('span');
+                const categoriesDiv = document.createElement('div');
                 categoriesDiv.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
 
                 item.metadata.categories.forEach(category => {
@@ -143,6 +147,7 @@ fetch('markdown_output.json')
             // Append link element, content div, and author/category div to item blog div
             itemBlogDiv.appendChild(linkElement);
             itemBlogDiv.appendChild(contentDiv);
+            itemBlogDiv.appendChild(categoryElement);
             itemBlogDiv.appendChild(authorCategoryDiv);
 
             // Append item blog div to inner column div
