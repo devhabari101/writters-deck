@@ -65,11 +65,11 @@ fetch('markdown_output.json')
 
             const daySpan = document.createElement('span');
             daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
-            daySpan.textContent = day;
+            daySpan.textContent = isNaN(day) ? '' : day;
 
             const monthYearSpan = document.createElement('span');
             monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
-            monthYearSpan.textContent = monthYear;
+            monthYearSpan.textContent = isNaN(monthYear) ? '' : monthYear;
 
             dateDiv.appendChild(daySpan);
             dateDiv.appendChild(monthYearSpan);
@@ -119,6 +119,7 @@ fetch('markdown_output.json')
                     const categorySpan = document.createElement('span');
                     categorySpan.textContent = category;
                     categorySpan.classList.add('cl4'); // Add category color class if needed
+
                     categoriesDiv.appendChild(categorySpan);
 
                     const separatorSpan = document.createElement('span');
