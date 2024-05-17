@@ -40,6 +40,9 @@ fetch('markdown_output.json')
         // Append inner column to main column and main column to row
         columnDiv.appendChild(innerColumnDiv);
         rowDiv.appendChild(columnDiv);
+        
+        // Process data to identify popular markdowns
+        const popularMarkdowns = data.filter(item => item.metadata.popular === 'on');
 
         // Iterate over each item in the JSON data
         data.forEach(item => {
