@@ -100,7 +100,7 @@ fetch('markdown_output.json')
             contentDiv.appendChild(titleElement);
             contentDiv.appendChild(contentParagraph);
 
-            // Create author, category, and continue reading elements
+            // Create author and category elements
             const authorCategoryDiv = document.createElement('div');
             authorCategoryDiv.classList.add('flex-w', 'flex-sb-m', 'p-t-18');
 
@@ -108,17 +108,34 @@ fetch('markdown_output.json')
             authorDiv.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
             authorDiv.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
 
-            const categoriesDiv = document.createElement('span');
-            categoriesDiv.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
-            categoriesDiv.textContent = `StreetStyle, Fashion, Couple <span class="cl12 m-l-4 m-r-6">|</span>`;
+            authorCategoryDiv.appendChild(authorDiv);
 
+            // Dynamically create category elements
+            if (item.metadata.categories && item.metadata.categories.length > 0) {
+                const categoriesDiv = document.createElement('span');
+                categoriesDiv.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
+
+                item.metadata.categories.forEach(category => {
+                    const categorySpan = document.createElement('span');
+                    categorySpan.textContent = category;
+                    categorySpan.classList.add('cl4'); // Add category color class if needed
+                    categoriesDiv.appendChild(categorySpan);
+
+                    const separatorSpan = document.createElement('span');
+                    separatorSpan.classList.add('cl12', 'm-l-4', 'm-r-6');
+                    separatorSpan.textContent = '|';
+                    categoriesDiv.appendChild(separatorSpan);
+                });
+
+                authorCategoryDiv.appendChild(categoriesDiv);
+            }
+
+            // Create "Continue Reading" link
             const continueReadingLink = document.createElement('a');
             continueReadingLink.href = 'blog-detail.html';
             continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
             continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
 
-            authorCategoryDiv.appendChild(authorDiv);
-            authorCategoryDiv.appendChild(categoriesDiv);
             authorCategoryDiv.appendChild(continueReadingLink);
 
             // Append link element, content div, and author/category div to item blog div
