@@ -111,14 +111,14 @@ fetch('markdown_output.json')
 
             const categorySpan = document.createElement('span');
             categorySpan.textContent = item.metadata.category;
-            categorySpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
-
-            authorSpan.appendChild(categorySpan);
+            categorySpan.classList.add('cl4'); // Add category color class if needed
 
             const separatorSpan = document.createElement('span');
             separatorSpan.classList.add('cl12', 'm-l-4', 'm-r-6');
             separatorSpan.textContent = '|';
 
+            // Append category and separator to authorSpan
+            authorSpan.appendChild(categorySpan);
             authorSpan.appendChild(separatorSpan);
 
             // Create "Continue Reading" link
