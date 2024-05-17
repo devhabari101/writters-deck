@@ -9,35 +9,6 @@ fetch('markdown_output.json')
 
         // Create a new instance of Showdown converter
         const converter = new showdown.Converter(); // Define and initialize converter
-        
-        // Create section element
-        const section = document.createElement('section');
-        section.classList.add('bg0', 'p-t-62', 'p-b-60');
-
-        // Create container element
-        const containerDiv = document.createElement('div');
-        containerDiv.classList.add('container');
-
-        // Append container element to section
-        section.appendChild(containerDiv);
-
-        // Create row element
-        const rowDiv = document.createElement('div');
-        rowDiv.classList.add('row');
-
-        // Append row to container
-        containerDiv.appendChild(rowDiv);
-
-        // Create main content column
-        const columnDiv = document.createElement('div');
-        columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
-
-        const innerColumnDiv = document.createElement('div');
-        innerColumnDiv.classList.add('p-r-45', 'p-r-0-lg');
-
-        // Append inner column to main column and main column to row
-        columnDiv.appendChild(innerColumnDiv);
-        rowDiv.appendChild(columnDiv);
 
         // Iterate over each item in the JSON data
         data.forEach(item => {
@@ -129,69 +100,40 @@ fetch('markdown_output.json')
             itemBlogDiv.appendChild(contentDiv);
             itemBlogDiv.appendChild(authorCategoryDiv);
 
-            // Append item blog div to inner column div
-            innerColumnDiv.appendChild(itemBlogDiv);
+            // Append item blog div to markdown content div
+            markdownContentDiv.appendChild(itemBlogDiv);
         });
 
-        // Create sidebar column
-        const sidebarColumnDiv = document.createElement('div');
-        sidebarColumnDiv.classList.add('col-md-4', 'col-lg-3', 'p-b-80');
+        // Fetch unique categories
+        const categories = Array.from(new Set(data.map(item => item.metadata.category)));
 
-        const sideMenuDiv = document.createElement('div');
-        sideMenuDiv.classList.add('side-menu');
+        // Sidebar content generation
+        const sidebarHTML = `
+            <div class="col-md-4 col-lg-3 p-b-80">
+                <div class="side-menu">
+                    <div class="bor17 of-hidden pos-relative">
+                        <input class="stext-103 cl2 plh4 size-116 p-l-28 p-r-55" type="text" name="search" placeholder="Search">
+                        <button class="flex-c-m size-122 ab-t-r fs-18 cl4 hov-cl1 trans-04">
+                            <i class="zmdi zmdi-search"></i>
+                        </button>
+                    </div>
+                    <div class="p-t-55">
+                        <h4 class="mtext-112 cl2 p-b-33">
+                            Categories
+                        </h4>
+                        <ul>
+                            ${categories.map(category => `
+                                <li class="bor18">
+                                    <a href="#" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">${category}</a>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `;
 
-        // Search bar
-        const searchDiv = document.createElement('div');
-        searchDiv.classList.add('bor17', 'of-hidden', 'pos-relative');
-
-        const searchInput = document.createElement('input');
-        searchInput.classList.add('stext-103', 'cl2', 'plh4', 'size-116', 'p-l-28', 'p-r-55');
-        searchInput.type = 'text';
-        searchInput.name = 'search';
-        searchInput.placeholder = 'Search';
-
-        const searchButton = document.createElement('button');
-        searchButton.classList.add('flex-c-m', 'size-122', 'ab-t-r', 'fs-18', 'cl4', 'hov-cl1', 'trans-04');
-        searchButton.innerHTML = '<i class="zmdi zmdi-search"></i>';
-
-        searchDiv.appendChild(searchInput);
-        searchDiv.appendChild(searchButton);
-
-        // Categories
-        const categoriesDiv = document.createElement('div');
-        categoriesDiv.classList.add('p-t-55');
-
-        const categoriesTitle = document.createElement('h4');
-        categoriesTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
-        categoriesTitle.textContent = 'Categories';
-
-        const categoriesList = document.createElement('ul');
-
-        ['Fashion', 'Beauty', 'Street Style', 'Life Style', 'DIY & Crafts'].forEach(category => {
-            const listItem = document.createElement('li');
-            listItem.classList.add('bor18');
-
-            const categoryLink = document.createElement('a');
-            categoryLink.href = '#';
-            categoryLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
-            categoryLink.textContent = category;
-
-            listItem.appendChild(categoryLink);
-            categoriesList.appendChild(listItem);
-        });
-
-        categoriesDiv.appendChild(categoriesTitle);
-        categoriesDiv.appendChild(categoriesList);
-
-        // Append search bar and categories to sidebar
-        sideMenuDiv.appendChild(searchDiv);
-        sideMenuDiv.appendChild(categoriesDiv);
-
-        // Add sidebar to sidebar column and sidebar column to row
-        sidebarColumnDiv.appendChild(sideMenuDiv);
-        rowDiv.appendChild(sidebarColumnDiv);
-
-        // Append section to markdown content div (outside loop)
-        markdownContentDiv.appendChild(section);
+        // Insert the sidebar HTML into the DOM
+        markdownContentDiv.insertAdjacentHTML('beforeend', sidebarHTML);
     })
     .catch(error => console.error('Error fetching JSON:', error));
