@@ -69,6 +69,7 @@ export function createSidebar(categories, popularMarkdowns) {
         const image = document.createElement('img');
         image.src = markdown.metadata.image_url;
         image.alt = 'PRODUCT';
+        image.classList.add('img-fluid'); // Add Bootstrap class for responsive images
 
         const titleWrapper = document.createElement('div');
         titleWrapper.classList.add('size-215', 'flex-col-t', 'p-t-8');
