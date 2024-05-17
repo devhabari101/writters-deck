@@ -1,7 +1,4 @@
-// sidebar.js
-
-// Function to create the sidebar
-export function createSidebar(categories) {
+export function createSidebar(categories, popularMarkdowns) {
     const sidebarColumnDiv = document.createElement('div');
     sidebarColumnDiv.classList.add('col-md-4', 'col-lg-3', 'p-b-80');
 
@@ -51,11 +48,52 @@ export function createSidebar(categories) {
     categoriesDiv.appendChild(categoriesTitle);
     categoriesDiv.appendChild(categoriesList);
 
-    // Append search bar and categories to sidebar
+    // Popular markdowns
+    const popularMarkdownsDiv = document.createElement('div');
+    popularMarkdownsDiv.classList.add('p-t-55');
+
+    const popularMarkdownsTitle = document.createElement('h4');
+    popularMarkdownsTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
+    popularMarkdownsTitle.textContent = 'Popular Markdowns';
+
+    const popularMarkdownsList = document.createElement('ul');
+
+    popularMarkdowns.forEach(markdown => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('flex-w', 'flex-t', 'p-b-30');
+
+        const linkWrapper = document.createElement('a');
+        linkWrapper.href = '#';
+        linkWrapper.classList.add('wrao-pic-w', 'size-214', 'hov-ovelay1', 'm-r-20');
+
+        const image = document.createElement('img');
+        image.src = markdown.imageUrl;
+        image.alt = 'PRODUCT';
+
+        const titleWrapper = document.createElement('div');
+        titleWrapper.classList.add('size-215', 'flex-col-t', 'p-t-8');
+
+        const titleLink = document.createElement('a');
+        titleLink.href = '#';
+        titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
+        titleLink.textContent = markdown.title;
+
+        linkWrapper.appendChild(image);
+        titleWrapper.appendChild(titleLink);
+        listItem.appendChild(linkWrapper);
+        listItem.appendChild(titleWrapper);
+        popularMarkdownsList.appendChild(listItem);
+    });
+
+    popularMarkdownsDiv.appendChild(popularMarkdownsTitle);
+    popularMarkdownsDiv.appendChild(popularMarkdownsList);
+
+    // Append search bar, categories, and popular markdowns to sidebar
     sideMenuDiv.appendChild(searchDiv);
     sideMenuDiv.appendChild(categoriesDiv);
+    sideMenuDiv.appendChild(popularMarkdownsDiv);
 
-    // Add sidebar to sidebar column
+    // Append sidebar to sidebar column
     sidebarColumnDiv.appendChild(sideMenuDiv);
 
     return sidebarColumnDiv;
