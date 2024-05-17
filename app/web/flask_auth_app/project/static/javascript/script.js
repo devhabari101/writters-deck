@@ -146,5 +146,8 @@ fetch('markdown_output.json')
 
         // Append the sidebar to the row
         rowDiv.appendChild(createSidebar(uniqueCategories));
+
+        // Append the complete section to the markdown content div
+        markdownContentDiv.appendChild(section);
     })
     .catch(error => console.error('Error fetching JSON:', error));
