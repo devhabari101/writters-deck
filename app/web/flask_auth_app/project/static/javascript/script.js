@@ -46,6 +46,8 @@ fetch('markdown_output.json')
 
             // Create elements for each field
             const titleElement = document.createElement('h2');
+            const imageWrapperElement = document.createElement('div');
+            imageWrapperElement.classList.add('p-b-63');
             const imageElement = document.createElement('img');
             const attributionElement = document.createElement('div');
             const dateElement = document.createElement('h2');
@@ -75,7 +77,6 @@ fetch('markdown_output.json')
 
             // Append elements to the article element
             articleElement.appendChild(titleElement);
-            articleElement.appendChild(imageElement);
             articleElement.appendChild(attributionElement);
             articleElement.appendChild(dateElement);
             articleElement.appendChild(categoryElement);
@@ -83,7 +84,11 @@ fetch('markdown_output.json')
             articleElement.appendChild(topPickElement);
             articleElement.appendChild(popularElement);
             articleElement.appendChild(linkElement);
-            
+
+            // Wrap image element in a div with class "p-b-63" and append to article element
+            imageWrapperElement.appendChild(imageElement);
+            articleElement.appendChild(imageWrapperElement);
+
             // Append content element (markdown) to the article element
             articleElement.appendChild(contentElement);
 
