@@ -144,8 +144,11 @@ fetch('markdown_output.json')
         const categories = data.map(item => item.metadata.category);
         const uniqueCategories = [...new Set(categories)];
 
-        // Append the sidebar to the row
-        rowDiv.appendChild(createSidebar(uniqueCategories));
+        // Append the sidebar to the row, passing popularMarkdowns as the second argument
+        rowDiv.appendChild(createSidebar(uniqueCategories, popularMarkdowns));
+        
+    
+
 
         // Append the complete section to the markdown content div
         markdownContentDiv.appendChild(section);
