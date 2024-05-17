@@ -101,19 +101,10 @@ fetch('markdown_output.json')
             contentDiv.appendChild(titleElement);
             contentDiv.appendChild(contentParagraph);
 
-            // Create author and category elements
-            const authorCategoryDiv = document.createElement('div');
-            authorCategoryDiv.classList.add('flex-w', 'flex-sb-m', 'p-t-18');
-
-            const authorDiv = document.createElement('span');
-            authorDiv.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
-            authorDiv.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
-
-            authorCategoryDiv.appendChild(authorDiv);
-
             // Create category element
             const categoryElement = document.createElement('div');
             categoryElement.textContent = `Category: ${item.metadata.category}`;
+            categoryElement.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
 
             // Dynamically create category elements
             if (item.metadata.categories && item.metadata.categories.length > 0) {
@@ -133,22 +124,25 @@ fetch('markdown_output.json')
                     categoriesDiv.appendChild(separatorSpan);
                 });
 
-                authorCategoryDiv.appendChild(categoriesDiv);
+                categoryElement.appendChild(categoriesDiv);
             }
 
-            // Create "Continue Reading" link
+            // Create author and "Continue Reading" elements
+            const authorDiv = document.createElement('span');
+            authorDiv.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
+            authorDiv.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
+
             const continueReadingLink = document.createElement('a');
             continueReadingLink.href = 'blog-detail.html';
             continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
             continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
 
-            authorCategoryDiv.appendChild(continueReadingLink);
-
-            // Append link element, content div, and author/category div to item blog div
+            // Append elements to item blog div
             itemBlogDiv.appendChild(linkElement);
             itemBlogDiv.appendChild(contentDiv);
             itemBlogDiv.appendChild(categoryElement);
-            itemBlogDiv.appendChild(authorCategoryDiv);
+            itemBlogDiv.appendChild(authorDiv);
+            itemBlogDiv.appendChild(continueReadingLink);
 
             // Append item blog div to inner column div
             innerColumnDiv.appendChild(itemBlogDiv);
