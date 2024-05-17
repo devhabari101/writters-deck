@@ -1,3 +1,5 @@
+import { createSidebar } from './sidebar.js';
+
 // Fetch JSON data from the server and render markdown content
 fetch('markdown_output.json')
     .then(response => response.json())
@@ -21,26 +23,26 @@ fetch('markdown_output.json')
         // Append container element to section
         section.appendChild(containerDiv);
 
-        // Append section to markdown content div (outside loop)
-        markdownContentDiv.appendChild(section);
+        // Create row element
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('row');
+
+        // Append row to container
+        containerDiv.appendChild(rowDiv);
+
+        // Create main content column
+        const columnDiv = document.createElement('div');
+        columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
+
+        const innerColumnDiv = document.createElement('div');
+        innerColumnDiv.classList.add('p-r-45', 'p-r-0-lg');
+
+        // Append inner column to main column and main column to row
+        columnDiv.appendChild(innerColumnDiv);
+        rowDiv.appendChild(columnDiv);
 
         // Iterate over each item in the JSON data
         data.forEach(item => {
-            // Create row, column, and inner column elements
-            const rowDiv = document.createElement('div');
-            rowDiv.classList.add('row');
-
-            const columnDiv = document.createElement('div');
-            columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
-
-            const innerColumnDiv = document.createElement('div');
-            innerColumnDiv.classList.add('p-r-45', 'p-r-0-lg');
-
-            // Append column elements to row and row to container
-            rowDiv.appendChild(columnDiv);
-            containerDiv.appendChild(rowDiv);
-            columnDiv.appendChild(innerColumnDiv);
-
             // Create div for item blog
             const itemBlogDiv = document.createElement('div');
             itemBlogDiv.classList.add('p-b-63');
@@ -137,5 +139,12 @@ fetch('markdown_output.json')
             // Append item blog div to inner column div
             innerColumnDiv.appendChild(itemBlogDiv);
         });
+
+        // Assuming categories are provided in the fetched data
+        const categories = data.map(item => item.metadata.category);
+        const uniqueCategories = [...new Set(categories)];
+
+        // Append the sidebar to the row
+        rowDiv.appendChild(createSidebar(uniqueCategories));
     })
     .catch(error => console.error('Error fetching JSON:', error));
