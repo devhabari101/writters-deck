@@ -59,18 +59,17 @@ fetch('markdown_output.json')
             const dateDiv = document.createElement('div');
             dateDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
 
-            const date = new Date(item.metadata.date);
-            const day = date.getDate();
-            const month = date.toLocaleString('default', { month: 'short' });
-            const year = date.getFullYear();
+            // Extract day, month, and year from item.metadata.date
+            const [day, month, year] = item.metadata.date.split('-');
+            const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
             const daySpan = document.createElement('span');
             daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
-            daySpan.textContent = isNaN(day) ? '' : day;
+            daySpan.textContent = day;
 
             const monthYearSpan = document.createElement('span');
             monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
-            monthYearSpan.textContent = isNaN(year) ? '' : `${month} ${year}`;
+            monthYearSpan.textContent = `${monthName} ${year}`;
 
             dateDiv.appendChild(daySpan);
             dateDiv.appendChild(monthYearSpan);
