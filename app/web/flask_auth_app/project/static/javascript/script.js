@@ -1,17 +1,48 @@
+import { createSidebar } from './sidebar.js';
+
+// Fetch JSON data from the server and render markdown content
 fetch('markdown_output.json')
     .then(response => response.json())
     .then(data => {
         console.log('Fetched data:', data); // Debugging: Log fetched data
 
-        // Assuming categories are provided in the fetched data
-        const categories = data.map(item => item.metadata.category);
-        const uniqueCategories = [...new Set(categories)];
+        // Get the div element to display the markdown content
+        const markdownContentDiv = document.getElementById('markdown-content');
 
-        // Filter popular markdowns
+        // Create a new instance of Showdown converter
+        const converter = new showdown.Converter(); // Define and initialize converter
+        
+        // Create section element
+        const section = document.createElement('section');
+        section.classList.add('bg0', 'p-t-62', 'p-b-60');
+
+        // Create container element
+        const containerDiv = document.createElement('div');
+        containerDiv.classList.add('container');
+
+        // Append container element to section
+        section.appendChild(containerDiv);
+
+        // Create row element
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('row');
+
+        // Append row to container
+        containerDiv.appendChild(rowDiv);
+
+        // Create main content column
+        const columnDiv = document.createElement('div');
+        columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
+
+        const innerColumnDiv = document.createElement('div');
+        innerColumnDiv.classList.add('p-r-45', 'p-r-0-lg');
+
+        // Append inner column to main column and main column to row
+        columnDiv.appendChild(innerColumnDiv);
+        rowDiv.appendChild(columnDiv);
+        
+        // Process data to identify popular markdowns
         const popularMarkdowns = data.filter(item => item.metadata.popular === 'on');
-
-        // Append the sidebar to the row, passing popularMarkdowns as the second argument
-        rowDiv.appendChild(createSidebar(uniqueCategories, popularMarkdowns));
 
         // Iterate over each item in the JSON data
         data.forEach(item => {
@@ -111,6 +142,16 @@ fetch('markdown_output.json')
             // Append item blog div to inner column div
             innerColumnDiv.appendChild(itemBlogDiv);
         });
+
+        // Assuming categories are provided in the fetched data
+        const categories = data.map(item => item.metadata.category);
+        const uniqueCategories = [...new Set(categories)];
+
+        // Append the sidebar to the row, passing popularMarkdowns as the second argument
+        rowDiv.appendChild(createSidebar(uniqueCategories, popularMarkdowns));
+        
+    
+
 
         // Append the complete section to the markdown content div
         markdownContentDiv.appendChild(section);
