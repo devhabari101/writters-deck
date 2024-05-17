@@ -9,9 +9,38 @@ fetch('markdown_output.json')
 
         // Create a new instance of Showdown converter
         const converter = new showdown.Converter(); // Define and initialize converter
+        
+        // Create section element
+        const section = document.createElement('section');
+        section.classList.add('bg0', 'p-t-62', 'p-b-60');
+
+        // Create container element
+        const containerDiv = document.createElement('div');
+        containerDiv.classList.add('container');
+
+        // Append container element to section
+        section.appendChild(containerDiv);
+
+        // Append section to markdown content div (outside loop)
+        markdownContentDiv.appendChild(section);
 
         // Iterate over each item in the JSON data
         data.forEach(item => {
+            // Create row, column, and inner column elements
+            const rowDiv = document.createElement('div');
+            rowDiv.classList.add('row');
+
+            const columnDiv = document.createElement('div');
+            columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
+
+            const innerColumnDiv = document.createElement('div');
+            innerColumnDiv.classList.add('p-r-45', 'p-r-0-lg');
+
+            // Append column elements to row and row to container
+            rowDiv.appendChild(columnDiv);
+            containerDiv.appendChild(rowDiv);
+            columnDiv.appendChild(innerColumnDiv);
+
             // Create div for item blog
             const itemBlogDiv = document.createElement('div');
             itemBlogDiv.classList.add('p-b-63');
@@ -30,18 +59,17 @@ fetch('markdown_output.json')
             const dateDiv = document.createElement('div');
             dateDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
 
-            const date = new Date(item.metadata.date.split('-').reverse().join('-')); // Convert to standard format
-            const day = date.getDate();
-            const month = date.toLocaleString('default', { month: 'short' });
-            const year = date.getFullYear();
+            // Extract day, month, and year from item.metadata.date
+            const [day, month, year] = item.metadata.date.split('-');
+            const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
             const daySpan = document.createElement('span');
             daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
-            daySpan.textContent = isNaN(day) ? '' : day;
+            daySpan.textContent = day;
 
             const monthYearSpan = document.createElement('span');
             monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
-            monthYearSpan.textContent = isNaN(year) ? '' : `${month} ${year}`;
+            monthYearSpan.textContent = `${monthName} ${year}`;
 
             dateDiv.appendChild(daySpan);
             dateDiv.appendChild(monthYearSpan);
@@ -76,16 +104,21 @@ fetch('markdown_output.json')
             const authorCategoryDiv = document.createElement('div');
             authorCategoryDiv.classList.add('flex-w', 'flex-sb-m', 'p-t-18');
 
-            const authorDiv = document.createElement('span');
-            authorDiv.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
-            authorDiv.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
+            const authorSpan = document.createElement('span');
+            authorSpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
+            authorSpan.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
 
             const categorySpan = document.createElement('span');
             categorySpan.textContent = item.metadata.category;
-            authorDiv.appendChild(categorySpan);
-            authorDiv.innerHTML += ' <span class="cl12 m-l-4 m-r-6">|</span>';
+            categorySpan.classList.add('cl4'); // Add category color class if needed
 
-            authorCategoryDiv.appendChild(authorDiv);
+            const separatorSpan = document.createElement('span');
+            separatorSpan.classList.add('cl12', 'm-l-4', 'm-r-6');
+            separatorSpan.textContent = '|';
+
+            // Append category and separator to authorSpan
+            authorSpan.appendChild(categorySpan);
+            authorSpan.appendChild(separatorSpan);
 
             // Create "Continue Reading" link
             const continueReadingLink = document.createElement('a');
@@ -93,6 +126,7 @@ fetch('markdown_output.json')
             continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
             continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
 
+            authorCategoryDiv.appendChild(authorSpan);
             authorCategoryDiv.appendChild(continueReadingLink);
 
             // Append link element, content div, and author/category div to item blog div
@@ -100,40 +134,8 @@ fetch('markdown_output.json')
             itemBlogDiv.appendChild(contentDiv);
             itemBlogDiv.appendChild(authorCategoryDiv);
 
-            // Append item blog div to markdown content div
-            markdownContentDiv.appendChild(itemBlogDiv);
+            // Append item blog div to inner column div
+            innerColumnDiv.appendChild(itemBlogDiv);
         });
-
-        // Fetch unique categories
-        const categories = Array.from(new Set(data.map(item => item.metadata.category)));
-
-        // Sidebar content generation
-        const sidebarHTML = `
-            <div class="col-md-4 col-lg-3 p-b-80">
-                <div class="side-menu">
-                    <div class="bor17 of-hidden pos-relative">
-                        <input class="stext-103 cl2 plh4 size-116 p-l-28 p-r-55" type="text" name="search" placeholder="Search">
-                        <button class="flex-c-m size-122 ab-t-r fs-18 cl4 hov-cl1 trans-04">
-                            <i class="zmdi zmdi-search"></i>
-                        </button>
-                    </div>
-                    <div class="p-t-55">
-                        <h4 class="mtext-112 cl2 p-b-33">
-                            Categories
-                        </h4>
-                        <ul>
-                            ${categories.map(category => `
-                                <li class="bor18">
-                                    <a href="#" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">${category}</a>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // Insert the sidebar HTML into the DOM
-        markdownContentDiv.insertAdjacentHTML('beforeend', sidebarHTML);
     })
     .catch(error => console.error('Error fetching JSON:', error));
