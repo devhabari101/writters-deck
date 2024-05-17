@@ -63,20 +63,20 @@ export function createSidebar(categories, popularMarkdowns) {
         listItem.classList.add('flex-w', 'flex-t', 'p-b-30');
 
         const linkWrapper = document.createElement('a');
-        linkWrapper.href = '#';
+        linkWrapper.href = markdown.metadata.link;
         linkWrapper.classList.add('wrao-pic-w', 'size-214', 'hov-ovelay1', 'm-r-20');
 
         const image = document.createElement('img');
-        image.src = markdown.imageUrl;
+        image.src = markdown.metadata.image_url;
         image.alt = 'PRODUCT';
 
         const titleWrapper = document.createElement('div');
         titleWrapper.classList.add('size-215', 'flex-col-t', 'p-t-8');
 
         const titleLink = document.createElement('a');
-        titleLink.href = '#';
+        titleLink.href = markdown.metadata.link;
         titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
-        titleLink.textContent = markdown.title;
+        titleLink.textContent = markdown.metadata.title;
 
         linkWrapper.appendChild(image);
         titleWrapper.appendChild(titleLink);
