@@ -61,15 +61,16 @@ fetch('markdown_output.json')
 
             const date = new Date(item.metadata.date);
             const day = date.getDate();
-            const monthYear = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+            const month = date.toLocaleString('default', { month: 'short' });
+            const year = date.getFullYear();
 
             const daySpan = document.createElement('span');
             daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
-            daySpan.textContent = isNaN(day) ? '' : day;
+            daySpan.textContent = day;
 
             const monthYearSpan = document.createElement('span');
             monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
-            monthYearSpan.textContent = isNaN(monthYear) ? '' : monthYear;
+            monthYearSpan.textContent = `${month} ${year}`;
 
             dateDiv.appendChild(daySpan);
             dateDiv.appendChild(monthYearSpan);
