@@ -76,16 +76,16 @@ export function renderLatestTrendingMarkdowns(markdowns) {
         markdownContentDiv.classList.add('latest-trending-markdown', 'row'); // Add Bootstrap classes for grid layout
 
         const imageDiv = document.createElement('div');
-        imageDiv.classList.add('col-md-4'); // Bootstrap grid column class
+        imageDiv.classList.add('col-md-8'); // Bootstrap grid column class
         const markdownImage = document.createElement('img');
         markdownImage.src = markdown.metadata.image_url;
         markdownImage.alt = markdown.metadata.title;
-        markdownImage.classList.add('img-fluid'); // Add Bootstrap class for responsive images
+        markdownImage.classList.add('img-fluid', 'col-md-12'); // Add Bootstrap class for responsive images
         imageDiv.appendChild(markdownImage);
 
         // Title and Date container
         const titleDateDiv = document.createElement('div');
-        titleDateDiv.classList.add('col-md-8', 'title-date-container'); // Bootstrap grid column class
+        titleDateDiv.classList.add('col-md-4', 'title-date-container'); // Bootstrap grid column class
 
         // Title
         const titleLink = document.createElement('a');
