@@ -1,0 +1,18 @@
+.latest-trending-markdown {
+    margin-bottom: 20px;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+}
+
+.title-date-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.title-date-container .stext-116 {
+    margin-bottom: 10px;
+}
