@@ -62,8 +62,9 @@ export function renderLatestTrendingMarkdowns(markdowns) {
     // Create a container to hold the markdowns
     const containerDiv = document.createElement('div');
 
+    // Function to calculate the estimated reading time
     const calculateReadingTime = (text) => {
-        const wordsPerMinute = 200;
+        const wordsPerMinute = 200; // Average reading speed
         const words = text.split(/\s+/).length;
         const minutes = Math.ceil(words / wordsPerMinute);
         return `${minutes} min read`;
@@ -72,30 +73,34 @@ export function renderLatestTrendingMarkdowns(markdowns) {
     // Render each of the latest trending markdowns
     latestTrendingMarkdowns.forEach(markdown => {
         const markdownContentDiv = document.createElement('div');
-        markdownContentDiv.classList.add('latest-trending-markdown', 'row');
+        markdownContentDiv.classList.add('latest-trending-markdown', 'row'); // Add Bootstrap classes for grid layout
 
         const imageDiv = document.createElement('div');
-        imageDiv.classList.add('col-md-8');
+        imageDiv.classList.add('col-md-4'); // Bootstrap grid column class
         const markdownImage = document.createElement('img');
         markdownImage.src = markdown.metadata.image_url;
         markdownImage.alt = markdown.metadata.title;
-        markdownImage.classList.add('img-fluid', 'col-md-12'); // Adjusted Bootstrap class);
+        markdownImage.classList.add('img-fluid'); // Add Bootstrap class for responsive images
         imageDiv.appendChild(markdownImage);
 
+        // Title and Date container
         const titleDateDiv = document.createElement('div');
-        titleDateDiv.classList.add('col-md-4');
+        titleDateDiv.classList.add('col-md-8', 'title-date-container'); // Bootstrap grid column class
 
+        // Title
         const titleLink = document.createElement('a');
         titleLink.href = markdown.metadata.link;
-        titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
+        titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04', 'd-block', 'mb-2');
         titleLink.textContent = markdown.metadata.title;
 
+        // Time to read
         const timeToReadSpan = document.createElement('span');
-        timeToReadSpan.classList.add('stext-116', 'cl6', 'p-t-20');
+        timeToReadSpan.classList.add('stext-116', 'cl6', 'd-block', 'mb-2');
         timeToReadSpan.textContent = calculateReadingTime(markdown.content);
 
+        // Date
         const dateSpan = document.createElement('span');
-        dateSpan.classList.add('stext-116', 'cl6', 'p-t-20');
+        dateSpan.classList.add('stext-116', 'cl6', 'd-block');
         dateSpan.textContent = markdown.metadata.date;
 
         titleDateDiv.appendChild(titleLink);
