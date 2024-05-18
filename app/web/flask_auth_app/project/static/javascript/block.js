@@ -40,7 +40,15 @@ export function renderLatestTrendingMarkdowns(markdowns) {
 
     // Create a container to hold the markdowns
     const containerDiv = document.createElement('div');
-
+    
+     // Function to calculate the estimated reading time
+    const calculateReadingTime = (text) => {
+        const wordsPerMinute = 200; // Average reading speed
+        const words = text.split(/\s+/).length;
+        const minutes = Math.ceil(words / wordsPerMinute);
+        return `${minutes} min read`;
+    };
+    
     // Render each of the latest trending markdowns
     latestTrendingMarkdowns.forEach(markdown => {
         const markdownContentDiv = document.createElement('div');
