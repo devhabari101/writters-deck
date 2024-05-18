@@ -79,7 +79,7 @@ export function renderLatestTrendingMarkdowns(markdowns) {
         const markdownImage = document.createElement('img');
         markdownImage.src = markdown.metadata.image_url;
         markdownImage.alt = markdown.metadata.title;
-        markdownImage.classList.add('img-fluid');
+        markdownImage.classList.add('img-fluid', 'col-md-12'); // Adjusted Bootstrap class);
         imageDiv.appendChild(markdownImage);
 
         const titleDateDiv = document.createElement('div');
