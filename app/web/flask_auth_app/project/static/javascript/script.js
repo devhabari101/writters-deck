@@ -1,5 +1,5 @@
 import { createSidebar } from './sidebar.js';
-import { getLatestPopularMarkdown } from './block.js';
+import { getLatestPopularMarkdown, renderLatestTrendingMarkdowns} from './block.js';
 
 fetch('markdown_output.json')
     .then(response => response.json())
@@ -37,6 +37,11 @@ fetch('markdown_output.json')
             firstColumnDiv.innerHTML = ''; // Clear existing content
             firstColumnDiv.appendChild(latestPopularMarkdownDiv);
         }
+        // Render the latest trending markdowns in the second column
+        const secondColumnDiv = document.querySelector('.d-flex .col-md-4:nth-child(2)'); // Select the second column
+        const latestTrendingMarkdownsDiv = renderLatestTrendingMarkdowns(data); // Use the new function to render latest trending markdowns
+        secondColumnDiv.innerHTML = ''; // Clear existing content
+        secondColumnDiv.appendChild(latestTrendingMarkdownsDiv); // Append the rendered markdowns to the second column
 
         data.forEach(item => {
             const itemBlogDiv = document.createElement('div');
