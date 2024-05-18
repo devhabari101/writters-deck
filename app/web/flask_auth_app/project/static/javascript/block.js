@@ -44,22 +44,40 @@ export function renderLatestTrendingMarkdowns(markdowns) {
     // Render each of the latest trending markdowns
     latestTrendingMarkdowns.forEach(markdown => {
         const markdownContentDiv = document.createElement('div');
-        markdownContentDiv.classList.add('markdown-content');
+        markdownContentDiv.classList.add('latest-trending-markdown'); // Add a class for styling
 
-        const markdownTitle = document.createElement('h4');
-        markdownTitle.textContent = markdown.metadata.title;
+        const imageDiv = document.createElement('div');
+        imageDiv.classList.add('image-container'); // Container for image
 
         const markdownImage = document.createElement('img');
         markdownImage.src = markdown.metadata.image_url;
         markdownImage.alt = markdown.metadata.title;
-        markdownImage.classList.add('img-fluid');
+        markdownImage.classList.add('img-fluid'); // Add Bootstrap class for responsive images
+        imageDiv.appendChild(markdownImage);
 
-        markdownContentDiv.appendChild(markdownTitle);
-        markdownContentDiv.appendChild(markdownImage);
+        // Title and Date container
+        const titleDateDiv = document.createElement('div');
+        titleDateDiv.classList.add('title-date-container');
+
+        // Title
+        const titleLink = document.createElement('a');
+        titleLink.href = markdown.metadata.link;
+        titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
+        titleLink.textContent = markdown.metadata.title;
+
+        // Date
+        const dateSpan = document.createElement('span');
+        dateSpan.classList.add('stext-116', 'cl6', 'p-t-20');
+        dateSpan.textContent = markdown.metadata.date;
+
+        titleDateDiv.appendChild(titleLink);
+        titleDateDiv.appendChild(dateSpan);
+
+        markdownContentDiv.appendChild(imageDiv);
+        markdownContentDiv.appendChild(titleDateDiv);
 
         containerDiv.appendChild(markdownContentDiv);
     });
 
     return containerDiv;
 }
-
