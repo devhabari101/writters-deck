@@ -79,8 +79,14 @@ export function createSidebar(categories, popularMarkdowns) {
         titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
         titleLink.textContent = markdown.metadata.title;
 
+        // Create category span
+        const categorySpan = document.createElement('span');
+        categorySpan.classList.add('stext-116', 'cl6', 'p-t-20');
+        categorySpan.textContent = markdown.metadata.category;
+
         linkWrapper.appendChild(image);
         titleWrapper.appendChild(titleLink);
+        titleWrapper.appendChild(categorySpan); // Append category span
         listItem.appendChild(linkWrapper);
         listItem.appendChild(titleWrapper);
         popularMarkdownsList.appendChild(listItem);
