@@ -1,4 +1,5 @@
 import { createSidebar } from './sidebar.js';
+import { getLatestPopularMarkdown } from './block.js';
 
 // Fetch JSON data from the server and render markdown content
 fetch('markdown_output.json')
