@@ -64,12 +64,18 @@ export function renderLatestTrendingMarkdowns(markdowns) {
         titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
         titleLink.textContent = markdown.metadata.title;
 
+        // Time to read
+        const timeToReadSpan = document.createElement('span');
+        timeToReadSpan.classList.add('stext-116', 'cl6', 'p-t-20');
+        timeToReadSpan.textContent = markdown.metadata.time_to_read;
+
         // Date
         const dateSpan = document.createElement('span');
         dateSpan.classList.add('stext-116', 'cl6', 'p-t-20');
         dateSpan.textContent = markdown.metadata.date;
 
         titleDateDiv.appendChild(titleLink);
+        titleDateDiv.appendChild(timeToReadSpan);
         titleDateDiv.appendChild(dateSpan);
 
         markdownContentDiv.appendChild(imageDiv);
