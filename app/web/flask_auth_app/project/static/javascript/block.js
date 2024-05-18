@@ -13,9 +13,9 @@ export function getLatestPopularMarkdown(popularMarkdowns) {
     markdownImage.classList.add('img-fluid', 'col-md-12'); // Add Bootstrap class for responsive images
     imageDiv.appendChild(markdownImage);
 
-    // Title and Date container
-    const titleDateDiv = document.createElement('div');
-    titleDateDiv.classList.add('col-md-4', 'title-date-container'); // Bootstrap grid column class with custom class
+    // Content container
+    const contentDiv = document.createElement('div');
+    contentDiv.classList.add('col-md-4', 'title-date-container'); // Bootstrap grid column class with custom class
 
     // Title
     const markdownLink = document.createElement('a');
@@ -41,17 +41,18 @@ export function getLatestPopularMarkdown(popularMarkdowns) {
     dateSpan.classList.add('stext-116', 'cl6', 'p-t-20');
     dateSpan.textContent = latestPopularMarkdown.metadata.date;
 
-    // Append elements to titleDateDiv
-    titleDateDiv.appendChild(markdownLink);
-    titleDateDiv.appendChild(dateSpan);
-    titleDateDiv.appendChild(timeToReadSpan);
+    // Append elements to content container
+    contentDiv.appendChild(markdownLink);
+    contentDiv.appendChild(dateSpan);
+    contentDiv.appendChild(timeToReadSpan);
 
     // Append containers to main container
     markdownContentDiv.appendChild(imageDiv);
-    markdownContentDiv.appendChild(titleDateDiv);
+    markdownContentDiv.appendChild(contentDiv);
 
     return markdownContentDiv;
 }
+
 
 export function renderLatestTrendingMarkdowns(markdowns) {
     // Filter the markdowns based on the "trending" field being "on"
