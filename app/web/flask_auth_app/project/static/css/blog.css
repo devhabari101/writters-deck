@@ -16,3 +16,11 @@
 .title-date-container .stext-116 {
     margin-bottom: 10px;
 }
+
+.d-block {
+    display: block;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem; /* Adjust this value as needed for spacing */
+}
