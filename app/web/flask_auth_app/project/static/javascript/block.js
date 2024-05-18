@@ -75,7 +75,7 @@ export function renderLatestTrendingMarkdowns(markdowns) {
         markdownContentDiv.classList.add('latest-trending-markdown', 'row');
 
         const imageDiv = document.createElement('div');
-        imageDiv.classList.add('col-md-4');
+        imageDiv.classList.add('col-md-8');
         const markdownImage = document.createElement('img');
         markdownImage.src = markdown.metadata.image_url;
         markdownImage.alt = markdown.metadata.title;
@@ -83,7 +83,7 @@ export function renderLatestTrendingMarkdowns(markdowns) {
         imageDiv.appendChild(markdownImage);
 
         const titleDateDiv = document.createElement('div');
-        titleDateDiv.classList.add('col-md-8');
+        titleDateDiv.classList.add('col-md-4');
 
         const titleLink = document.createElement('a');
         titleLink.href = markdown.metadata.link;
