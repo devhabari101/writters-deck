@@ -5,15 +5,15 @@ export function getLatestPopularMarkdown(popularMarkdowns) {
     markdownContentDiv.classList.add('markdown-content', 'row'); // Add Bootstrap classes for grid layout
     
     const imageDiv = document.createElement('div');
-    imageDiv.classList.add('col-md-4'); // Bootstrap grid column class
+    imageDiv.classList.add('col-md-8'); // Bootstrap grid column class
     const markdownImage = document.createElement('img');
     markdownImage.src = latestPopularMarkdown.metadata.image_url;
     markdownImage.alt = latestPopularMarkdown.metadata.title;
-    markdownImage.classList.add('img-fluid'); // Add Bootstrap class for responsive images
+    markdownImage.classList.add('img-fluid', 'col-md-12'); // Add Bootstrap class for responsive images
     imageDiv.appendChild(markdownImage);
     
     const contentDiv = document.createElement('div');
-    contentDiv.classList.add('col-md-8'); // Bootstrap grid column class
+    contentDiv.classList.add('col-md-4'); // Bootstrap grid column class
     
     const markdownLink = document.createElement('a');
     markdownLink.href = latestPopularMarkdown.metadata.link;
