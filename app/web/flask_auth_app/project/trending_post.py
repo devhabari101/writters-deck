@@ -1,4 +1,7 @@
 # trending_post.py
+import os
+import json
+
 def list_trending_post():
     trending_post = None
     for filename in os.listdir(markdown_dir):
