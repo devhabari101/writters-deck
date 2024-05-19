@@ -84,19 +84,16 @@
                     </button>
                     <div class="collapse navbar-collapse bg-light py-3" id="navbarCollapse">
                         <div class="navbar-nav mx-auto border-top">
-                            {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('auth.logout') }}" class="nav-item nav-link active">Logout</a>
-                            {% else %}
-                            <a href="{{ url_for('auth.login') }}" class="nav-item nav-link">Login</a>
-                            <a href="{{ url_for('auth.signup') }}" class="nav-item nav-link">Sign Up</a>
-                            {% endif %}
+                            <a href="{{ url_for('index') }}" class="nav-item nav-link active">Home</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dropdown</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="#" class="dropdown-item">Dropdown 1</a>
-                                    <a href="#" class="dropdown-item">Dropdown 2</a>
-                                    <a href="#" class="dropdown-item">Dropdown 3</a>
-                                    <a href="#" class="dropdown-item">Dropdown 4</a>
+                                    {% if current_user.is_authenticated %}
+                                    <a href="{{ url_for('auth.logout') }}" class="dropdown-item">Logout</a>
+                                    {% else %}
+                                    <a href="{{ url_for('auth.login') }}" class="dropdown-item">Login</a>
+                                    <a href="{{ url_for('auth.signup') }}" class="dropdown-item">Sign Up</a>
+                                    {% endif %}
                                 </div>
                             </div>
                             <a href="contact.html" class="nav-item nav-link">Contact Us</a>
@@ -139,6 +136,11 @@
         </div>
     </div>
     <!-- Modal Search End -->
+
+    <!-- Content Block Start -->
+    {% block content %}
+    {% endblock %}
+    <!-- Content Block End -->
 
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
