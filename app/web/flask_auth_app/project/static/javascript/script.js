@@ -64,9 +64,9 @@ fetch('markdown_output.json')
         });
         
         // Adjust width of the image
-        const images = document.querySelectorAll('.image');
-        images.forEach(image => {
-            image.style.width = '75%';
-        });
-    })
+        //const images = document.querySelectorAll('.image');
+       // images.forEach(image => {
+       //     image.style.width = '75%';
+       // });
+    //})
     .catch(error => console.error('Error fetching JSON:', error));
