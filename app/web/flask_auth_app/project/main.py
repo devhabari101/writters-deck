@@ -19,6 +19,9 @@ def index():
         # Handle the case where the file doesn't exist
         data = []
     
+    # Sort data by date
+    data.sort(key=lambda x: x['metadata']['date'], reverse=True)
+    
     # Filter data for entries where trending, topPick, or popular is "on"
     filtered_data = []
     trending_count = 0
