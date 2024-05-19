@@ -24,19 +24,18 @@ def index():
     
     # Filter data for entries where trending, topPick, or popular is "on"
     filtered_data = []
-    trending_count = 0
-    top_pick_count = 0
-    popular_count = 0
+    category_count = {}
     for item in data:
-        if trending_count < 1 and item['metadata'].get('trending') == 'on':
+        category = item['metadata'].get('category')
+        if category not in category_count:
+            category_count[category] = 0
+        if category_count.get(category, 0) < 1 and (
+            item['metadata'].get('trending') == 'on' or 
+            item['metadata'].get('topPick') == 'on' or 
+            item['metadata'].get('popular') == 'on'
+        ):
             filtered_data.append(item)
-            trending_count += 1
-        elif top_pick_count < 1 and item['metadata'].get('topPick') == 'on':
-            filtered_data.append(item)
-            top_pick_count += 1
-        elif popular_count < 2 and item['metadata'].get('popular') == 'on':
-            filtered_data.append(item)
-            popular_count += 1
+            category_count[category] += 1
     
     # Pass the filtered data to the template for rendering
     return render_template('index.html', data=filtered_data)
