@@ -12,8 +12,12 @@ def index():
     json_file_path = '/web/flask_auth_app/markdown_output.json'
     
     # Read data from markdown_output.json
-    with open(json_file_path, 'r') as json_file:
-        data = json.load(json_file)
+    try:
+        with open(json_file_path, 'r') as json_file:
+            data = json.load(json_file)
+    except FileNotFoundError:
+        # Handle the case where the file doesn't exist
+        data = []
     
     # Filter data for entries where trending, topPick, or popular is "on"
     filtered_data = []
