@@ -6,22 +6,31 @@ export function getLatestPopularMarkdown(popularMarkdowns) {
 
     // Image container
     const imageDiv = document.createElement('div');
-    imageDiv.classList.add('col-md-8'); // Bootstrap grid column class
+    imageDiv.classList.add('col-md-12'); // Bootstrap grid column class
     const markdownImage = document.createElement('img');
     markdownImage.src = latestPopularMarkdown.metadata.image_url;
     markdownImage.alt = latestPopularMarkdown.metadata.title;
-    markdownImage.classList.add('img-fluid', 'col-md-12'); // Add Bootstrap class for responsive images
+    markdownImage.classList.add('img-fluid'); // Add Bootstrap class for responsive images
     imageDiv.appendChild(markdownImage);
 
     // Content container
     const contentDiv = document.createElement('div');
-    contentDiv.classList.add('col-md-4', 'title-date-container'); // Bootstrap grid column class with custom class
+    contentDiv.classList.add('col-md-12'); // Bootstrap grid column class
 
     // Title
     const markdownLink = document.createElement('a');
     markdownLink.href = latestPopularMarkdown.metadata.link;
     markdownLink.textContent = latestPopularMarkdown.metadata.title;
     markdownLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04'); // Add text classes
+
+    // Container for date and time to read
+    const dateAndTimeDiv = document.createElement('div');
+    dateAndTimeDiv.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+
+    // Date span
+    const dateSpan = document.createElement('span');
+    dateSpan.classList.add('stext-116', 'cl6', 'p-t-20');
+    dateSpan.textContent = latestPopularMarkdown.metadata.date;
 
     // Reading time calculation
     const calculateReadingTime = (text) => {
@@ -36,15 +45,30 @@ export function getLatestPopularMarkdown(popularMarkdowns) {
     timeToReadSpan.classList.add('stext-116', 'cl6', 'p-t-20');
     timeToReadSpan.textContent = calculateReadingTime(latestPopularMarkdown.content);
 
-    // Date span
-    const dateSpan = document.createElement('span');
-    dateSpan.classList.add('stext-116', 'cl6', 'p-t-20');
-    dateSpan.textContent = latestPopularMarkdown.metadata.date;
+    // Category span
+    const categorySpan = document.createElement('span');
+    categorySpan.classList.add('stext-116', 'cl6', 'p-t-20');
+    categorySpan.textContent = latestPopularMarkdown.metadata.category;
 
-    // Append elements to content container
+    // Truncate content to 50 words
+    const truncateContent = (text, wordLimit) => {
+        const words = text.split(/\s+/);
+        return words.slice(0, wordLimit).join(' ') + (words.length > wordLimit ? '...' : '');
+    };
+
+    const contentParagraph = document.createElement('p');
+    contentParagraph.classList.add('stext-117', 'cl6', 'p-t-20');
+    contentParagraph.textContent = truncateContent(latestPopularMarkdown.content, 50);
+
+    // Append elements to dateAndTimeDiv
+    dateAndTimeDiv.appendChild(dateSpan);
+    dateAndTimeDiv.appendChild(timeToReadSpan);
+
+    // Append elements to contentDiv
     contentDiv.appendChild(markdownLink);
-    contentDiv.appendChild(dateSpan);
-    contentDiv.appendChild(timeToReadSpan);
+    contentDiv.appendChild(dateAndTimeDiv);
+    contentDiv.appendChild(categorySpan);
+    contentDiv.appendChild(contentParagraph);
 
     // Append containers to main container
     markdownContentDiv.appendChild(imageDiv);
