@@ -1,8 +1,9 @@
-import json
 import os
+import json
 from flask import Blueprint, render_template, current_app
 from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
+from .trending_post import list_trending_post  # Import the list_trending_post function
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -27,8 +28,10 @@ def index():
     category_count = {}
     for item in data:
         if trending_count < 1 and item['metadata'].get('trending') == 'on':
-            filtered_data.append(item)
-            trending_count += 1
+            trending_post = list_trending_post()  # Get the trending post
+            if trending_post:
+                filtered_data.append(trending_post)
+                trending_count += 1
         elif top_pick_count < 1 and item['metadata'].get('topPick') == 'on':
             filtered_data.append(item)
             top_pick_count += 1
