@@ -54,6 +54,7 @@ export function getLatestPopularMarkdown(popularMarkdowns) {
 }
 
 
+
 export function renderLatestTrendingMarkdowns(markdowns) {
     // Filter the markdowns based on the "trending" field being "on"
     const trendingMarkdowns = markdowns.filter(markdown => markdown.metadata.trending === "on");
