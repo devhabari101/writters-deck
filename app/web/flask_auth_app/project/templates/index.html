@@ -1,33 +1,30 @@
 <!-- index.html -->
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container-fluid features mb-5">
     <div class="container py-5">
         <div class="row g-4">
-            {% if latest_markdown %}
+            {% for item in data %}
             <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="row g-4 align-items-center features-item">
                     <div class="col-4">
                         <div class="rounded-circle position-relative">
                             <div class="overflow-hidden rounded-circle">
-                                <img src="{{ latest_markdown.metadata.image_url }}" class="img-zoomin img-fluid rounded-circle w-100" alt=""> <!-- image -->
+                                <img src="{{ item.metadata.image_url }}" class="img-zoomin img-fluid rounded-circle w-100" alt=""> <!-- image -->
                             </div>
                             <span class="rounded-circle border border-2 border-white bg-primary btn-sm-square text-white position-absolute" style="top: 10%; right: -10px;">3</span> <!-- number of content within a category -->
                         </div>
                     </div>
                     <div class="col-8">
                         <div class="features-content d-flex flex-column">
-                            <p class="text-uppercase mb-2">{{ latest_markdown.metadata.category }}</p> <!-- category -->
-                            <a href="#" class="h6">{{ latest_markdown.metadata.title }}</a> <!-- title -->
-                            <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"></i> {{ latest_markdown.metadata.date }}</small> <!-- date -->
+                            <p class="text-uppercase mb-2">{{ item.metadata.category }}</p> <!-- category -->
+                            <a href="{{ item.metadata.link }}" class="h6">{{ item.metadata.title }}</a> <!-- title -->
+                            <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"></i> {{ item.metadata.date }}</small> <!-- date -->
                         </div>
                     </div>
                 </div>
             </div>
-            {% else %}
-            <p>No trending, top pick, and popular markdown found.</p>
-            {% endif %}
+            {% endfor %}
         </div>
     </div>
 </div>
