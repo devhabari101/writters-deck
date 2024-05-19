@@ -1,5 +1,6 @@
 import json
-from flask import Blueprint, render_template, redirect, url_for
+import os
+from flask import Blueprint, render_template, current_app
 from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
 
@@ -7,7 +8,13 @@ main_blueprint = Blueprint('main', __name__)
 
 @main_blueprint.route('/')
 def index():
-    return render_template('index.html')
+    # Construct the file path relative to the application root
+    file_path = os.path.join(current_app.root_path, 'markdown_output.json')
+    # Read data from markdown_output.json
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+    # Pass data to the template for rendering
+    return render_template('index.html', data=data)
 
 @main_blueprint.route('/profile')
 @login_required
