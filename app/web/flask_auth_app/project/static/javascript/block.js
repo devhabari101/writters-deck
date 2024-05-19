@@ -1,97 +1,93 @@
-// Function to render the latest single markdown
 export function renderLatestMarkdown(data) {
-    // Find the latest markdown with "trending", "topPick", and "popular" set to "on"
+    // Iterate over the JSON data to find the latest item with trending, topPick, and popular set to "on"
     const latestMarkdown = data.find(item => item.metadata.trending === "on" && item.metadata.topPick === "on" && item.metadata.popular === "on");
 
     if (!latestMarkdown) {
-        console.error("No markdown found with 'trending', 'topPick', and 'popular' set to 'on'");
+        console.error("No markdown data found for trending, topPick, and popular.");
         return null;
     }
 
-    // Create container elements
-    const containerFluid = document.createElement('div');
-    containerFluid.className = 'container-fluid features mb-5';
+    // Create a container div for the latest markdown
     const container = document.createElement('div');
-    container.className = 'container py-5';
+    container.className = 'container-fluid features mb-5';
+
+    // Create the inner container
+    const innerContainer = document.createElement('div');
+    innerContainer.className = 'container py-5';
+
+    // Create the row for the latest markdown
     const row = document.createElement('div');
     row.className = 'row g-4';
 
-    // Create column element
+    // Create the column for the latest markdown
     const column = document.createElement('div');
     column.className = 'col-md-6 col-lg-6 col-xl-3';
 
-    // Create features item element
-    const featuresItem = document.createElement('div');
-    featuresItem.className = 'row g-4 align-items-center features-item';
+    // Create the features item row
+    const featuresItemRow = document.createElement('div');
+    featuresItemRow.className = 'row g-4 align-items-center features-item';
 
-    // Create image container
-    const imageContainer = document.createElement('div');
-    imageContainer.className = 'col-4';
+    // Create the column for the image
+    const imageColumn = document.createElement('div');
+    imageColumn.className = 'col-4';
 
-    // Create image element
+    // Create the image element
     const image = document.createElement('img');
-    image.src = latestMarkdown.metadata.image_url;
     image.className = 'img-zoomin img-fluid rounded-circle w-100';
+    image.src = latestMarkdown.metadata.image_url;
     image.alt = 'Image';
 
-    // Create image overlay
-    const overlay = document.createElement('span');
-    overlay.className = 'rounded-circle border border-2 border-white bg-primary btn-sm-square text-white position-absolute';
-    overlay.style.top = '10%';
-    overlay.style.right = '-10px';
-    overlay.textContent = '3'; // Assuming this is the number of content within a category
+    // Append the image to the image column
+    imageColumn.appendChild(image);
 
-    // Append image and overlay to the image container
-    imageContainer.appendChild(image);
-    imageContainer.appendChild(overlay);
+    // Create the content column
+    const contentColumn = document.createElement('div');
+    contentColumn.className = 'col-8';
 
-    // Create content container
-    const contentContainer = document.createElement('div');
-    contentContainer.className = 'col-8';
-
-    // Create features content element
+    // Create the features content
     const featuresContent = document.createElement('div');
     featuresContent.className = 'features-content d-flex flex-column';
 
-    // Create category element
-    const category = document.createElement('p');
-    category.className = 'text-uppercase mb-2';
-    category.textContent = latestMarkdown.metadata.category;
+    // Create the category paragraph
+    const categoryParagraph = document.createElement('p');
+    categoryParagraph.className = 'text-uppercase mb-2';
+    categoryParagraph.textContent = latestMarkdown.metadata.category;
 
-    // Create title element
-    const title = document.createElement('a');
-    title.className = 'h6';
-    title.href = '#';
-    title.textContent = latestMarkdown.metadata.title;
+    // Create the title link
+    const titleLink = document.createElement('a');
+    titleLink.className = 'h6';
+    titleLink.href = latestMarkdown.metadata.link;
+    titleLink.textContent = latestMarkdown.metadata.title;
 
-    // Create date element
-    const date = document.createElement('small');
-    date.className = 'text-body d-block';
-    date.innerHTML = `<i class="fas fa-calendar-alt me-1"></i>${latestMarkdown.metadata.date}`;
+    // Create the date small element
+    const dateSmall = document.createElement('small');
+    dateSmall.className = 'text-body d-block';
+    dateSmall.innerHTML = `<i class="fas fa-calendar-alt me-1"></i> ${latestMarkdown.metadata.date}`;
 
-    // Append category, title, and date to features content
-    featuresContent.appendChild(category);
-    featuresContent.appendChild(title);
-    featuresContent.appendChild(date);
+    // Append the category, title link, and date elements to the features content
+    featuresContent.appendChild(categoryParagraph);
+    featuresContent.appendChild(titleLink);
+    featuresContent.appendChild(dateSmall);
 
-    // Append features content to content container
-    contentContainer.appendChild(featuresContent);
+    // Append the features content to the content column
+    contentColumn.appendChild(featuresContent);
 
-    // Append image container and content container to features item
-    featuresItem.appendChild(imageContainer);
-    featuresItem.appendChild(contentContainer);
+    // Append the image column and content column to the features item row
+    featuresItemRow.appendChild(imageColumn);
+    featuresItemRow.appendChild(contentColumn);
 
-    // Append features item to column
-    column.appendChild(featuresItem);
+    // Append the features item row to the column
+    column.appendChild(featuresItemRow);
 
-    // Append column to row
+    // Append the column to the row
     row.appendChild(column);
 
-    // Append row to container
-    container.appendChild(row);
+    // Append the row to the inner container
+    innerContainer.appendChild(row);
 
-    // Append container to container fluid
-    containerFluid.appendChild(container);
+    // Append the inner container to the container
+    container.appendChild(innerContainer);
 
-    return containerFluid; // Return the container with the latest markdown
+    // Return the container with the latest markdown
+    return container;
 }
