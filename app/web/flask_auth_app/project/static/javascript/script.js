@@ -1,4 +1,4 @@
-//import showdown from 'showdown'; // Import Showdown library
+import showdown from 'showdown'; // Import Showdown library
 import { renderLatestMarkdown } from './block.js';
 
 // Fetch JSON data from the server and render markdown content
