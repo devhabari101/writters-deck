@@ -2,5 +2,10 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'includes/_features.html' %}
-{% include 'includes/_mainpost.html' %}
+<main>
+<!-- Render the main post section here -->
+{% for post in posts %}
+{% include '_mainpost.html' %}
+      {% endfor %}
+</main>
 {% endblock %}
