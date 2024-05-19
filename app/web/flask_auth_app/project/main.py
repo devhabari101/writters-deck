@@ -20,19 +20,20 @@ def index():
         # Handle the case where the file doesn't exist
         data = []
     
-    # Filter data for entries where trending, topPick, or popular is "on"
+    # Get the latest trending post
+    trending_post = list_trending_post()
+    
+    # Filter data for entries where topPick or popular is "on"
     filtered_data = []
-    trending_count = 0
     top_pick_count = 0
     popular_count = 0
     category_count = {}
+
+    if trending_post:
+        filtered_data.append(trending_post)
+
     for item in data:
-        if trending_count < 1 and item['metadata'].get('trending') == 'on':
-            trending_post = list_trending_post()  # Get the trending post
-            if trending_post:
-                filtered_data.append(trending_post)
-                trending_count += 1
-        elif top_pick_count < 1 and item['metadata'].get('topPick') == 'on':
+        if top_pick_count < 1 and item['metadata'].get('topPick') == 'on':
             filtered_data.append(item)
             top_pick_count += 1
         elif popular_count < 2 and item['metadata'].get('popular') == 'on':
@@ -44,4 +45,9 @@ def index():
             category_count[category] = category_count.get(category, 0) + 1
     
     # Pass the filtered data and category count to the template for rendering
-    return render_template('index.html', data=filtered_data, category_count=category_count)
+    return render_template('index.html', posts=filtered_data, category_count=category_count)
+
+@main_blueprint.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', name=current_user.name)
