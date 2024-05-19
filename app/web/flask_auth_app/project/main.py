@@ -45,8 +45,3 @@ def index():
     
     # Pass the filtered data and category count to the template for rendering
     return render_template('index.html', data=filtered_data, category_count=category_count)
-
-@main_blueprint.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html', name=current_user.name)
