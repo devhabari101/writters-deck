@@ -4,6 +4,9 @@ export function renderLatestMarkdown(data) {
     // Filter the data to get items where "trending", "topPick", and "popular" are all "on"
     const latestItems = data.filter(item => item.metadata.trending === "on" && item.metadata.topPick === "on" && item.metadata.popular === "on");
 
+    // Clear existing content
+    featuresContainer.innerHTML = '';
+
     // Loop through each latest item
     latestItems.forEach(item => {
         // Create column div for the item
