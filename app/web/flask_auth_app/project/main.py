@@ -15,8 +15,11 @@ def index():
     with open(json_file_path, 'r') as json_file:
         data = json.load(json_file)
     
+    # Filter the data to get the latest trending, topPick, and popular markdown
+    latest_markdown = next((item for item in data if item['metadata'].get('trending') == 'on' and item['metadata'].get('topPick') == 'on' and item['metadata'].get('popular') == 'on'), None)
+    
     # Pass data to the template for rendering
-    return render_template('index.html', data=data)
+    return render_template('index.html', latest_markdown=latest_markdown)
 
 @main_blueprint.route('/profile')
 @login_required
