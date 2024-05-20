@@ -14,7 +14,7 @@
 <!-- Render all other posts here -->
 <section>
     {% for post in posts %}
-        {% if post is not none and post.metadata is not none and post.metadata.trending != 'on' %}
+        {% if post is not none and post.metadata is not none and (post.metadata.topPick == 'on' or post.metadata.popular == 'on') %}
             {% include 'includes/_mainpost.html' %}
         {% endif %}
     {% endfor %}
