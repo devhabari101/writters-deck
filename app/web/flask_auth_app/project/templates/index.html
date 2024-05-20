@@ -15,13 +15,19 @@
 <!-- Render all other posts here -->
 <section>
      <!-- Render the main post section here -->
-    {% set found_trending_post = false %}
-    {% for post in posts %}
-        {% if post.metadata.trending == 'on' or post.metadata.trending == 'None' %}
-            {% include 'includes/_mainpost.html' %}
-            {% set found_trending_post = true %}
-        {% endif %}
-    {% endfor %}
+    <main>
+    <!-- Render the main post section here -->
+    <!-- Render the main post section here -->
+{% set found_trending_post = false %}
+{% for post in posts %}
+    {% if post and post.metadata and post.metadata.topic and post.metadata.trending == 'on' %}
+        {% include 'includes/_mainpost.html' %}
+        {% set found_trending_post = true %}
+    {% endif %}
+{% endfor %}
+
+
+
 </section>
 
 {% endblock %}
