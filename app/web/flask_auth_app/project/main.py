@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
+from .features import get_filtered_data  # Import the get_filtered_data function
 from .trending_post import list_trending_post  # Import the list_trending_post function
 
 main_blueprint = Blueprint('main', __name__)
@@ -19,6 +20,9 @@ def index():
     except FileNotFoundError:
         # Handle the case where the file doesn't exist
         data = []
+        
+    # Get the filtered data
+    filtered_data = get_filtered_data()
     
     # Get the latest trending post
     trending_post = list_trending_post()
