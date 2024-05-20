@@ -13,10 +13,14 @@
 </main>
 <!-- Render all other posts here -->
 <section>
-    {% for post in posts %}
-        {% if post and post.metadata and post.metadata.topPick and post.metadata.trending != 'on' %}
-            {% include 'includes/_mainpost.html' %}
-        {% endif %}
-    {% endfor %}
+   <!-- Render the main post section here -->
+{% set found_trending_post = false %}
+{% for post in posts %}
+    {% if post and post.metadata and post.metadata.topic and post.metadata.trending == 'on' %}
+        {% include 'includes/_mainpost.html' %}
+        {% set found_trending_post = true %}
+    {% endif %}
+{% endfor %}
+
 </section>
 {% endblock %}
