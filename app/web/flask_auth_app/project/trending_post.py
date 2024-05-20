@@ -24,6 +24,8 @@ def list_trending_post():
                     if not latest_date or (post_date and post_date > latest_date):
                         latest_date = post_date
                         html_content = markdown.markdown(content)
+                        # Remove <p> tags from the HTML content
+                        html_content = re.sub(r'<p>(.*?)</p>', r'\1', html_content)
                         trending_post = {
                             "metadata": metadata_dict,
                             "content": html_content
