@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Blueprint, render_template, current_app
+from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
 from .trending_post import list_trending_post  # Import the list_trending_post function
