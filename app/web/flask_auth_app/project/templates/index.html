@@ -5,7 +5,10 @@
 <main>
 <!-- Render the main post section here -->
 {% for post in posts %}
-{% include 'includes/_mainpost.html' %}
-      {% endfor %}
+    {% if post.metadata.trending == 'on' %}
+        {% include 'includes/_mainpost.html' %}
+        {% break %}
+    {% endif %}
+{% endfor %}
 </main>
 {% endblock %}
