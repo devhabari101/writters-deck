@@ -13,11 +13,9 @@
     {% endfor %}
 </main>
 <!-- Render all other posts here -->
-<section>
-    {% for post in posts %}
-        {% if post %}
+{% for post in posts %}
+        {% if post is not none and post.metadata is not none and not post.metadata.trending %}
             {% include 'includes/_mainpost.html' %}
         {% endif %}
     {% endfor %}
-</section>
 {% endblock %}
