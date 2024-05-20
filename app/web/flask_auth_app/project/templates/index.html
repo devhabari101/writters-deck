@@ -4,11 +4,13 @@
 {% include 'includes/_features.html' %}
 <main>
 <!-- Render the main post section here -->
+{% set found_trending_post = false %}
 {% for post in posts %}
-    {% if post.metadata.trending == 'on' %}
+    {% if post.metadata.trending == 'on' and not found_trending_post %}
         {% include 'includes/_mainpost.html' %}
-        {% break %}
+        {% set found_trending_post = true %}
     {% endif %}
 {% endfor %}
+
 </main>
 {% endblock %}
