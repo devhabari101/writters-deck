@@ -39,7 +39,7 @@ def list_trending_post():
 
     for post in posts:
         metadata = post['metadata']
-        if metadata.get('trending') == 'on':
+        if metadata.get('trending') == 'on' or metadata.get('popular') == 'on' or metadata.get('topPick') == 'on':
             post_date_str = metadata.get('date')
             if post_date_str:
                 post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
