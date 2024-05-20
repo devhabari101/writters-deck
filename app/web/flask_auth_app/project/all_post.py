@@ -1,4 +1,3 @@
-# all_post.py
 import os
 import re
 import markdown
