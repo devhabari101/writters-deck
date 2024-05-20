@@ -1,6 +1,7 @@
 import os
 import re
 import markdown
+from datetime import datetime
 from .convertor import markdown_dir  # Import markdown_dir
 
 def list_trending_post():
@@ -20,14 +21,16 @@ def list_trending_post():
                         key, value = key_value
                         metadata_dict[key.strip()] = value.strip()
                 if metadata_dict.get('trending') == 'on':
-                    post_date = metadata_dict.get('date')
-                    if not latest_date or (post_date and post_date > latest_date):
-                        latest_date = post_date
-                        html_content = markdown.markdown(content)
-                        # Remove <p> tags from the HTML content
-                        html_content = re.sub(r'<p>(.*?)</p>', r'\1', html_content)
-                        trending_post = {
-                            "metadata": metadata_dict,
-                            "content": html_content
-                        }
+                    post_date_str = metadata_dict.get('date')
+                    if post_date_str:
+                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        if not latest_date or post_date > latest_date:
+                            latest_date = post_date
+                            html_content = markdown.markdown(content)
+                            # Remove <p> tags from the HTML content
+                            html_content = re.sub(r'<p>(.*?)</p>', r'\1', html_content)
+                            trending_post = {
+                                "metadata": metadata_dict,
+                                "content": html_content
+                            }
     return trending_post
