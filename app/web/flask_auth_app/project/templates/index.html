@@ -3,14 +3,21 @@
 {% block content %}
 {% include 'includes/_features.html' %}
 <main>
-<!-- Render the main post section here -->
-{% set found_trending_post = false %}
-{% for post in posts %}
-    {% if post.metadata.trending == 'on' and not found_trending_post %}
-        {% include 'includes/_mainpost.html' %}
-        {% set found_trending_post = true %}
-    {% endif %}
-{% endfor %}
-
+    <!-- Render the main post section here -->
+    {% set found_trending_post = false %}
+    {% for post in posts %}
+        {% if post.metadata.trending == 'on' and not found_trending_post %}
+            {% include 'includes/_mainpost.html' %}
+            {% set found_trending_post = true %}
+        {% endif %}
+    {% endfor %}
 </main>
+<!-- Render all other posts here -->
+<section>
+    {% for post in posts %}
+        {% if post.metadata.trending != 'on' %}
+            {% include 'includes/_mainpost.html' %}
+        {% endif %}
+    {% endfor %}
+</section>
 {% endblock %}
