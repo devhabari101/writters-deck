@@ -48,3 +48,19 @@ def list_trending_post():
                     trending_post = post
 
     return trending_post
+
+def get_latest_second_post(posts):
+    latest_post = None
+    latest_date = None
+
+    for post in posts:
+        metadata = post['metadata']
+        if metadata.get('trending') == 'on':
+            post_date_str = metadata.get('date')
+            if post_date_str:
+                post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                if not latest_date or post_date > latest_date:
+                    latest_date = post_date
+                    latest_post = post
+
+    return latest_post
