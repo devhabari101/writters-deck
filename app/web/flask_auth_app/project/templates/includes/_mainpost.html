@@ -1,0 +1,53 @@
+<!-- Main Post Section Start  -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-lg-7 col-xl-8 mt-0">
+                <div class="position-relative overflow-hidden rounded">
+                    <img src="{{ post.metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt="Image">
+                    <div class="d-flex justify-content-center px-4 position-absolute flex-wrap" style="bottom: 10px; left: 0;">
+                        <a href="#" class="text-white me-3 link-hover"><i class="fa fa-clock"></i> {{ post.metadata.time_to_read }}</a>
+                        <a href="#" class="text-white me-3 link-hover"><i class="fa fa-eye"></i>  Views</a>
+                        <a href="#" class="text-white link-hover"><i class="fa fa-arrow-up"></i>  Shares</a>
+                    </div>
+                </div>
+                <div class="border-bottom py-3">
+                    <a href="#" class="display-4 text-dark mb-0 link-hover">{{ post.metadata.title }}</a>
+                </div>
+                <p class="text-muted">{{ post.metadata.date }}</p>
+                <p class="mt-3 mb-4">{{ post.content }}</p>
+            </div>
+            <!-- get_latest_second_post here  -->
+{% block second_content %}
+{% set trending_posts = [] %}
+{% for post in posts %}
+    {% if post.metadata.trending == 'on' %}
+        {% set trending_posts = trending_posts + [post] %}
+    {% endif %}
+{% endfor %}
+
+{% if trending_posts|length > 1 %}
+<div class="bg-light p-4 rounded">
+    <div class="news-2">
+        <h3 class="mb-4">Second Latest Trending Post</h3>
+    </div>
+    <div class="row g-4 align-items-center">
+        <div class="col-md-6">
+            <div class="rounded overflow-hidden">
+                <img src="{{ trending_posts[-2].metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt=""> <!-- image -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex flex-column">
+                <a href="#" class="h3">{{ trending_posts[-2].metadata.title }}</a> <!-- title -->
+                <p class="mb-0 fs-5"><i class="fa fa-clock"></i> {{ trending_posts[-2].metadata.time_to_read }} minute read</p> <!-- time to read -->
+                <p class="mb-0 fs-5"><i class="fa fa-eye"></i> Views</p> <!-- views -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+            
+<!-- Main Post Section End -->
