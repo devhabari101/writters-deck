@@ -49,7 +49,7 @@ def index():
             category_count[category] = category_count.get(category, 0) + 1
     
     # Pass the filtered data and category count to the template for rendering
-    return render_template('index.html', data=filtered_data, posts=filtered_data, category_count=category_count)
+    return render_template('index.html', post=post, trending_post=trending_post, data=filtered_data, posts=filtered_data, category_count=category_count)
 
 @main_blueprint.route('/profile')
 @login_required
