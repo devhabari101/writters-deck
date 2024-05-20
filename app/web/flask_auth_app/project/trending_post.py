@@ -1,9 +1,11 @@
-# trending_post.py
 import os
-import json
+import re
+import markdown
+from .convertor import markdown_dir  # Import markdown_dir
 
 def list_trending_post():
     trending_post = None
+    latest_date = None
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
             with open(os.path.join(markdown_dir, filename), "r", encoding="utf-8") as file:
@@ -18,14 +20,12 @@ def list_trending_post():
                         key, value = key_value
                         metadata_dict[key.strip()] = value.strip()
                 if metadata_dict.get('trending') == 'on':
-                    html_content = markdown.markdown(content)
-                    trending_post = {
-                        "metadata": metadata_dict,
-                        "content": html_content
-                    }
-                    break  # Found a trending post, no need to continue searching
-                else:
-                    print(f"No trending post found in file: {filename}")
-            else:
-                print(f"Could not parse metadata in file: {filename}")
+                    post_date = metadata_dict.get('date')
+                    if not latest_date or (post_date and post_date > latest_date):
+                        latest_date = post_date
+                        html_content = markdown.markdown(content)
+                        trending_post = {
+                            "metadata": metadata_dict,
+                            "content": html_content
+                        }
     return trending_post
