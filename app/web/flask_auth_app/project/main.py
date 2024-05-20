@@ -4,8 +4,7 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
 from .features import get_filtered_data  # Import the get_filtered_data function
-from .trending_post import list_all_posts, list_trending_post  # Import the functions
-
+from .trending_post import list_all_posts, list_trending_post, get_latest_second_post  # Import the functions
 main_blueprint = Blueprint('main', __name__)
 
 @main_blueprint.route('/')
@@ -23,7 +22,8 @@ def index():
         
     # Get the filtered data
     filtered_data = get_filtered_data()
-    
+    # Get the latest second post where trending is "on"
+    latest_second_post = get_latest_second_post(filtered_data)
     # Get the latest trending post
     trending_post = list_trending_post()
     
@@ -52,7 +52,7 @@ def index():
     all_posts = list_all_posts()
     
     # Pass the filtered data and category count to the template for rendering
-    return render_template('index.html', trending_post=trending_post, data=filtered_data, posts=all_posts, category_count=category_count)
+    return render_template('index.html', trending_post=trending_post, data=filtered_data, posts=all_posts, category_count=category_count, latest_second_post=latest_second_post)
 
 @main_blueprint.route('/profile')
 @login_required
