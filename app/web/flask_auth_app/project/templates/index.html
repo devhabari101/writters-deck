@@ -6,7 +6,7 @@
 
 <main>
     <!-- Render the main post section here -->
-    {% if latest_post and post.metadata and post.metadata.topic and latest_post.metadata.trending == 'on' %}
+    {% if latest_post and latest_post.metadata.trending == 'on' %}
         {% set post = latest_post %}
         {% include 'includes/_mainpost.html' %}
         {% set found_trending_post = true %}
@@ -15,7 +15,7 @@
 
 <section>
     <!-- Render the secondary post section here -->
-    {% if second_latest_post and post.metadata and post.metadata.topic and second_latest_post.metadata.trending == 'on' and not found_trending_post %}
+    {% if second_latest_post and second_latest_post.metadata.trending == 'on' and not found_trending_post %}
         {% set post = second_latest_post %}
         {% include 'includes/_mainpost.html' %}
         {% set found_trending_post = true %}
