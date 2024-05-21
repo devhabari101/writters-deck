@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'includes/_features.html' %}
+
+{% set found_trending_post = false %}
+
 <main>
     <!-- Render the main post section here -->
-    {% if latest_post %}
+    {% if latest_post and post.metadata and post.metadata.topic and latest_post.metadata.trending == 'on' %}
         {% set post = latest_post %}
         {% include 'includes/_mainpost.html' %}
+        {% set found_trending_post = true %}
     {% endif %}
 </main>
+
+<section>
+    <!-- Render the secondary post section here -->
+    {% if second_latest_post and post.metadata and post.metadata.topic and second_latest_post.metadata.trending == 'on' and not found_trending_post %}
+        {% set post = second_latest_post %}
+        {% include 'includes/_mainpost.html' %}
+        {% set found_trending_post = true %}
+    {% endif %}
+</section>
+
 {% endblock %}
