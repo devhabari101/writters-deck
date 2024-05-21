@@ -26,7 +26,7 @@
     <!-- Render the main secondary section here -->
     {% if latest_post and latest_post.metadata.trending == 'on' %}
         {% set post = latest_post %}
-        {% include 'includes/singlesmtrending.html' %}
+        {% include 'includes/_singlesmtrending.html' %}
         {% set found_trending_post = true %}
     {% endif %}
 </main>
