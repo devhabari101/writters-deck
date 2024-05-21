@@ -38,6 +38,11 @@ def index():
         if latest_post['metadata'].get('trending') == 'on':
             filtered_data.append(latest_post)
 
+    if second_latest_post:
+        # Append the second latest post only if it is trending
+        if second_latest_post['metadata'].get('trending') == 'on':
+            filtered_data.append(second_latest_post)
+
     for item in data:
         if top_pick_count < 1 and item['metadata'].get('topPick') == 'on':
             filtered_data.append(item)
