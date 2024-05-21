@@ -34,10 +34,9 @@ def index():
     category_count = {}
 
     if latest_post:
-        filtered_data.append(latest_post)
-
-    #if second_latest_post:
-        #filtered_data.append(second_latest_post)
+        # Append the latest post only if it is trending
+        if latest_post['metadata'].get('trending') == 'on':
+            filtered_data.append(latest_post)
 
     for item in data:
         if top_pick_count < 1 and item['metadata'].get('topPick') == 'on':
@@ -51,7 +50,7 @@ def index():
         if category:
             category_count[category] = category_count.get(category, 0) + 1
     
-    # Pass the filtered data and category count to the template for rendering
+    # Pass the filtered data, latest post, second latest post, and category count to the template for rendering
     return render_template('index.html', data=filtered_data, latest_post=latest_post, second_latest_post=second_latest_post, posts=filtered_data, category_count=category_count)
 
 
