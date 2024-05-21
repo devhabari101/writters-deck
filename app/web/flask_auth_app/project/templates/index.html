@@ -8,7 +8,7 @@
     <!-- Render the main post section here -->
     {% if latest_post and latest_post.metadata.trending == 'on' %}
         {% set post = latest_post %}
-        {% include 'includes/_mainpost.html' %}
+        {% include 'includes/_secondtrending.html' %}
         {% set found_trending_post = true %}
     {% endif %}
 </main>
