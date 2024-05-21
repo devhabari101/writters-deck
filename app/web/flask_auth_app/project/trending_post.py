@@ -21,21 +21,24 @@ def get_latest_post():
                     if len(key_value) == 2:
                         key, value = key_value
                         metadata_dict[key.strip()] = value.strip()
-                post_date_str = metadata_dict.get('date')
-                if post_date_str:
-                    post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
-                    if not latest_date or post_date > latest_date:
-                        latest_date = post_date
-                        latest_post = {
-                            "metadata": metadata_dict,
-                            "content": markdown.markdown(content)
-                        }
+                # Check if the post is trending
+                if metadata_dict.get('trending') == 'on':
+                    post_date_str = metadata_dict.get('date')
+                    if post_date_str:
+                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        if not latest_date or post_date > latest_date:
+                            latest_date = post_date
+                            latest_post = {
+                                "metadata": metadata_dict,
+                                "content": markdown.markdown(content)
+                            }
 
     # Remove <p> tags from the HTML content
     if latest_post:
         latest_post["content"] = re.sub(r'<p>(.*?)</p>', r'\1', latest_post["content"])
 
     return latest_post
+
 def get_second_latest_post():
     posts = []
 
@@ -52,14 +55,16 @@ def get_second_latest_post():
                     if len(key_value) == 2:
                         key, value = key_value
                         metadata_dict[key.strip()] = value.strip()
-                post_date_str = metadata_dict.get('date')
-                if post_date_str:
-                    post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
-                    posts.append({
-                        "metadata": metadata_dict,
-                        "content": markdown.markdown(content),
-                        "date": post_date
-                    })
+                # Check if the post is trending
+                if metadata_dict.get('trending') == 'on':
+                    post_date_str = metadata_dict.get('date')
+                    if post_date_str:
+                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        posts.append({
+                            "metadata": metadata_dict,
+                            "content": markdown.markdown(content),
+                            "date": post_date
+                        })
 
     # Sort posts by date in descending order
     sorted_posts = sorted(posts, key=lambda x: x["date"], reverse=True)
