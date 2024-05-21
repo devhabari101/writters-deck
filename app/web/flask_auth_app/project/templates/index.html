@@ -15,7 +15,7 @@
 
 <section>
     <!-- Render the secondary post section here -->
-    {% if second_latest_post and second_latest_post.metadata.trending == 'on' and not found_trending_post %}
+    {% if second_latest_post and second_latest_post.metadata.trending == 'on' a%}
         {% set post = second_latest_post %}
         {% include 'includes/_mainpost.html' %}
         {% set found_trending_post = true %}
