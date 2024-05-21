@@ -7,7 +7,6 @@ from .convertor import markdown_dir  # Ensure the correct import path
 def list_trending_post(index):
     trending_post = None
     trending_counter = 0
-    latest_date = None
 
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
@@ -42,5 +41,8 @@ def list_trending_post(index):
 
     return trending_post
 
+def get_latest_post():
+    return list_trending_post(1)  # Get the latest trending post
+
 def get_second_latest_post():
-    return list_trending_post(2)  # Get the second trending post
+    return list_trending_post(2)  # Get the second latest trending post
