@@ -15,6 +15,14 @@
 
 <main>
     <!-- Render the main secondary section here -->
+    {% if second_latest_post and second_latest_post.metadata.trending == 'on' %}
+        {% set post = latest_post %}
+        {% include 'includes/_singlesmtrending.html' %}
+        {% set found_trending_post = true %}
+    {% endif %}
+</main>
+<main>
+    <!-- Render the main secondary section here -->
     {% if latest_post and latest_post.metadata.trending == 'on' %}
         {% set post = latest_post %}
         {% include 'includes/_secondtrending.html' %}
@@ -22,14 +30,7 @@
     {% endif %}
 </main>
 
-<main>
-    <!-- Render the main secondary section here -->
-    {% if latest_post and latest_post.metadata.trending == 'on' %}
-        {% set post = latest_post %}
-        {% include 'includes/_singlesmtrending.html' %}
-        {% set found_trending_post = true %}
-    {% endif %}
-</main>
+
 
 
 {% endblock %}
