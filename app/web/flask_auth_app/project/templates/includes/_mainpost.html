@@ -42,6 +42,8 @@
             </div>
 
             <!-- Single Small Trending Post -->
+            {% if latest_post and latest_post.metadata.trending == 'on' %}
+            {% set post = latest_post %}
             <div class="col-lg-5 col-xl-4">
                 <div class="bg-light rounded p-4 pt-0">
                     <div class="row g-4">
@@ -62,4 +64,5 @@
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
