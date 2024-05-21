@@ -4,8 +4,7 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
 from .features import get_filtered_data  # Import the get_filtered_data function
-from .trending_post import list_trending_post  # Import the list_trending_post function
-
+from .trending_post import get_latest_post, get_second_latest_post  # Import the functions
 main_blueprint = Blueprint('main', __name__)
 
 @main_blueprint.route('/')
@@ -24,8 +23,9 @@ def index():
     # Get the filtered data
     filtered_data = get_filtered_data()
     
-    # Get the latest trending post
-    trending_post = list_trending_post()
+    # Get the latest and second latest posts
+    latest_post = get_latest_post()
+    second_latest_post = get_second_latest_post()
     
     # Filter data for entries where topPick or popular is "on"
     filtered_data = []
@@ -33,8 +33,11 @@ def index():
     popular_count = 0
     category_count = {}
 
-    if trending_post:
-        filtered_data.append(trending_post)
+    if latest_post:
+        filtered_data.append(latest_post)
+
+    if second_latest_post:
+        filtered_data.append(second_latest_post)
 
     for item in data:
         if top_pick_count < 1 and item['metadata'].get('topPick') == 'on':
@@ -49,7 +52,8 @@ def index():
             category_count[category] = category_count.get(category, 0) + 1
     
     # Pass the filtered data and category count to the template for rendering
-    return render_template('index.html', data=filtered_data, posts=filtered_data, category_count=category_count)
+    return render_template('index.html', data=filtered_data, latest_post=latest_post, second_latest_post=second_latest_post, posts=filtered_data, category_count=category_count)
+
 
 @main_blueprint.route('/profile')
 @login_required
