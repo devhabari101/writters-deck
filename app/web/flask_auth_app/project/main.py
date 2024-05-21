@@ -36,8 +36,8 @@ def index():
     if latest_post:
         filtered_data.append(latest_post)
 
-    if second_latest_post:
-        filtered_data.append(second_latest_post)
+    #if second_latest_post:
+        #filtered_data.append(second_latest_post)
 
     for item in data:
         if top_pick_count < 1 and item['metadata'].get('topPick') == 'on':
