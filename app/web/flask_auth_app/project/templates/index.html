@@ -4,7 +4,7 @@
 
 {% set found_trending_post = false %}
 
-
+<!--
 <main>
     <!-- Render the main first section here -->
     {% if latest_post and latest_post.metadata.trending == 'on' %}
@@ -13,14 +13,14 @@
         {% set found_trending_post = true %}
     {% endif %}
 </main>
-<main>
+<!--<main>-->
     <!-- Render the main secondary section here -->
-    {% if second_latest_post and second_latest_post.metadata.trending == 'on' %}
-        {% set post = latest_post %}
-        {% include 'includes/_singlesmtrending.html' %}
-        {% set found_trending_post = true %}
-    {% endif %}
-</main>
+    <!--{% if second_latest_post and second_latest_post.metadata.trending == 'on' %}-->
+     <!--   {% set post = latest_post %} -->
+      <!--  {% include 'includes/_singlesmtrending.html' %} -->
+       <!-- {% set found_trending_post = true %} -->
+    <!--{% endif %}-->
+<!--</main>-->
 <section>
     <!-- Render the main secondpost section here -->
     {% if second_latest_post and second_latest_post.metadata.trending == 'on' %}
