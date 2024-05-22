@@ -43,7 +43,7 @@ def list_trending_post(index):
     else:
         return None
 
-def list_all_trending_posts(skip_first=False):
+def list_all_trending_posts(skip_first=True):
     trending_posts = []
 
     for filename in os.listdir(markdown_dir):
