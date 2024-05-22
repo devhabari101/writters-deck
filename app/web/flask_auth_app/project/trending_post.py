@@ -61,6 +61,9 @@ def list_all_trending_posts():
                         metadata_dict[key.strip()] = value.strip()
                 # Check if the post is trending
                 if metadata_dict.get('trending') == 'on':
+                    trending_counter += 1
+                    # Skip the first trending post
+                    if trending_counter > 1:
                     post_date_str = metadata_dict.get('date')
                     if post_date_str:
                         post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
