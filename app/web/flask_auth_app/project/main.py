@@ -4,7 +4,7 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
 from .features import get_filtered_data  # Import the get_filtered_data function
-from .trending_post import get_latest_post, get_second_latest_post, list_all_trending_posts, get_skipped_trending_post  # Import the functions
+from .trending_post import get_latest_post, get_second_latest_post, list_all_trending_posts  # Import the functions
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -29,8 +29,7 @@ def index():
     second_latest_post = get_second_latest_post()
     trending_posts = list_all_trending_posts()
     
-    # Get the skipped trending post
-    skipped_post = get_skipped_trending_post()
+    
     
     # Filter data for entries where topPick or popular is "on"
     top_pick_count = 0
