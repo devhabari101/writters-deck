@@ -45,7 +45,6 @@ def list_trending_post(index):
 
 def list_all_trending_posts():
     trending_posts = []
-    trending_counter = 0
 
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
@@ -62,18 +61,15 @@ def list_all_trending_posts():
                         metadata_dict[key.strip()] = value.strip()
                 # Check if the post is trending
                 if metadata_dict.get('trending') == 'on':
-                    trending_counter += 1
-                    # Skip the first trending post
-                    if trending_counter > 1:
-                        post_date_str = metadata_dict.get('date')
-                        if post_date_str:
-                            post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
-                            trending_post = {
-                                "metadata": metadata_dict,
-                                "content": markdown.markdown(content),
-                                "date": post_date
-                            }
-                            trending_posts.append(trending_post)
+                    post_date_str = metadata_dict.get('date')
+                    if post_date_str:
+                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        trending_post = {
+                            "metadata": metadata_dict,
+                            "content": markdown.markdown(content),
+                            "date": post_date
+                        }
+                        trending_posts.append(trending_post)
 
     # Sort posts by date in descending order
     trending_posts.sort(key=lambda post: post['date'], reverse=True)
