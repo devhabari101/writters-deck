@@ -43,9 +43,8 @@ def list_trending_post(index):
     else:
         return None
 
-def list_all_trending_posts():
+def list_all_trending_posts(skip_first=False):
     trending_posts = []
-    trending_counter = 0
 
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
@@ -62,30 +61,40 @@ def list_all_trending_posts():
                         metadata_dict[key.strip()] = value.strip()
                 # Check if the post is trending
                 if metadata_dict.get('trending') == 'on':
-                    trending_counter += 1
-                    # Skip the first trending post
-                    if trending_counter > 1:
-                        post_date_str = metadata_dict.get('date')
-                        if post_date_str:
-                            post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
-                            trending_post = {
-                                "metadata": metadata_dict,
-                                "content": markdown.markdown(content),
-                                "date": post_date
-                            }
-                            trending_posts.append(trending_post)
+                    post_date_str = metadata_dict.get('date')
+                    if post_date_str:
+                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        trending_post = {
+                            "metadata": metadata_dict,
+                            "content": markdown.markdown(content),
+                            "date": post_date
+                        }
+                        trending_posts.append(trending_post)
 
     # Sort posts by date in descending order
     trending_posts.sort(key=lambda post: post['date'], reverse=True)
+
+    # Optionally skip the first trending post
+    if skip_first and len(trending_posts) > 0:
+        skipped_post = trending_posts[0]
+        trending_posts = trending_posts[1:]
+    else:
+        skipped_post = None
 
     # Remove <p> tags from the HTML content
     for post in trending_posts:
         post["content"] = re.sub(r'<p>(.*?)</p>', r'\1', post["content"])
 
-    return trending_posts
+    return trending_posts, skipped_post
 
 def get_latest_post():
     return list_trending_post(0)  # Get the latest trending post
 
 def get_second_latest_post():
     return list_trending_post(1)  # Get the second latest trending post
+
+def get_skipped_trending_post():
+    trending_posts, skipped_post = list_all_trending_posts(skip_first=True)
+    if skipped_post:
+        skipped_post["content"] = re.sub(r'<p>(.*?)</p>', r'\1', skipped_post["content"])
+    return skipped_post
