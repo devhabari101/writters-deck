@@ -4,9 +4,8 @@ import markdown
 from datetime import datetime
 from .convertor import markdown_dir  # Ensure the correct import path
 
-def list_trending_post(skip, index):
-    trending_post = None
-    trending_counter = 0
+def list_trending_post(index):
+    trending_posts = []
 
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
@@ -23,27 +22,29 @@ def list_trending_post(skip, index):
                         metadata_dict[key.strip()] = value.strip()
                 # Check if the post is trending
                 if metadata_dict.get('trending') == 'on':
-                    trending_counter += 1
-                    if trending_counter == index + skip:
-                        post_date_str = metadata_dict.get('date')
-                        if post_date_str:
-                            post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
-                            trending_post = {
-                                "metadata": metadata_dict,
-                                "content": markdown.markdown(content),
-                                "date": post_date
-                            }
-                        break  # Exit the loop once we find the post at the desired index
+                    post_date_str = metadata_dict.get('date')
+                    if post_date_str:
+                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        trending_post = {
+                            "metadata": metadata_dict,
+                            "content": markdown.markdown(content),
+                            "date": post_date
+                        }
+                        trending_posts.append(trending_post)
 
-    # Remove <p> tags from the HTML content
-    if trending_post:
-        trending_post["content"] = re.sub(r'<p>(.*?)</p>', r'\1', trending_post["content"])
+    # Sort posts by date in descending order
+    trending_posts.sort(key=lambda post: post['date'], reverse=True)
 
-    return trending_post
+    # Ensure the index is within the range of trending posts
+    if 0 <= index < len(trending_posts):
+        # Remove <p> tags from the HTML content of the selected post
+        trending_posts[index]["content"] = re.sub(r'<p>(.*?)</p>', r'\1', trending_posts[index]["content"])
+        return trending_posts[index]
+    else:
+        return None
 
 def list_all_trending_posts():
     trending_posts = []
-    trending_counter = 0
 
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
@@ -60,18 +61,15 @@ def list_all_trending_posts():
                         metadata_dict[key.strip()] = value.strip()
                 # Check if the post is trending
                 if metadata_dict.get('trending') == 'on':
-                    trending_counter += 1
-                    # Skip the first trending post
-                    if trending_counter > 1:
-                        post_date_str = metadata_dict.get('date')
-                        if post_date_str:
-                            post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
-                            trending_post = {
-                                "metadata": metadata_dict,
-                                "content": markdown.markdown(content),
-                                "date": post_date
-                            }
-                            trending_posts.append(trending_post)
+                    post_date_str = metadata_dict.get('date')
+                    if post_date_str:
+                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        trending_post = {
+                            "metadata": metadata_dict,
+                            "content": markdown.markdown(content),
+                            "date": post_date
+                        }
+                        trending_posts.append(trending_post)
 
     # Sort posts by date in descending order
     trending_posts.sort(key=lambda post: post['date'], reverse=True)
@@ -83,7 +81,7 @@ def list_all_trending_posts():
     return trending_posts
 
 def get_latest_post():
-    return list_trending_post(skip=0, index=0)  # Get the second latest trending post
+    return list_trending_post(0)  # Get the latest trending post
 
 def get_second_latest_post():
-    return list_trending_post(skip=1, index=2)  # Get the third latest trending post
+    return list_trending_post(1)  # Get the second latest trending post
