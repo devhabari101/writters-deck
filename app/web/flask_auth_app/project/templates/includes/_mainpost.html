@@ -77,6 +77,7 @@
                              {% endif %}
                                 <div class="col-12">
                                  {% for post in trending_posts %}
+                                 {% if post and post.metadata.trending == 'on' %}
                                     <div class="row g-4 align-items-center">
                                         <div class="col-5">
                                             <div class="overflow-hidden rounded">
@@ -92,6 +93,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endif %}
                                {% endfor %}
                                 <div class="col-12">
                                     <div class="row g-4 align-items-center">
