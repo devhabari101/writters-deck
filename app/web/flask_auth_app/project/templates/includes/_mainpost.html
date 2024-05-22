@@ -1,7 +1,9 @@
 <!-- Main Post Section Start -->
+ 
 <div class="container-fluid py-5">
     <div class="container py-5">
         <div class="row g-4">
+            {% if latest_post and latest_post.metadata.trending == 'on' %}
             <div class="col-lg-7 col-xl-8 mt-0">
                 <div class="position-relative overflow-hidden rounded">
                     <img src="{{ post.metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt="Image">
@@ -16,7 +18,7 @@
                 </div>
                 <p class="text-muted">{{ post.metadata.date }}</p>
                 <p class="mt-3 mb-4">{{ post.content }}</p>
-
+                {% endif %}
                 {% if second_latest_post and second_latest_post.metadata.trending == 'on' %}
                     {% set post = second_latest_post %}
                     <div class="bg-light p-4 rounded">
@@ -42,9 +44,10 @@
             </div>
 
             <!-- Single Small Trending Post -->
-            {% if latest_post and latest_post.metadata.trending == 'on' %}
-            {% set post = latest_post %}
+            
             <div class="col-lg-5 col-xl-4">
+                {% if latest_post and latest_post.metadata.trending == 'on' %}
+                 {% set post = latest_post %}
                 <div class="bg-light rounded p-4 pt-0">
                     <div class="row g-4">
                         <div class="col-12">
@@ -69,6 +72,7 @@
    <!-- Render all trending posts -->
 
     {% for post in trending_posts %}
+{% if post and post.metadata.trending == 'on' %}
 <div class="col-12">
                                     <div class="row g-4 align-items-center">
                                         <div class="col-5">
@@ -85,4 +89,5 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endif %}
                                {% endfor %}
