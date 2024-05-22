@@ -2,16 +2,16 @@
 {% block content %}
 {% include 'includes/_features.html' %}
 
-{% set found_trending_post = false %}
+<!--{% set found_trending_post = false %}-->
 
 
 <main>
     <!-- Render the main first section here -->
-    {% if latest_post and latest_post.metadata.trending == 'on' %}
-        {% set post = latest_post %}
+    <!--{% if latest_post and latest_post.metadata.trending == 'on' %}-->
+        <!--{% set post = latest_post %}-->
         {% include 'includes/_mainpost.html' %} 
-        {% set found_trending_post = true %}
-    {% endif %}
+        <!--{% set found_trending_post = true %}-->
+    <!--{% endif %}-->
 </main>
 <!--<main>-->
     <!-- Render the main secondary section here -->
