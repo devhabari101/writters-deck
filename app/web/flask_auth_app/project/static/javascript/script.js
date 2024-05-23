@@ -42,7 +42,7 @@ fetch('markdown_output.json')
         const popularMarkdowns = data.filter(item => item.metadata.popular === 'on');
         console.log('Popular Markdowns:', popularMarkdowns); // Debugging: Log popular markdowns
 
-        // Iterate over each item in the JSON data
+        // Iterate over each item in the sorted JSON data
         data.forEach(item => {
             const itemBlogDiv = document.createElement('div');
             itemBlogDiv.classList.add('p-b-63');
