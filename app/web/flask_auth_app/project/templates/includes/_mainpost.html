@@ -28,7 +28,7 @@
                             <div class="row g-4 align-items-center">
                                 <div class="col-md-6">
                                     <div class="rounded overflow-hidden">
-                                        <img src="{{ post.metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt="">
+                                        <img src="{{ post.metadata.image_url or '/static/img/news-2.jpg' }}" class="img-fluid rounded img-zoomin w-100" alt="">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
