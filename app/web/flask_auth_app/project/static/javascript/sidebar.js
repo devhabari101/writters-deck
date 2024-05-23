@@ -58,6 +58,9 @@ export function createSidebar(categories, popularMarkdowns) {
 
     const popularMarkdownsList = document.createElement('ul');
 
+    // Sort popularMarkdowns by date (assuming markdown.metadata.date is a Date object or a parsable date string)
+    popularMarkdowns.sort((a, b) => new Date(b.metadata.date) - new Date(a.metadata.date));
+
     popularMarkdowns.forEach(markdown => {
         const listItem = document.createElement('li');
         listItem.classList.add('flex-w', 'flex-t', 'p-b-30');
