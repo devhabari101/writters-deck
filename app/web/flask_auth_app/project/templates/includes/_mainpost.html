@@ -78,24 +78,22 @@
                                    {% endif %}     
                                 </div>
                                 <div class="col-12">
-                                    {% for post in trending_posts %}
-                                 {% if post and post.metadata.trending == 'on' %}
+                                    
                                     <div class="row g-4 align-items-center">
                                         <div class="col-5">
                                             <div class="overflow-hidden rounded">
-                                                <img src="{{ post.metadata.image_url }}" class="img-zoomin img-fluid rounded w-100" alt="">
+                                                <img src="" class="img-zoomin img-fluid rounded w-100" alt="">
                                             </div>
                                         </div>
                                         <div class="col-7">
                                             <div class="features-content d-flex flex-column">
-                                                <a href="#" class="h6">{{ post.metadata.title }}</a>
+                                                <a href="#" class="h6">test1</a>
                                                 <small><i class="fa fa-clock"> 06 minute read</i> </small>
                                                 <small><i class="fa fa-eye"> 3.5k Views</i></small>
                                             </div>
                                         </div>
                                     </div>
-                                   {% endif %}
-                                   {% endfor %}     
+                                       
                                 </div>
                                 <div class="col-12">
                                 
