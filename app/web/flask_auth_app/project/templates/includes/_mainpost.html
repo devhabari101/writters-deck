@@ -1,48 +1,47 @@
-<!-- Main Post Section Start -->
- 
-<div class="container-fluid py-5">
-    <div class="container py-5">
-        <div class="row g-4">
-             {% if latest_post and latest_post.metadata.trending == 'on' %}
-             {% set post = latest_post %}
-            <div class="col-lg-7 col-xl-8 mt-0">
-                <div class="position-relative overflow-hidden rounded">
-                    <img src="{{ post.metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt="Image">
-                    <div class="d-flex justify-content-center px-4 position-absolute flex-wrap" style="bottom: 10px; left: 0;">
-                        <a href="#" class="text-white me-3 link-hover"><i class="fa fa-clock"></i> {{ post.metadata.time_to_read }}</a>
-                        <a href="#" class="text-white me-3 link-hover"><i class="fa fa-eye"></i>  Views</a>
-                        <a href="#" class="text-white link-hover"><i class="fa fa-arrow-up"></i>  Shares</a>
-                    </div>
-                </div>
-                <div class="border-bottom py-3">
-                    <a href="#" class="display-4 text-dark mb-0 link-hover">{{ post.metadata.title }}</a>
-                </div>
-                <p class="text-muted">{{ post.metadata.date }}</p>
-                <p class="mt-3 mb-4">{{ post.content }}</p>
-                {% endif %}
-             {% if second_latest_post and second_latest_post.metadata.trending == 'on' %}
-                    {% set post = second_latest_post %}
-<div class="bg-light p-4 rounded">
+        <!-- Main Post Section Start -->
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <div class="row g-4">
+                   {% if latest_post and latest_post.metadata.trending == 'on' %}
+                    {% set post = latest_post %}
+                    <div class="col-lg-7 col-xl-8 mt-0">
+                        <div class="position-relative overflow-hidden rounded">
+                            <img src="{{ post.metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt="">
+                            <div class="d-flex justify-content-center px-4 position-absolute flex-wrap" style="bottom: 10px; left: 0;">
+                                <a href="#" class="text-white me-3 link-hover"><i class="fa fa-clock"></i> {{ post.metadata.time_to_read }}</a>
+                                <a href="#" class="text-white me-3 link-hover"><i class="fa fa-eye"></i> 3.5k Views</a>
+                                <a href="#" class="text-white me-3 link-hover"><i class="fa fa-comment-dots"></i> 05 Comment</a>
+                                <a href="#" class="text-white link-hover"><i class="fa fa-arrow-up"></i> 1.5k Share</a>
+                            </div>
+                        </div>
+                        <div class="border-bottom py-3">
+                            <a href="#" class="display-4 text-dark mb-0 link-hover">{{ post.metadata.title }}</a>
+                        </div>
+                        <p class="mt-3 mb-4">{{ post.content }}</p>
+                            {% endif %}
+                        <div class="bg-light p-4 rounded">
+                              {% if second_latest_post and second_latest_post.metadata.trending == 'on' %}
+                             {% set post = second_latest_post %}  
                             <div class="news-2">
                                 <h3 class="mb-4">Top Story</h3>
                             </div>
                             <div class="row g-4 align-items-center">
                                 <div class="col-md-6">
                                     <div class="rounded overflow-hidden">
-                                        <img src="{{ post.metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt="">
+                                        <img src="{{ post.metadata.image_url or '/static/img/news-2.jpg' }}" class="img-fluid rounded img-zoomin w-100" alt="">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="d-flex flex-column">
-                                        <a href="#" class="h3">{{ post.metadata.title }}</a>
-                                        <p class="mb-0 fs-5"><i class="fa fa-clock"> 06 minute read</i> </p>
+                                        <a href="#" class="h3">S{{ post.metadata.title }}</a>
+                                        <p class="mb-0 fs-5"><i class="fa fa-clock"> 06 minute read</i>{{ post.metadata.time_to_read }} </p>
                                         <p class="mb-0 fs-5"><i class="fa fa-eye"> 3.5k Views</i></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                     {% endif %}       
                     </div>
-                   {% endif %}
                     <div class="col-lg-5 col-xl-4">
                      {% if latest_post and latest_post.metadata.trending == 'on' %}
                      {% set post = latest_post %}
@@ -59,11 +58,12 @@
                                         <p class="fs-5 mb-0"><i class="fa fa-clock"> 06 minute read</i>{{ post.metadata.time_to_read }} </p>
                                         <p class="fs-5 mb-0"><i class="fa fa-eye"> 3.5k Views</i></p>
                                     </div>
+                                 {% endif %}
                                 </div>
-                                {% endif %}  
-                                {% if get_latest_post and get_latest_post.metadata.trending == 'on' %}
-                                {% set post = get_latest_post %} 
+                                    
                                 <div class="col-12">
+                                    {% for post in trending_posts %}
+                                 {% if post and post.metadata.trending == 'on' %}    
                                     <div class="row g-4 align-items-center">
                                         <div class="col-5">
                                             <div class="overflow-hidden rounded">
@@ -73,34 +73,24 @@
                                         <div class="col-7">
                                             <div class="features-content d-flex flex-column">
                                                 <a href="#" class="h6">{{ post.metadata.title }}</a>
-                                                <small><i class="fa fa-clock"> 06 minute read</i> </small>
+                                                <small><i class="fa fa-clock"> 06 minute read</i>{{ post.metadata.time_to_read }} </small>
                                                 <small><i class="fa fa-eye"> 3.5k Views</i></small>
                                             </div>
                                         </div>
                                     </div>
+                                   {% endif %}
+                                   {% endfor %}    
                                 </div>
-                                 {% endif %} 
-                                <div class="col-12">
-                                 {% for post in trending_posts %}
-                                 {% if post and post.metadata.trending == 'on' %}
-                                    <div class="row g-4 align-items-center">
-                                        <div class="col-5">
-                                            <div class="overflow-hidden rounded">
-                                                <img src="{{ post.metadata.image_url }}" class="img-zoomin img-fluid rounded w-100" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="features-content d-flex flex-column">
-                                                <a href="#" class="h6">{{ post.metadata.title }}</a>
-                                                <small><i class="fa fa-clock"> 06 minute read</i> </small>
-                                                <small><i class="fa fa-eye"> 3.5k Views</i></small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endif %}
-                               {% endfor %}
                                 
+                   
+                            
+                            </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Main Post Section End -->
 
 
