@@ -50,11 +50,11 @@ export function createSidebar(categories, popularMarkdowns) {
 
     // Popular markdowns
     const popularMarkdownsDiv = document.createElement('div');
-    popularMarkdownsDiv.classList.add('p-t-55');
+    popularMarkdownsDiv.classList.add('p-t-65');
 
     const popularMarkdownsTitle = document.createElement('h4');
     popularMarkdownsTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
-    popularMarkdownsTitle.textContent = 'Popular Markdowns';
+    popularMarkdownsTitle.textContent = 'Popular post';
 
     const popularMarkdownsList = document.createElement('ul');
 
@@ -69,6 +69,7 @@ export function createSidebar(categories, popularMarkdowns) {
         const image = document.createElement('img');
         image.src = markdown.metadata.image_url;
         image.alt = 'PRODUCT';
+        image.style.width = '100%'; // Ensure the image fits the container
 
         const titleWrapper = document.createElement('div');
         titleWrapper.classList.add('size-215', 'flex-col-t', 'p-t-8');
@@ -78,8 +79,13 @@ export function createSidebar(categories, popularMarkdowns) {
         titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
         titleLink.textContent = markdown.metadata.title;
 
+        const categorySpan = document.createElement('span');
+        categorySpan.classList.add('stext-116', 'cl6', 'p-t-20');
+        categorySpan.textContent = markdown.metadata.category;
+
         linkWrapper.appendChild(image);
         titleWrapper.appendChild(titleLink);
+        titleWrapper.appendChild(categorySpan);
         listItem.appendChild(linkWrapper);
         listItem.appendChild(titleWrapper);
         popularMarkdownsList.appendChild(listItem);
