@@ -1,4 +1,4 @@
-import { createSidebar } from './sidebar.js';
+import { createSidebar, popularMarkdowns } from './sidebar.js';
 
 // Fetch JSON data from the server and render markdown content
 fetch('markdown_output.json')
