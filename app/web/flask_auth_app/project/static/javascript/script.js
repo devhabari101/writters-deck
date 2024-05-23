@@ -6,14 +6,27 @@ fetch('markdown_output.json')
         try {
             console.log('Fetched data:', data); // Debugging: Log fetched data
 
+            // Function to parse dates safely
+            const parseDate = (dateString) => {
+                const dateParts = dateString.split('-');
+                if (dateParts.length === 3) {
+                    const [day, month, year] = dateParts;
+                    return new Date(`${year}-${month}-${day}`);
+                } else {
+                    console.error('Invalid date format:', dateString);
+                    return new Date(dateString); // Fallback parsing
+                }
+            };
+
             // Sort data by date (assuming metadata.date is a Date object or a parsable date string)
             data.sort((a, b) => {
-                // Parse dates from metadata
-                const dateA = new Date(a.metadata.date);
-                const dateB = new Date(b.metadata.date);
-                // Compare dates
+                const dateA = parseDate(a.metadata.date);
+                const dateB = parseDate(b.metadata.date);
+                console.log('Comparing dates:', dateA, dateB); // Debugging: Log date comparisons
                 return dateB - dateA;
             });
+
+            console.log('Sorted data:', data); // Debugging: Log sorted data
 
             // Get the div element to display the markdown content
             const markdownContentDiv = document.getElementById('markdown-content');
@@ -47,6 +60,10 @@ fetch('markdown_output.json')
             // Process data to identify popular markdowns
             const popularMarkdowns = data.filter(item => item.metadata.popular === 'on');
             console.log('Popular Markdowns:', popularMarkdowns); // Debugging: Log popular markdowns
+
+            // Sort popular markdowns by date as well
+            popularMarkdowns.sort((a, b) => parseDate(b.metadata.date) - parseDate(a.metadata.date));
+            console.log('Sorted Popular Markdowns:', popularMarkdowns); // Debugging: Log sorted popular markdowns
 
             // Iterate over each item in the JSON data
             data.forEach(item => {
