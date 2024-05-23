@@ -57,25 +57,26 @@
                                     </div>
                                 </div>
                                  {% endif %}   
-                                <div class="col-12">
-                                {% if get_latest_post and get_latest_post.metadata.trending == 'on' %}
-                                {% set post = get_latest_post %}
-                                    <div class="row g-4 align-items-center">
-                                        <div class="col-5">
-                                            <div class="overflow-hidden rounded">
-                                                <img src="{{ post.metadata.image_url }}" class="img-zoomin img-fluid rounded w-100" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="features-content d-flex flex-column">
-                                                <a href="#" class="h6">{{ post.metadata.title }}</a>
-                                                <small><i class="fa fa-clock"> 06 minute read</i>{{ post.metadata.time_to_read }} </small>
-                                                <small><i class="fa fa-eye"> 3.5k Views</i></small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endif %}    
-                                </div>
+                                 <div class="col-12">
+    {% if get_latest_post and get_latest_post.metadata.trending == 'on' %}
+        {% set post = get_latest_post %}
+        <div class="row g-4 align-items-center">
+            <div class="col-5">
+                <div class="overflow-hidden rounded">
+                    <img src="{{ post.metadata.image_url }}" class="img-zoomin img-fluid rounded w-100" alt="">
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="features-content d-flex flex-column">
+                    <a href="#" class="h6">{{ post.metadata.title }}</a>
+                    <small><i class="fa fa-clock"></i> {{ post.metadata.time_to_read }} minute read</small>
+                    <small><i class="fa fa-eye"></i> 3.5k Views</small>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
                                 <div class="col-12">
                                     <div class="row g-4 align-items-center">
                                         <div class="col-5">
