@@ -70,7 +70,7 @@
                                         <div class="col-7">
                                             <div class="features-content d-flex flex-column">
                                                 <a href="#" class="h6">{{ post.metadata.title }}</a>
-                                                <small><i class="fa fa-clock"> 06 minute read</i> </small>
+                                                <small><i class="fa fa-clock"> 06 minute read</i>{{ post.metadata.time_to_read }} </small>
                                                 <small><i class="fa fa-eye"> 3.5k Views</i></small>
                                             </div>
                                         </div>
@@ -78,8 +78,8 @@
                                    {% endif %}     
                                 </div>
                                 <div class="col-12">
-                                {% for post in trending_posts %}
-                                 {% if post and post.metadata.trending == 'on' %}    
+                                    {% for post in trending_posts %}
+                                 {% if post and post.metadata.trending == 'on' %}
                                     <div class="row g-4 align-items-center">
                                         <div class="col-5">
                                             <div class="overflow-hidden rounded">
@@ -88,30 +88,33 @@
                                         </div>
                                         <div class="col-7">
                                             <div class="features-content d-flex flex-column">
-                                                <a href="#" class="h6">Get the best speak market, news.</a>
+                                                <a href="#" class="h6">{{ post.metadata.title }}</a>
                                                 <small><i class="fa fa-clock"> 06 minute read</i> </small>
                                                 <small><i class="fa fa-eye"> 3.5k Views</i></small>
                                             </div>
                                         </div>
                                     </div>
-                                  {% endif %}
-                               {% endfor %}      
+                                   {% endif %}
+                                   {% endfor %}     
                                 </div>
                                 <div class="col-12">
+                                
                                     <div class="row g-4 align-items-center">
                                         <div class="col-5">
                                             <div class="overflow-hidden rounded">
-                                                <img src="/static/img/news-5.jpg" class="img-zoomin img-fluid rounded w-100" alt="">
+                                                <img src="/static/img/news-4.jpg" class="img-zoomin img-fluid rounded w-100" alt="">
                                             </div>
+                                                
                                         </div>
                                         <div class="col-7">
                                             <div class="features-content d-flex flex-column">
-                                                <a href="#" class="h6">Get the best speak market, news.</a>
+                                                <a href="#" class="h6">test</a>
                                                 <small><i class="fa fa-clock"> 06 minute read</i> </small>
                                                 <small><i class="fa fa-eye"> 3.5k Views</i></small>
                                             </div>
                                         </div>
                                     </div>
+                                        
                                 </div>
                                 <div class="col-12">
                                     <div class="row g-4 align-items-center">
