@@ -37,6 +37,7 @@ fetch('markdown_output.json')
         
         // Process data to identify popular markdowns
         const popularMarkdowns = data.filter(item => item.metadata.popular === 'on');
+        console.log('Popular Markdowns:', popularMarkdowns); // Debugging: Log popular markdowns
 
         // Iterate over each item in the JSON data
         data.forEach(item => {
