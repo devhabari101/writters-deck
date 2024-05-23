@@ -1,5 +1,5 @@
 import { createSidebar } from './sidebar.js';
-import { getLatestPopularMarkdown, renderLatestTrendingMarkdowns} from './block.js';
+// import { getLatestPopularMarkdown, renderLatestTrendingMarkdowns } from './block.js';
 
 fetch('markdown_output.json')
     .then(response => response.json())
@@ -28,21 +28,7 @@ fetch('markdown_output.json')
         columnDiv.appendChild(innerColumnDiv);
         rowDiv.appendChild(columnDiv);
 
-        const popularMarkdowns = data.filter(item => item.metadata.popular === 'on');
-
-        // Insert the latest popular markdown into the first column
-        const firstColumnDiv = document.querySelector('.d-flex .col-md-4:first-child');
-        if (popularMarkdowns.length > 0) {
-            const latestPopularMarkdownDiv = getLatestPopularMarkdown(popularMarkdowns);
-            firstColumnDiv.innerHTML = ''; // Clear existing content
-            firstColumnDiv.appendChild(latestPopularMarkdownDiv);
-        }
-        // Render the latest trending markdowns in the second column
-        const secondColumnDiv = document.querySelector('.d-flex .col-md-4:nth-child(2)'); // Select the second column
-        const latestTrendingMarkdownsDiv = renderLatestTrendingMarkdowns(data); // Use the new function to render latest trending markdowns
-        secondColumnDiv.innerHTML = ''; // Clear existing content
-        secondColumnDiv.appendChild(latestTrendingMarkdownsDiv); // Append the rendered markdowns to the second column
-
+        // Iterate over the fetched data to create blog entries
         data.forEach(item => {
             const itemBlogDiv = document.createElement('div');
             itemBlogDiv.classList.add('p-b-63');
@@ -67,73 +53,4 @@ fetch('markdown_output.json')
 
             const monthYearSpan = document.createElement('span');
             monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
-            monthYearSpan.textContent = `${monthName} ${year}`;
-
-            dateDiv.appendChild(daySpan);
-            dateDiv.appendChild(monthYearSpan);
-
-            linkElement.appendChild(imageElement);
-            linkElement.appendChild(dateDiv);
-
-            const contentDiv = document.createElement('div');
-            contentDiv.classList.add('p-t-32');
-
-            const titleElement = document.createElement('h4');
-            titleElement.classList.add('p-b-15');
-
-            const titleLink = document.createElement('a');
-            titleLink.href = 'blog-detail.html';
-            titleLink.classList.add('ltext-108', 'cl2', 'hov-cl1', 'trans-04');
-            titleLink.textContent = item.metadata.title;
-
-            titleElement.appendChild(titleLink);
-
-            const contentParagraph = document.createElement('p');
-            contentParagraph.classList.add('stext-117', 'cl6');
-            const htmlContent = converter.makeHtml(item.content);
-            contentParagraph.innerHTML = htmlContent;
-
-            contentDiv.appendChild(titleElement);
-            contentDiv.appendChild(contentParagraph);
-
-            const authorCategoryDiv = document.createElement('div');
-            authorCategoryDiv.classList.add('flex-w', 'flex-sb-m', 'p-t-18');
-
-            const authorSpan = document.createElement('span');
-            authorSpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
-            authorSpan.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
-
-            const categorySpan = document.createElement('span');
-            categorySpan.textContent = item.metadata.category;
-            categorySpan.classList.add('cl4');
-
-            const separatorSpan = document.createElement('span');
-            separatorSpan.classList.add('cl12', 'm-l-4', 'm-r-6');
-            separatorSpan.textContent = '|';
-
-            authorSpan.appendChild(categorySpan);
-            authorSpan.appendChild(separatorSpan);
-
-            const continueReadingLink = document.createElement('a');
-            continueReadingLink.href = 'blog-detail.html';
-            continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
-            continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
-
-            authorCategoryDiv.appendChild(authorSpan);
-            authorCategoryDiv.appendChild(continueReadingLink);
-
-            itemBlogDiv.appendChild(linkElement);
-            itemBlogDiv.appendChild(contentDiv);
-            itemBlogDiv.appendChild(authorCategoryDiv);
-
-            innerColumnDiv.appendChild(itemBlogDiv);
-        });
-
-        const categories = data.map(item => item.metadata.category);
-        const uniqueCategories = [...new Set(categories)];
-
-        rowDiv.appendChild(createSidebar(uniqueCategories, popularMarkdowns));
-
-        markdownContentDiv.appendChild(section);
-    })
-    .catch(error => console.error('Error fetching JSON:', error));
+            monthYearSpan.textContent = `${monthName}
