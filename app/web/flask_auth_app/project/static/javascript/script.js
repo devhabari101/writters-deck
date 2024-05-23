@@ -6,6 +6,9 @@ fetch('markdown_output.json')
     .then(data => {
         console.log('Fetched data:', data); // Debugging: Log fetched data
 
+        // Sort data by date (assuming metadata.date is a Date object or a parsable date string)
+        data.sort((a, b) => new Date(b.metadata.date) - new Date(a.metadata.date));
+
         // Get the div element to display the markdown content
         const markdownContentDiv = document.getElementById('markdown-content');
 
