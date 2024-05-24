@@ -2,7 +2,7 @@ import os
 import markdown
 import json
 import re
-from flask import Blueprint, render_template, send_file, request, redirect, url_for, current_app
+from flask import Blueprint, render_template, send_file, request, redirect, url_for, current_app, abort
 from flask_login import current_user, login_required, LoginManager  # Correct import
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -33,6 +33,7 @@ def save_to_markdown(data, user_id):
         file.write(f"imageAttribution: {data['imageAttribution']}\n")
         file.write(f"date: {data['date']}\n")
         file.write(f"category: {data['category']}\n")
+        file.write(f"tags: {', '.join(data['tags'])}\n")  # Include tags field
         file.write(f"trending: {data['trending']}\n")
         file.write(f"topPick: {data['topPick']}\n")
         file.write(f"popular: {data['popular']}\n")
@@ -97,6 +98,7 @@ def submit_form():
     imageAttribution = request.form.get("imageAttribution", "")  # Initialize with empty string if not provided
     date = request.form.get("date")
     category = request.form.get("category")
+    tags = request.form.get("tags", "").split(",")  # Split tags by comma
     content = request.form.get("content")
     
     # Get additional metadata fields from the form
@@ -110,6 +112,23 @@ def submit_form():
     # Generate the slug from the title
     slug = generate_slug(title)
     
+    # Check if the category already has a markdown file
+    for filename in os.listdir(markdown_dir):
+        if filename.endswith(".md"):
+            with open(os.path.join(markdown_dir, filename), "r", encoding="utf-8") as file:
+                markdown_content = file.read()
+            metadata_match = re.match(r'^---(.*?)---(.*)', markdown_content, re.DOTALL)
+            if metadata_match:
+                metadata, _ = metadata_match.groups()
+                metadata_dict = {}
+                for line in metadata.strip().split('\n'):
+                    key_value = line.split(':', 1)
+                    if len(key_value) == 2:
+                        key, value = key_value
+                        metadata_dict[key.strip()] = value.strip()
+                if metadata_dict.get('category') == category:
+                    return "A Markdown file already exists for this category.", 400
+    
     # Construct the form data dictionary including all fields
     form_data = {
         "title": title,
@@ -118,6 +137,7 @@ def submit_form():
         "imageAttribution": imageAttribution,
         "date": date,
         "category": category,
+        "tags": tags,
         "content": content,
         "trending": trending,
         "topPick": top_pick,
@@ -143,7 +163,6 @@ def get_markdown_output():
     # Assuming markdown_output.json is in the root directory
     json_file_path = '/web/flask_auth_app/markdown_output.json'
     return send_file(json_file_path)
-
 
 # Route for detailed Markdown page
 @convertor_blueprint.route("/detail-page/<slug>")
