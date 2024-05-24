@@ -22,6 +22,11 @@ def extract_metadata_and_content(markdown_content):
         return metadata_dict, content.strip()
     return None, None
 
+def truncate_content(content, word_limit=47):
+    words = content.split()
+    truncated = ' '.join(words[:word_limit])
+    return truncated
+
 def process_markdown_file(filename):
     with open(os.path.join(markdown_dir, filename), "r", encoding="utf-8") as file:
         markdown_content = file.read()
@@ -36,9 +41,12 @@ def process_markdown_file(filename):
             # Add word count and reading time to metadata
             metadata_dict["word_count"] = word_count
             metadata_dict["reading_time"] = f"{reading_time} min read"
+            # Add truncated content
+            truncated_content = truncate_content(content)
             return {
                 "metadata": metadata_dict,
                 "content": markdown.markdown(content),
+                "truncated_content": truncated_content,
                 "date": post_date
             }
     return None
@@ -59,6 +67,7 @@ def list_trending_post(index):
     if 0 <= index < len(trending_posts):
         # Remove <p> tags from the HTML content of the selected post
         trending_posts[index]["content"] = re.sub(r'<p>(.*?)</p>', r'\1', trending_posts[index]["content"])
+        trending_posts[index]["truncated_content"] = re.sub(r'<p>(.*?)</p>', r'\1', trending_posts[index]["truncated_content"])
         return trending_posts[index]
     else:
         return None
@@ -78,6 +87,7 @@ def list_all_trending_posts():
     # Remove <p> tags from the HTML content
     for post in trending_posts:
         post["content"] = re.sub(r'<p>(.*?)</p>', r'\1', post["content"])
+        post["truncated_content"] = re.sub(r'<p>(.*?)</p>', r'\1', post["truncated_content"])
 
     return trending_posts
 
