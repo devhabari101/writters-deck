@@ -9,43 +9,48 @@ def calculate_reading_time(word_count):
     reading_time = word_count / words_per_minute
     return max(1, round(reading_time))  # ensure at least 1 minute
 
+def extract_metadata_and_content(markdown_content):
+    metadata_match = re.match(r'^---(.*?)---(.*)', markdown_content, re.DOTALL)
+    if metadata_match:
+        metadata, content = metadata_match.groups()
+        metadata_dict = {}
+        for line in metadata.strip().split('\n'):
+            key_value = line.split(':', 1)
+            if len(key_value) == 2:
+                key, value = key_value
+                metadata_dict[key.strip()] = value.strip()
+        return metadata_dict, content.strip()
+    return None, None
+
+def process_markdown_file(filename):
+    with open(os.path.join(markdown_dir, filename), "r", encoding="utf-8") as file:
+        markdown_content = file.read()
+    metadata_dict, content = extract_metadata_and_content(markdown_content)
+    if metadata_dict:
+        post_date_str = metadata_dict.get('date')
+        if post_date_str:
+            post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+            # Calculate word count and reading time
+            word_count = len(content.split())
+            reading_time = calculate_reading_time(word_count)
+            # Add word count and reading time to metadata
+            metadata_dict["word_count"] = word_count
+            metadata_dict["reading_time"] = f"{reading_time} min read"
+            return {
+                "metadata": metadata_dict,
+                "content": markdown.markdown(content),
+                "date": post_date
+            }
+    return None
+
 def list_trending_post(index):
     trending_posts = []
 
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
-            with open(os.path.join(markdown_dir, filename), "r", encoding="utf-8") as file:
-                markdown_content = file.read()
-            metadata_match = re.match(r'^---(.*?)---(.*)', markdown_content, re.DOTALL)
-            if metadata_match:
-                metadata, content = metadata_match.groups()
-                metadata_dict = {}
-                for line in metadata.strip().split('\n'):
-                    key_value = line.split(':', 1)
-                    if len(key_value) == 2:
-                        key, value = key_value
-                        metadata_dict[key.strip()] = value.strip()
-                
-                # Check if the post is trending
-                if metadata_dict.get('trending') == 'on':
-                    post_date_str = metadata_dict.get('date')
-                    if post_date_str:
-                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
-                        
-                        # Calculate word count and reading time
-                        word_count = len(content.split())
-                        reading_time = calculate_reading_time(word_count)
-                        
-                        # Add word count and reading time to metadata
-                        metadata_dict["word_count"] = word_count
-                        metadata_dict["reading_time"] = f"{reading_time} min read"
-
-                        trending_post = {
-                            "metadata": metadata_dict,
-                            "content": markdown.markdown(content),
-                            "date": post_date
-                        }
-                        trending_posts.append(trending_post)
+            trending_post = process_markdown_file(filename)
+            if trending_post and trending_post["metadata"].get('trending') == 'on':
+                trending_posts.append(trending_post)
 
     # Sort posts by date in descending order
     trending_posts.sort(key=lambda post: post['date'], reverse=True)
@@ -63,38 +68,9 @@ def list_all_trending_posts():
 
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
-            with open(os.path.join(markdown_dir, filename), "r", encoding="utf-8") as file:
-                markdown_content = file.read()
-            metadata_match = re.match(r'^---(.*?)---(.*)', markdown_content, re.DOTALL)
-            if metadata_match:
-                metadata, content = metadata_match.groups()
-                metadata_dict = {}
-                for line in metadata.strip().split('\n'):
-                    key_value = line.split(':', 1)
-                    if len(key_value) == 2:
-                        key, value = key_value
-                        metadata_dict[key.strip()] = value.strip()
-                
-                # Check if the post is trending
-                if metadata_dict.get('trending') == 'on':
-                    post_date_str = metadata_dict.get('date')
-                    if post_date_str:
-                        post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
-                        
-                        # Calculate word count and reading time
-                        word_count = len(content.split())
-                        reading_time = calculate_reading_time(word_count)
-                        
-                        # Add word count and reading time to metadata
-                        metadata_dict["word_count"] = word_count
-                        metadata_dict["reading_time"] = f"{reading_time} min read"
-
-                        trending_post = {
-                            "metadata": metadata_dict,
-                            "content": markdown.markdown(content),
-                            "date": post_date
-                        }
-                        trending_posts.append(trending_post)
+            trending_post = process_markdown_file(filename)
+            if trending_post and trending_post["metadata"].get('trending') == 'on':
+                trending_posts.append(trending_post)
 
     # Sort posts by date in descending order
     trending_posts.sort(key=lambda post: post['date'], reverse=True)
