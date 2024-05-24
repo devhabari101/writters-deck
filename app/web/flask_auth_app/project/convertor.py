@@ -15,6 +15,11 @@ login_manager.login_view = 'auth.login'
 markdown_dir = "content"
 json_output_file = "markdown_output.json"
 
+def generate_slug(title):
+    # Replace spaces with underscores and remove any non-alphanumeric characters
+    slug = re.sub(r'\W+', '_', title)
+    return slug
+
 # Function to save form data to Markdown file
 def save_to_markdown(data, user_id):
     # Create a filename based on the form title
@@ -23,6 +28,7 @@ def save_to_markdown(data, user_id):
     with open(filename, "w") as file:
         file.write(f"---\n")
         file.write(f"title: {data['title']}\n")
+        file.write(f"slug: {data['slug']}\n")  # Include the slug field
         file.write(f"image_url: {data['image_url']}\n")  # Include image URL field
         file.write(f"imageAttribution: {data['imageAttribution']}\n")
         file.write(f"date: {data['date']}\n")
@@ -101,9 +107,13 @@ def submit_form():
     body = request.form.get("body", "")  # Initialize with empty string if not provided
     user_id = current_user.id
     
+    # Generate the slug from the title
+    slug = generate_slug(title)
+    
     # Construct the form data dictionary including all fields
     form_data = {
         "title": title,
+        "slug": slug,
         "image_url": image_url,
         "imageAttribution": imageAttribution,
         "date": date,
@@ -128,10 +138,8 @@ def submit_form():
     # Redirect to the index page
     return redirect(url_for("main.index"))
 
-
 @convertor_blueprint.route('/markdown_output.json')
 def get_markdown_output():
     # Assuming markdown_output.json is in the root directory
     json_file_path = '/web/flask_auth_app/markdown_output.json'
     return send_file(json_file_path)
-    
