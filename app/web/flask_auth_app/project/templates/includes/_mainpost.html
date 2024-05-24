@@ -34,7 +34,7 @@
                                 <div class="col-md-6">
                                     <div class="d-flex flex-column">
                                         <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="h3">S{{ post.metadata.title }}</a>
-                                        <p class="mb-0 fs-5"><i class="fa fa-clock"> 06 minute read</i>{{ post.metadata.time_to_read }} </p>
+                                        <p class="mb-0 fs-5"><i class="fa fa-clock"></i>{{ post.metadata.reading_time }}</p>
                                         <p class="mb-0 fs-5"><i class="fa fa-eye"> 3.5k Views</i></p>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
                                 <div class="col-12">
                                     <div class="d-flex flex-column">
                                         <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="h4 mb-2">{{ post.metadata.title }}</a>
-                                        <p class="fs-5 mb-0"><i class="fa fa-clock"> 06 minute read</i>{{ post.metadata.time_to_read }} </p>
+                                        <p class="fs-5 mb-0"><i class="fa fa-clock"> </i>{{ post.metadata.reading_time }}< </p>
                                         <p class="fs-5 mb-0"><i class="fa fa-eye"> 3.5k Views</i></p>
                                     </div>
                                  {% endif %}
