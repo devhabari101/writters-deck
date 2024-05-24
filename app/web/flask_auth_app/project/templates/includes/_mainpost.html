@@ -20,8 +20,8 @@
                         <p class="mt-3 mb-4">{{ post.content }}</p>
                             {% endif %}
                         <div class="bg-light p-4 rounded">
-                              {% if second_latest_post and second_latest_post.metadata.trending == 'on' %}
-                             {% set post = second_latest_post %}  
+                              {% if get_second_latest_post and get_second_latest_post.metadata.trending == 'on' %}
+                             {% set post = get_second_latest_post %}  
                             <div class="news-2">
                                 <h3 class="mb-4">Top Story</h3>
                             </div>
@@ -33,9 +33,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="d-flex flex-column">
-                                        <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="h3">S{{ post.metadata.title }}</a>
+                                        <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="h3">{{ post.metadata.title }}</a>
                                         <p class="mb-0 fs-5"><i class="fa fa-clock"></i>{{ post.metadata.reading_time }}</p>
-                                        <p class="mb-0 fs-5"><i class="fa fa-eye"> 3.5k Views</i></p>
+                                        <p class="mb-0 fs-5"><i class="fa fa-eye"></i></p>
                                     </div>
                                 </div>
                             </div>
@@ -55,8 +55,8 @@
                                 <div class="col-12">
                                     <div class="d-flex flex-column">
                                         <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="h4 mb-2">{{ post.metadata.title }}</a>
-                                        <p class="fs-5 mb-0"><i class="fa fa-clock"> </i>{{ post.metadata.reading_time }}< </p>
-                                        <p class="fs-5 mb-0"><i class="fa fa-eye"> 3.5k Views</i></p>
+                                        <p class="fs-5 mb-0"><i class="fa fa-clock"> </i>{{ post.metadata.reading_time }}</p>
+                                        <p class="fs-5 mb-0"><i class="fa fa-eye"></i></p>
                                     </div>
                                  {% endif %}
                                 </div>
