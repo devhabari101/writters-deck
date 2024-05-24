@@ -4,6 +4,11 @@ import markdown
 from datetime import datetime
 from .convertor import markdown_dir  # Ensure the correct import path
 
+def calculate_reading_time(word_count):
+    words_per_minute = 200  # average reading speed
+    reading_time = word_count / words_per_minute
+    return max(1, round(reading_time))  # ensure at least 1 minute
+
 def list_trending_post(index):
     trending_posts = []
 
@@ -20,11 +25,21 @@ def list_trending_post(index):
                     if len(key_value) == 2:
                         key, value = key_value
                         metadata_dict[key.strip()] = value.strip()
+                
                 # Check if the post is trending
                 if metadata_dict.get('trending') == 'on':
                     post_date_str = metadata_dict.get('date')
                     if post_date_str:
                         post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        
+                        # Calculate word count and reading time
+                        word_count = len(content.split())
+                        reading_time = calculate_reading_time(word_count)
+                        
+                        # Add word count and reading time to metadata
+                        metadata_dict["word_count"] = word_count
+                        metadata_dict["reading_time"] = f"{reading_time} min read"
+
                         trending_post = {
                             "metadata": metadata_dict,
                             "content": markdown.markdown(content),
@@ -59,11 +74,21 @@ def list_all_trending_posts():
                     if len(key_value) == 2:
                         key, value = key_value
                         metadata_dict[key.strip()] = value.strip()
+                
                 # Check if the post is trending
                 if metadata_dict.get('trending') == 'on':
                     post_date_str = metadata_dict.get('date')
                     if post_date_str:
                         post_date = datetime.strptime(post_date_str, '%d-%m-%Y')
+                        
+                        # Calculate word count and reading time
+                        word_count = len(content.split())
+                        reading_time = calculate_reading_time(word_count)
+                        
+                        # Add word count and reading time to metadata
+                        metadata_dict["word_count"] = word_count
+                        metadata_dict["reading_time"] = f"{reading_time} min read"
+
                         trending_post = {
                             "metadata": metadata_dict,
                             "content": markdown.markdown(content),
