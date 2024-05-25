@@ -98,7 +98,7 @@ def get_second_latest_post():
     return list_trending_post(1)  # Get the second latest trending post
 
 def list_latest_posts_by_category():
-    latest_posts = []
+    all_latest_posts = []
 
     for filename in os.listdir(markdown_dir):
         if filename.endswith(".md"):
@@ -108,14 +108,14 @@ def list_latest_posts_by_category():
                 post["metadata"].get('topPick') == 'on' or
                 post["metadata"].get('popular') == 'on'
             ):
-                latest_posts.append(post)
+                all_latest_posts.append(post)
 
     # Sort posts by date in descending order
-    latest_posts.sort(key=lambda post: post['date'], reverse=True)
+    all_latest_posts.sort(key=lambda post: post['date'], reverse=True)
 
     # Remove <p> tags from the HTML content
-    for post in latest_posts:
+    for post in all_latest_posts:
         post["content"] = re.sub(r'<p>(.*?)</p>', r'\1', post["content"])
         post["truncated_content"] = re.sub(r'<p>(.*?)</p>', r'\1', post["truncated_content"])
 
-    return latest_posts
+    return all_latest_posts
