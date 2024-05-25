@@ -76,11 +76,11 @@ def get_post_by_index(index):
         return all_posts[index]
     return None
 
-def newsall_first_latest_post():
+def nget_latest_post():
     return get_post_by_index(0)
 
-def newsall_second_latest_post():
+def ngetall_second_latest_post():
     return get_post_by_index(1)
 
-def newsall_fifth_latest_post():
+def nget_fifth_latest_post():
     return get_post_by_index(4)
