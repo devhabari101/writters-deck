@@ -30,7 +30,11 @@ def index():
     trending_posts = list_all_trending_posts()
     all_latest_posts = list_latest_posts_by_category()
     
-    
+    print("Filtered Data:", filtered_data)
+    print("Latest Post:", latest_post)
+    print("Second Latest Post:", second_latest_post)
+    print("Trending Posts:", trending_posts)
+    print("All Latest Posts:", all_latest_posts)
     # Filter data for entries where topPick or popular is "on"
     top_pick_count = 0
     popular_count = 0
