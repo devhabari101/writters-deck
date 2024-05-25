@@ -2,13 +2,13 @@ import os
 import markdown
 import json
 import re
-from flask import Blueprint, render_template, send_file, request, redirect, url_for, current_app, abort
-from flask_login import current_user, login_required, LoginManager  # Correct import
+from flask import Blueprint, render_template, send_file, request, redirect, url_for, abort, flash
+from flask_login import current_user, login_required, LoginManager
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 convertor_blueprint = Blueprint('convertor', __name__)
-login_manager = LoginManager()  # Correct initialization
+login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
 # Directory containing Markdown files
@@ -23,9 +23,13 @@ def generate_slug(title):
 # Function to save form data to Markdown file
 def save_to_markdown(data, user_id):
     # Create a filename based on the form title
-    filename = os.path.join(markdown_dir, f"{data['title']}.md")
+    filename = os.path.join(markdown_dir, f"{data['slug']}.md")
+    # Ensure the filename is unique
+    if os.path.exists(filename):
+        raise FileExistsError(f"A markdown file with the name {data['slug']} already exists.")
+    
     # Write form data to Markdown file
-    with open(filename, "w") as file:
+    with open(filename, "w", encoding="utf-8") as file:
         file.write(f"---\n")
         file.write(f"title: {data['title']}\n")
         file.write(f"slug: {data['slug']}\n")  # Include the slug field
@@ -112,23 +116,6 @@ def submit_form():
     # Generate the slug from the title
     slug = generate_slug(title)
     
-    # Check if the category already has a markdown file
-    for filename in os.listdir(markdown_dir):
-        if filename.endswith(".md"):
-            with open(os.path.join(markdown_dir, filename), "r", encoding="utf-8") as file:
-                markdown_content = file.read()
-            metadata_match = re.match(r'^---(.*?)---(.*)', markdown_content, re.DOTALL)
-            if metadata_match:
-                metadata, _ = metadata_match.groups()
-                metadata_dict = {}
-                for line in metadata.strip().split('\n'):
-                    key_value = line.split(':', 1)
-                    if len(key_value) == 2:
-                        key, value = key_value
-                        metadata_dict[key.strip()] = value.strip()
-                if metadata_dict.get('category') == category:
-                    return "A Markdown file already exists for this category.", 400
-    
     # Construct the form data dictionary including all fields
     form_data = {
         "title": title,
@@ -150,6 +137,9 @@ def submit_form():
     # Save the form data to Markdown file
     try:
         save_to_markdown(form_data, user_id)
+    except FileExistsError:
+        flash(f"A markdown file with the title '{title}' already exists.", "danger")
+        return redirect(url_for("convertor.form_admin"))
     except Exception as e:
         # Handle file save error gracefully
         print(f"Error saving Markdown file: {e}")
@@ -161,7 +151,7 @@ def submit_form():
 @convertor_blueprint.route('/markdown_output.json')
 def get_markdown_output():
     # Assuming markdown_output.json is in the root directory
-    json_file_path = '/web/flask_auth_app/markdown_output.json'
+    json_file_path = os.path.join(current_app.root_path, json_output_file)
     return send_file(json_file_path)
 
 # Route for detailed Markdown page
