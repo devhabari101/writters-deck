@@ -79,8 +79,8 @@ def get_post_by_index(index):
 def nget_latest_post():
     return get_post_by_index(0)
 
-def ngetall_second_latest_post():
+def nget_second_latest_post():
     return get_post_by_index(1)
 
 def nget_fifth_latest_post():
-    return get_post_by_index(4)
+    return get_post_by_index(3)
