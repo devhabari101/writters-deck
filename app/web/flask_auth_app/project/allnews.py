@@ -1,10 +1,8 @@
 import os
 import re
-import json
 import markdown
 from datetime import datetime
-from .convertor import markdown_dir # Ensure the correct import path
-
+from .convertor import markdown_dir  # Ensure the correct import path
 
 def calculate_reading_time(word_count):
     words_per_minute = 200  # average reading speed
@@ -71,3 +69,18 @@ def list_all_posts():
         post["truncated_content"] = re.sub(r'<p>(.*?)</p>', r'\1', post["truncated_content"])
 
     return all_posts
+
+def get_post_by_index(index):
+    all_posts = list_all_posts()
+    if 0 <= index < len(all_posts):
+        return all_posts[index]
+    return None
+
+def get_latest_post():
+    return get_post_by_index(0)
+
+def get_second_latest_post():
+    return get_post_by_index(1)
+
+def get_fifth_latest_post():
+    return get_post_by_index(4)
