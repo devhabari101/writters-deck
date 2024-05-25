@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
 from .features import get_filtered_data  # Import the get_filtered_data function
 from .trending_post import get_latest_post, get_second_latest_post, list_all_trending_posts, list_latest_posts_by_category   # Import the functions
-
+from .allnews import list_all_posts
 main_blueprint = Blueprint('main', __name__)
 
 @main_blueprint.route('/')
@@ -28,7 +28,8 @@ def index():
     latest_post = get_latest_post()
     second_latest_post = get_second_latest_post()
     trending_posts = list_all_trending_posts()
-    all_latest_posts = list_latest_posts_by_category()
+    all_latest_posts = list_latest_posts_by_category() # to remove this
+    all_posts = list_all_posts()
     
     print("Filtered Data:", filtered_data)
     print("Latest Post:", latest_post)
@@ -53,7 +54,7 @@ def index():
             category_count[category] = category_count.get(category, 0) + 1
     
     # Pass the filtered data, latest post, second latest post, skipped post, and category count to the template for rendering
-    return render_template('index.html', data=filtered_data, latest_post=latest_post, second_latest_post=second_latest_post, trending_posts=trending_posts, posts=filtered_data, category_count=category_count)
+    return render_template('index.html', all_posts=all_posts, data=filtered_data, latest_post=latest_post, second_latest_post=second_latest_post, trending_posts=trending_posts, posts=filtered_data, category_count=category_count)
 
 @main_blueprint.route('/profile')
 @login_required
