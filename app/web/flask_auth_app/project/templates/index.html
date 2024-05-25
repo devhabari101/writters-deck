@@ -7,11 +7,9 @@
 
 <main>
     <!-- Render the main first section here -->
-    <!--{% if latest_post and latest_post.metadata.trending == 'on' %}-->
-        <!--{% set post = latest_post %}-->
         {% include 'includes/_mainpost.html' %} 
-        <!--{% set found_trending_post = true %}-->
-    <!--{% endif %}-->
+        {% include 'includes/_allnews.html' %}
+        
 </main>
 
 
