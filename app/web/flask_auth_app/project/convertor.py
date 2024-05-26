@@ -81,7 +81,28 @@ class MarkdownFileEventHandler(FileSystemEventHandler):
         if event.event_type in ('created', 'modified'):
             if event.src_path.endswith(".md"):
                 convert_markdown_to_json()
+@login_required
+def list_user_markdowns():
+    user_id = current_user.id
+    user_markdowns = []
 
+    for filename in os.listdir(markdown_dir):
+        if filename.endswith(".md"):
+            with open(os.path.join(markdown_dir, filename), "r", encoding="utf-8") as file:
+                markdown_content = file.read()
+            metadata_match = re.match(r'^---(.*?)---(.*)', markdown_content, re.DOTALL)
+            if metadata_match:
+                metadata, _ = metadata_match.groups()
+                metadata_dict = {}
+                for line in metadata.strip().split('\n'):
+                    key_value = line.split(':', 1)
+                    if len(key_value) == 2:
+                        key, value = key_value
+                        metadata_dict[key.strip()] = value.strip()
+                if metadata_dict.get('user_id') == str(user_id):
+                    user_markdowns.append(metadata_dict)
+    
+    return user_markdowns
 # Start the watchdog observer to monitor file system changes
 event_handler = MarkdownFileEventHandler()
 observer = Observer()
@@ -91,7 +112,8 @@ observer.start()
 @convertor_blueprint.route("/admin", methods=["GET"])
 @login_required
 def form_admin():
-    return render_template("profile.html")
+    user_markdowns = list_user_markdowns()
+    return render_template("profile.html", name=current_user.name, user_markdowns=user_markdowns)
 
 @convertor_blueprint.route("/submit", methods=["POST"])
 @login_required
