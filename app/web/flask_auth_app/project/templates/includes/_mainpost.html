@@ -1,0 +1,120 @@
+        <!-- Main Post Section Start -->
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <div class="row g-4">
+                   {% if latest_post and latest_post.metadata.trending == 'on' %}
+                    {% set post = latest_post %}
+                    <div class="col-lg-7 col-xl-8 mt-0">
+                        <div class="position-relative overflow-hidden rounded">
+                            <img src="{{ post.metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt="">
+                            <div class="d-flex justify-content-center px-4 position-absolute flex-wrap" style="bottom: 10px; left: 0;">
+                                <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="text-white me-3 link-hover"><i class="fa fa-clock"></i> {{ post.metadata.reading_time }}</a>
+                                <a href="#" class="text-white me-3 link-hover"><i class="fa fa-eye"></i> 3.5k Views</a>
+                                <a href="#" class="text-white me-3 link-hover"><i class="fa fa-comment-dots"></i> 05 Comment</a>
+                                <a href="#" class="text-white link-hover"><i class="fa fa-arrow-up"></i> 1.5k Share</a>
+                            </div>
+                        </div>
+                        <div class="border-bottom py-3">
+                            <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="display-4 text-dark mb-0 link-hover">{{ post.metadata.title }}</a>
+                        </div>
+                        <p class="mt-3 mb-4">{{ post.truncated_content }}...</p>
+                            {% endif %}
+                        <div class="bg-light p-4 rounded">
+                              {% if second_latest_post and second_latest_post.metadata.trending == 'on' %}
+                             {% set post = second_latest_post %}  
+                            <div class="news-2">
+                                <h3 class="mb-4">Top Story</h3>
+                            </div>
+                            <div class="row g-4 align-items-center">
+                                <div class="col-md-6">
+                                    <div class="rounded overflow-hidden">
+                                        <img src="{{ post.metadata.image_url or '/static/img/news-2.jpg' }}" class="img-fluid rounded img-zoomin w-100" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="h3">{{ post.metadata.title }}</a>
+                                        <p class="mb-0 fs-5"><i class="fa fa-clock"></i>{{ post.metadata.reading_time }}</p>
+                                        <p class="mb-0 fs-5"><i class="fa fa-eye"></i></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     {% endif %}       
+                    </div>
+                    <div class="col-lg-5 col-xl-4">
+                     {% if latest_post and latest_post.metadata.trending == 'on' %}
+                     {% set post = latest_post %}
+                       <div class="bg-light rounded p-4 pt-0">
+                            <div class="row g-4">
+                                <div class="col-12">
+                                    <div class="rounded overflow-hidden">
+                                        <img src="{{ post.metadata.image_url }}" class="img-fluid rounded img-zoomin w-100" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="h4 mb-2">{{ post.metadata.title }}</a>
+                                        <p class="fs-5 mb-0"><i class="fa fa-clock"> </i>{{ post.metadata.reading_time }}</p>
+                                        <p class="fs-5 mb-0"><i class="fa fa-eye"></i></p>
+                                    </div>
+                                 {% endif %}
+                                </div>
+                                    
+                                <div class="col-12">
+                                    {% for post in trending_posts %}
+                                 {% if post and post.metadata.trending == 'on' %}    
+                                    <div class="row g-4 align-items-center">
+                                        <div class="col-5">
+                                            <div class="overflow-hidden rounded">
+                                                <img src="{{ post.metadata.image_url }}" class="img-zoomin img-fluid rounded w-100" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="features-content d-flex flex-column">
+                                                <a href="{{ url_for('convertor.detail_page', slug=post.metadata.slug) }}" class="h6">{{ post.metadata.title }}</a>
+                                                <small><i class="fa fa-clock"></i>{{ post.metadata.reading_time }} </small>
+                                                <small><i class="fa fa-eye"> 3.5k Views</i></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   {% endif %}
+                                   {% endfor %}    
+                                </div>
+                                
+                   
+                            
+                            </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Post Section End -->
+
+
+        <!-- Banner Start -->
+        <div class="container-fluid py-5 my-5" style="background: linear-gradient(rgba(202, 203, 185, 1), rgba(202, 203, 185, 1));">
+            <div class="container">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
+                        <h1 class="mb-4 text-primary">Newsers</h1>
+                        <h1 class="mb-4">Get Every Weekly Updates</h1>
+                        <p class="text-dark mb-4 pb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
+                        </p>
+                        <div class="position-relative mx-auto">
+                            <input class="form-control w-100 py-3 rounded-pill" type="email" placeholder="Your Busines Email">
+                            <button type="submit" class="btn btn-primary py-3 px-5 position-absolute rounded-pill text-white h-100" style="top: 0; right: 0;">Subscribe Now</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="rounded">
+                            <img src="/static/img/banner-img.jpg" class="img-fluid rounded w-100 rounded" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Banner End -->
+

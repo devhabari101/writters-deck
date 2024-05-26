@@ -1,0 +1,20 @@
+version: '3.10'
+
+services:
+  web:
+    build: ./app/web
+    ports:
+      - "6000:6000"
+      - "3000:3000"
+      - "7000:7000"
+    depends_on:
+      - duckling
+    volumes:
+      - ./app/ai:/ai
+
+  duckling:
+    image: rasa/duckling
+    ports:
+      - "8000:8000"
+
+
