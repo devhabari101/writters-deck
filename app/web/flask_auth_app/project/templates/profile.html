@@ -23,7 +23,7 @@
 	<link rel="stylesheet" href="/static/backend/css/atlantis.min.css">
 
 	<!-- CSS Just for demo purpose, don't include it in your project -->
-	<link rel="stylesheet" href="/static/backend/css/demo.css">
+	<link rel="stylesheet" href="../assets/css/demo.css">
 </head>
 <body data-background-color="dark">
 	<div class="wrapper">
@@ -32,7 +32,7 @@
 			<div class="logo-header" data-background-color="dark2">
 				
 				<a href="index.html" class="logo">
-					<img src="/static/backend/img/logo.svg" alt="navbar brand" class="navbar-brand">
+					<img src="../assets/img/logo.svg" alt="navbar brand" class="navbar-brand">
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon">
@@ -86,7 +86,7 @@
 										<div class="notif-center">
 											<a href="#">
 												<div class="notif-img"> 
-													<img src="/static/backend/img/jm_denis.jpg" alt="Img Profile">
+													<img src="../assets/img/jm_denis.jpg" alt="Img Profile">
 												</div>
 												<div class="notif-content">
 													<span class="subject">Jimmy Denis</span>
@@ -98,7 +98,7 @@
 											</a>
 											<a href="#">
 												<div class="notif-img"> 
-													<img src="/static/backend/img/chadengle.jpg" alt="Img Profile">
+													<img src="../assets/img/chadengle.jpg" alt="Img Profile">
 												</div>
 												<div class="notif-content">
 													<span class="subject">Chad</span>
@@ -110,7 +110,7 @@
 											</a>
 											<a href="#">
 												<div class="notif-img"> 
-													<img src="/static/backend/img/mlane.jpg" alt="Img Profile">
+													<img src="../assets/img/mlane.jpg" alt="Img Profile">
 												</div>
 												<div class="notif-content">
 													<span class="subject">Jhon Doe</span>
@@ -172,7 +172,7 @@
 											</a>
 											<a href="#">
 												<div class="notif-img"> 
-													<img src="/static/backend/img/profile2.jpg" alt="Img Profile">
+													<img src="../assets/img/profile2.jpg" alt="Img Profile">
 												</div>
 												<div class="notif-content">
 													<span class="block">
@@ -288,12 +288,12 @@
 		</div>
 
 		<!-- Sidebar -->
-		<div class="sidebar sidebar-style-2" data-background-color="dark2">
+		<div class="sidebar" data-background-color="dark2">
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
 					<div class="user">
 						<div class="avatar-sm float-left mr-2">
-							<img src="/static/backend/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+							<img src="../assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -327,7 +327,7 @@
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
@@ -415,15 +415,15 @@
 								</ul>
 							</div>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active submenu">
 							<a data-toggle="collapse" href="#sidebarLayouts">
 								<i class="fas fa-th-list"></i>
 								<p>Sidebar Layouts</p>
 								<span class="caret"></span>
 							</a>
-							<div class="collapse" id="sidebarLayouts">
+							<div class="collapse show" id="sidebarLayouts">
 								<ul class="nav nav-collapse">
-									<li>
+									<li class="active">
 										<a href="sidebar-style-1.html">
 											<span class="sub-item">Sidebar Style 1</span>
 										</a>
@@ -557,7 +557,7 @@
 														<span class="sub-item">Level 2</span>
 													</a>
 												</li>
-											</ul>
+					</ul>
 										</div>
 									</li>
 									<li>
@@ -572,7 +572,7 @@
 														<span class="sub-item">Level 2</span>
 													</a>
 												</li>
-											</ul>
+					</ul>
 										</div>
 									</li>
 									<li>
@@ -582,9 +582,6 @@
 									</li>
 								</ul>
 							</div>
-						</li>
-						<li class="mx-4 mt-2">
-							<a href="http://themekita.com/atlantis-bootstrap-dashboard.html" class="btn btn-primary btn-block"><span class="btn-label mr-2"> <i class="fa fa-heart"></i> </span>Buy Pro</a> 
 						</li>
 					</ul>
 				</div>
@@ -1010,7 +1007,7 @@
 												<li class="nav-item">
 													<a class="nav-link" id="pills-month" data-toggle="pill" href="#pills-month" role="tab" aria-selected="false">Month</a>
 												</li>
-											</ul>
+					</ul>
 										</div>
 									</div>
 								</div>
@@ -1223,7 +1220,6 @@
 	<!-- Atlantis JS -->
 	<script src="/static/backend/js/atlantis.min.js"></script>
 
-	
 	
 	<script>
 		$('#lineChart').sparkline([102,109,120,99,110,105,115], {
