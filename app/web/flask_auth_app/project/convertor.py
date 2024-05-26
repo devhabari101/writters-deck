@@ -91,7 +91,7 @@ observer.start()
 @convertor_blueprint.route("/admin", methods=["GET"])
 @login_required
 def form_admin():
-    return render_template("form.html")
+    return render_template("profile.html")
 
 @convertor_blueprint.route("/submit", methods=["POST"])
 @login_required
