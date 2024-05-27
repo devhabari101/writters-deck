@@ -113,7 +113,7 @@ observer.start()
 @login_required
 def form_admin():
     user_markdowns = list_user_markdowns()
-    return render_template("profile.html", name=current_user.name, user_markdowns=user_markdowns)
+    return render_template("profile.html", name=current_user.name, email=current_user.email, user_markdowns=user_markdowns)
 
 @convertor_blueprint.route("/submit", methods=["POST"])
 @login_required
