@@ -60,10 +60,6 @@ def index():
     # Pass the filtered data, latest post, second latest post, skipped post, and category count to the template for rendering
     return render_template('index.html', latest_news_post=latest_news_post, second_latest_news_post=second_latest_news_post, fifth_latest_news_post=fifth_latest_news_post, data=filtered_data, latest_post=latest_post, second_latest_post=second_latest_post, trending_posts=trending_posts, posts=filtered_data, category_count=category_count)
 
-@main_blueprint.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html', name=current_user.name)
 
 
 # Route for detailed Markdown page
