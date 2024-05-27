@@ -1,9 +1,11 @@
 import os
 import json
+import markdown
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .auth import auth_blueprint  # Import the auth blueprint
 from .features import get_filtered_data  # Import the get_filtered_data function
+from .convertor import markdown_dir
 from .trending_post import get_latest_post, get_second_latest_post, list_all_trending_posts, list_latest_posts_by_category   # Import the functions
 from .allnews import nget_latest_post, nget_second_latest_post, nget_fifth_latest_post
 main_blueprint = Blueprint('main', __name__)
