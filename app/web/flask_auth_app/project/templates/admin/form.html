@@ -1,10 +1,9 @@
 {% extends "admin/base.html" %}
 
 {% block content %}
-<h1 class="title">
-  Welcome, fill in the form {{ name }}!
-</h1>
 
+{% include 'admin/partials/_header.html' %}
+{% include 'admin/partials/_nav.html' %}
 <form action="{{ url_for('convertor.submit_form') }}" method="post">
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title" required><br><br>
