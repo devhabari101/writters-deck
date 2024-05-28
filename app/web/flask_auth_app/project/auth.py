@@ -114,7 +114,7 @@ def dashboard():
 @auth_blueprint.route('/admin/profile/edit')
 @login_required
 def profile():
-    return render_template('profile_.html')
+    return render_template("admin/profile_.edit.html")
     
 @auth_blueprint.route("/writer", methods=["GET"])
 @login_required
