@@ -481,17 +481,18 @@
                     <h4 class="mb-1">Basic information</h4>
 
                   </div>
-                  <form>
+                  <form action="{{ url_for('auth.update_profile') }}" method="post">
                     <!-- row -->
 
                     <div class="mb-3 row">
                       <label for="fullName" class="col-sm-4 col-form-label
-                          form-label">Full name</label>
+                          first_name">First Name</label>
                       <div class="col-sm-4 mb-3 mb-lg-0">
-                        <input type="text" class="form-control" placeholder="First name" id="fullName" required>
+                        <input type="text" name="first_name" class="form-control" placeholder="First name" id="first_name" value="{{ current_user.first_name }}">
+                        
                       </div>
                       <div class="col-sm-4">
-                        <input type="text" class="form-control" placeholder="Last name" id="lastName" required>
+                        <input type="text" name="last_name" class="form-control" placeholder="Last name" id="last_name" value="{{ current_user.last_name }}">
                       </div>
                     </div>
 
@@ -506,9 +507,10 @@
                     <!-- row -->
                     <div class="mb-3 row">
                       <label for="phone" class="col-sm-4 col-form-label
-                          form-label">Phone <span class="text-muted">(Optional)</span></label>
+                          form-label">Phone Number</label>
                       <div class="col-md-8 col-12">
-                        <input type="text" class="form-control" placeholder="Phone" id="phone" required>
+                        <input type="text" name="phone_number" class="form-control" placeholder="Phone" id="phone_number" value="{{ current_user.phone_number }}">
+                        
                       </div>
                     </div>
                     <!-- row -->
@@ -517,24 +519,35 @@
                           form-label">Location</label>
 
                       <div class="col-md-8 col-12">
-                        <select class="form-select" id="location">
-                            <option selected>Select Country</option>
-                            <option value="1">India</option>
-                            <option value="2">UK</option>
-                            <option value="3">USA</option>
-                          </select>
+                        <input type="text" name="location" class="form-control" placeholder="location" id="location" value="{{ current_user.location }}">
                       </div>
                     </div>
+
+                    <div class="mb-3 row">
+                   <label for="institution" class="col-sm-4 col-form-label">Institution/Organization Name:</label>
+                   <div class="col-sm-8 col-12">
+                <input type="text" name="institution" class="form-control" placeholder="Organization Name" id="institution" value="{{ current_user.institution }}">
+               </div>
+              </div>
+
+                    <div class="mb-3 row">
+                <label for="role" class="col-sm-4 col-form-label">Your Role:</label>
+                <div class="col-sm-8 col-12">
+                    <input type="text" name="role" class="form-control" placeholder="role" id="role" value="{{ current_user.role }}">
+                </div>
+            </div>
                     <!-- row -->
                     <div class="mb-3 row">
                       <label for="addressLine" class="col-sm-4 col-form-label
                           form-label">Address line 1</label>
 
 
-                      <div class="col-md-8 col-12">
-                        <input type="text" class="form-control" placeholder="placeholder" id="addressLine" required>
-                      </div>
-                    </div>
+                      <div class="mb-3 row">
+                <label for="address_line1" class="col-sm-4 col-form-label">Address Line 1:</label>
+                <div class="col-sm-8">
+                    <input type="text" name="address_line1" class="form-control" id="address_line1" value="{{ current_user.address_line1 }}">
+                </div>
+            </div>
                     <!-- row -->
                     <div class="mb-3 row">
                       <label for="addressLineTwo" class="col-sm-4
