@@ -65,7 +65,7 @@
     <div class="nav-scroller">
         <!-- Brand logo -->
         <a class="navbar-brand" href="../index.html">
-            <img src="/static/admin-ui/assets/images/brand/logo/logo.svg" alt="" />
+            <img src="{{ url_for('static', filename='admin-ui/uploads/' + (current_user.avatar or 'default_avatar.png')) }}" class="rounded-circle avatar avatar-lg" alt="Avatar">
         </a>
         <!-- Navbar nav -->
         <ul class="navbar-nav flex-column" id="sideNavbar">
@@ -464,7 +464,8 @@
                                 </div>
                                 <div class="col-sm-8 d-flex align-items-center">
                                     {% if current_user.avatar %}
-                                        <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}" class="rounded-circle avatar avatar-lg me-3" alt="Avatar">
+                                        <img src="{{ url_for('static', filename='admin-ui/uploads/' + (current_user.avatar or 'avatar.png')) }}" class="rounded-circle avatar avatar-lg" alt="Avatar">
+                                        
                                     {% endif %}
                                     <div>
                                         <input type="file" name="avatar" id="avatar" class="form-control mb-2">
