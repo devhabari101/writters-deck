@@ -70,22 +70,29 @@
             <label for="zip_code">Zip Code:</label>
             <input type="text" name="zip_code" id="zip_code" value="{{ current_user.zip_code }}">
         </div>
-        <div>
-            <label for="avatar">Avatar URL:</label>
-            <input type="text" name="avatar" id="avatar" value="{{ current_user.avatar }}">
-        </div>
-        <div>
-            <label for="coverphoto">Cover Photo URL:</label>
-            <input type="text" name="coverphoto" id="coverphoto" value="{{ current_user.coverphoto }}">
-        </div>
-        <div>
+          <div>
             <label for="bio">Bio:</label>
             <textarea name="bio" id="bio" rows="4">{{ current_user.bio }}</textarea>
             <p id="bio-warning" style="color: red; display: none;"></p>
         </div>
         <div>
+            <label for="avatar">Avatar:</label>
+            <input type="file" name="avatar" id="avatar">
+            {% if current_user.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}" alt="Avatar" width="100">
+            {% endif %}
+        </div>
+        <div>
+            <label for="coverphoto">Cover Photo:</label>
+            <input type="file" name="coverphoto" id="coverphoto">
+            {% if current_user.coverphoto %}
+                <img src="{{ url_for('static', filename='uploads/' + current_user.coverphoto) }}" alt="Cover Photo" width="200">
+            {% endif %}
+        </div>
+        <div>
             <button type="submit">Update Profile</button>
         </div>
+    </form>
     </form>
 </body>
 </html>
