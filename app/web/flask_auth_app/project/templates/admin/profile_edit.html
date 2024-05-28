@@ -29,6 +29,32 @@
 <!-- Theme CSS -->
 <link rel="stylesheet" href="/static/admin-ui/assets/css/theme.min.css">
   <title>Setting | Dash Ui - Bootstrap 5 Admin Dashboard Template</title>
+  <script>
+        function countWords(str) {
+            return str.trim().split(/\s+/).length;
+        }
+
+        function validateBio() {
+            const bioField = document.getElementById('bio');
+            const bioWarning = document.getElementById('bio-warning');
+            const maxWords = 200;
+            const wordCount = countWords(bioField.value);
+            
+            if (wordCount > maxWords) {
+                bioWarning.style.display = 'block';
+                bioWarning.textContent = `Bio exceeds ${maxWords} words. Current word count: ${wordCount}`;
+                return false;
+            } else {
+                bioWarning.style.display = 'none';
+                return true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const bioField = document.getElementById('bio');
+            bioField.addEventListener('input', validateBio);
+        });
+    </script>
 </head>
 
 <body class="bg-light">
@@ -409,172 +435,134 @@
 </div>
      
   
-     <!-- Container fluid -->
-      <div class="container-fluid p-6">
+    <div class="container-fluid p-6">
         <div class="row">
-          <div class="col-lg-12 col-md-12 col-12">
-            <!-- Page header -->
-         
-              <div class="border-bottom pb-4 mb-4">              
-                  <h3 class="mb-0 fw-bold">General</h3>             
-                
-              </div>
-           
-          </div>
+            <div class="col-lg-12 col-md-12 col-12">
+                <div class="border-bottom pb-4 mb-4">
+                    <h3 class="mb-0 fw-bold">General</h3>
+                </div>
+            </div>
         </div>
         <div class="row mb-8">
-          <div class="col-xl-3 col-lg-4 col-md-12 col-12">
-            <div class="mb-4 mb-lg-0">
-              <h4 class="mb-1">General Setting</h4>
-              <p class="mb-0 fs-5 text-muted">Profile configuration settings </p>
+            <div class="col-xl-3 col-lg-4 col-md-12 col-12">
+                <div class="mb-4 mb-lg-0">
+                    <h4 class="mb-1">General Setting</h4>
+                    <p class="mb-0 fs-5 text-muted">Profile configuration settings</p>
+                </div>
             </div>
 
-          </div>
-
-          <div class="col-xl-9 col-lg-8 col-md-12 col-12">
-            <!-- card -->
-            <div class="card">
-              <!-- card body -->
-              <div class="card-body">
-                <div class=" mb-6">
-                  <h4 class="mb-1">General Settings</h4>
-
-                </div>
-                <div class="row align-items-center mb-8">
-                  <div class="col-md-3 mb-3 mb-md-0">
-                    <h5 class="mb-0">Avatar</h5>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="d-flex align-items-center">
-                      <div class="me-3">
-                        <img src="../assets/images/avatar/avatar-5.jpg" class="rounded-circle avatar avatar-lg" alt="">
-                      </div>
-                      <div>
-                        <button type="submit" class="btn btn-outline-white
-                            me-1">Change</button>
-                        <button type="submit" class="btn btn-outline-white">Remove</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- col -->
-                <div class="row mb-8">
-                  <div class="col-md-3 mb-3 mb-md-0">
-                    <!-- heading -->
-                    <h5 class="mb-0">Cover photo</h5>
-                  </div>
-                  <div class="col-md-9">
-                    <!-- dropzone input -->
-                    <div>
-                      <form action="#" class="dropzone mb-3 border-dashed">
-                        <div class="fallback">
-                          <input name="file" type="file" multiple />
+            <div class="col-xl-9 col-lg-8 col-md-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-6">
+                            <h4 class="mb-1">General Settings</h4>
                         </div>
-                      </form>
-                      <button type="submit" class="btn btn-outline-white">Change</button>
+                        <form action="{{ url_for('auth.update_profile') }}" method="post" enctype="multipart/form-data">
+                            <div class="row align-items-center mb-8">
+                                <div class="col-md-3 mb-3 mb-md-0">
+                                    <h5 class="mb-0">Avatar</h5>
+                                </div>
+                                <div class="col-sm-8 d-flex align-items-center">
+                                    {% if current_user.avatar %}
+                                        <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}" class="rounded-circle avatar avatar-lg me-3" alt="Avatar">
+                                    {% endif %}
+                                    <div>
+                                        <input type="file" name="avatar" id="avatar" class="form-control mb-2">
+                                        <button type="submit" class="btn btn-outline-white me-1" name="action" value="change_avatar">Change</button>
+                                        <button type="submit" class="btn btn-outline-white" name="action" value="remove_avatar">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-8">
+                                <div class="col-md-3 mb-3 mb-md-0">
+                                    <h5 class="mb-0">Cover Photo</h5>
+                                </div>
+                                <div class="col-md-9 d-flex align-items-center">
+                                    {% if current_user.coverphoto %}
+                                        <img src="{{ url_for('static', filename='uploads/' + current_user.coverphoto) }}" class="cover-photo" alt="Cover Photo" width="200" class="me-3">
+                                    {% endif %}
+                                    <div>
+                                        <input type="file" name="coverphoto" id="coverphoto" class="form-control mb-2">
+                                        <button type="submit" class="btn btn-outline-white" name="action" value="change_coverphoto">Change</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <h4 class="mb-1">Basic Information</h4>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="first_name" class="col-sm-4 col-form-label">First Name</label>
+                                <div class="col-sm-4 mb-3 mb-lg-0">
+                                    <input type="text" name="first_name" class="form-control" id="first_name" value="{{ current_user.first_name }}">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="text" name="last_name" class="form-control" id="last_name" value="{{ current_user.last_name }}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="email" class="col-sm-4 col-form-label">Email</label>
+                                <div class="col-md-8 col-12">
+                                    <input type="email" name="email" class="form-control" id="email" value="{{ current_user.email }}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="phone_number" class="col-sm-4 col-form-label">Phone Number</label>
+                                <div class="col-md-8 col-12">
+                                    <input type="text" name="phone_number" class="form-control" id="phone_number" value="{{ current_user.phone_number }}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="location" class="col-sm-4 col-form-label">Location</label>
+                                <div class="col-md-8 col-12">
+                                    <input type="text" name="location" class="form-control" id="location" value="{{ current_user.location }}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="institution" class="col-sm-4 col-form-label">Institution/Organization Name</label>
+                                <div class="col-md-8 col-12">
+                                    <input type="text" name="institution" class="form-control" id="institution" value="{{ current_user.institution }}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="role" class="col-sm-4 col-form-label">Your Role</label>
+                                <div class="col-md-8 col-12">
+                                    <input type="text" name="role" class="form-control" id="role" value="{{ current_user.role }}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="address_line1" class="col-sm-4 col-form-label">Address Line 1</label>
+                                <div class="col-md-8 col-12">
+                                    <input type="text" name="address_line1" class="form-control" id="address_line1" value="{{ current_user.address_line1 }}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="address_line2" class="col-sm-4 col-form-label">Address Line 2</label>
+                                <div class="col-md-8 col-12">
+                                    <input type="text" name="address_line2" class="form-control" id="address_line2" value="{{ current_user.address_line2 }}">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="zip_code" class="col-sm-4 col-form-label">Zip Code</label>
+                                <div class="col-md-8 col-12">
+                                    <input type="text" name="zip_code" class="form-control" id="zip_code" value="{{ current_user.zip_code }}">
+                                </div>
+                            </div>
+                          <div class="mb-3">
+            <label for="bio">Bio:</label>
+            <textarea name="bio" id="bio" rows="4">{{ current_user.bio }}</textarea>
+            <p id="bio-warning" style="color: red; display: none;"></p>
+        </div>
+                            <div class="row">
+                                <div class="col-sm-8 offset-sm-4">
+                                    <button type="submit" class="btn btn-primary" name="action" value="update_profile">Update Profile</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                  </div>
-                </div>
-                <div>
-                  <!-- border -->
-                  <div class="mb-6">
-                    <h4 class="mb-1">Basic information</h4>
-
-                  </div>
-                  <form action="{{ url_for('auth.update_profile') }}" method="post">
-                    <!-- row -->
-
-                    <div class="mb-3 row">
-                      <label for="fullName" class="col-sm-4 col-form-label
-                          first_name">First Name</label>
-                      <div class="col-sm-4 mb-3 mb-lg-0">
-                        <input type="text" name="first_name" class="form-control" placeholder="First name" id="first_name" value="{{ current_user.first_name }}">
-                        
-                      </div>
-                      <div class="col-sm-4">
-                        <input type="text" name="last_name" class="form-control" placeholder="Last name" id="last_name" value="{{ current_user.last_name }}">
-                      </div>
-                    </div>
-
-                    <!-- row -->
-                    <div class="mb-3 row">
-                      <label for="email" class="col-sm-4 col-form-label
-                          form-label">Email</label>
-                      <div class="col-md-8 col-12">
-                        <input type="email" class="form-control" placeholder="Email" id="email" required>
-                      </div>
-                    </div>
-                    <!-- row -->
-                    <div class="mb-3 row">
-                      <label for="phone" class="col-sm-4 col-form-label
-                          form-label">Phone Number</label>
-                      <div class="col-md-8 col-12">
-                        <input type="text" name="phone_number" class="form-control" placeholder="Phone" id="phone_number" value="{{ current_user.phone_number }}">
-                        
-                      </div>
-                    </div>
-                    <!-- row -->
-                    <div class="mb-3 row">
-                      <label for="location" class="col-sm-4 col-form-label
-                          form-label">Location</label>
-
-                      <div class="col-md-8 col-12">
-                        <input type="text" name="location" class="form-control" placeholder="location" id="location" value="{{ current_user.location }}">
-                      </div>
-                    </div>
-
-                    <div class="mb-3 row">
-                   <label for="institution" class="col-sm-4 col-form-label">Institution/Organization Name:</label>
-                   <div class="col-sm-8 col-12">
-                <input type="text" name="institution" class="form-control" placeholder="Organization Name" id="institution" value="{{ current_user.institution }}">
-               </div>
-              </div>
-
-                    <div class="mb-3 row">
-                <label for="role" class="col-sm-4 col-form-label">Your Role:</label>
-                <div class="col-sm-8 col-12">
-                    <input type="text" name="role" class="form-control" placeholder="role" id="role" value="{{ current_user.role }}">
                 </div>
             </div>
-                    <!-- row -->
-                    <div class="mb-3 row">
-                      <label for="addressLine" class="col-sm-4 col-form-label
-                          form-label">Address line 1</label>
-
-
-                      <div class="mb-3 row">
-                <label for="address_line1" class="col-sm-4 col-form-label">Address Line 1:</label>
-                <div class="col-sm-8">
-                    <input type="text" name="address_line1" class="form-control" id="address_line1" value="{{ current_user.address_line1 }}">
-                </div>
-            </div>
-                    <!-- row -->
-                    <div class="mb-3 row">
-                      <label for="addressLineTwo" class="col-sm-4
-                          col-form-label form-label">Address line 2</label>
-                      <div class="col-md-8 col-12">
-                        <input type="text" class="form-control" placeholder="placeholder" id="addressLineTwo" required>
-                      </div>
-                    </div>
-                    <!-- row -->
-                    <div class="row align-items-center">
-                      <label for="zipcode" class="col-sm-4 col-form-label
-                          form-label">Zip code <i data-feather="info"
-                            class="me-2 icon-xs"></i></label>
-
-                      <div class="col-md-8 col-12">
-                        <input type="text" class="form-control" placeholder="placeholder" id="zipcode" required>
-                      </div>
-                      <div class="offset-md-4 col-md-8 mt-4">
-                        <button type="submit" class="btn btn-primary"> Save
-                            Changes</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-
+        </div>
+    </div>
           </div>
         </div>
         
