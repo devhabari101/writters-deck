@@ -16,7 +16,15 @@ def load_user(user_id):
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for('auth.login'))
+    
+# Configure file uploads
+UPLOAD_FOLDER = 'static/admin-ui/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
 @auth_blueprint.route('/login')
 def login():
     if current_user.is_authenticated:
