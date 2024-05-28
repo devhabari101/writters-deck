@@ -10,7 +10,7 @@ def create_app():
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    app.config['UPLOAD_FOLDER'] = 'static/uploads'
+    app.config['UPLOAD_FOLDER'] = 'static/admin-ui/uploads'
     app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
     
     db.init_app(app)
