@@ -107,7 +107,7 @@ def list_user_markdowns():
 
 @auth_blueprint.route("/admin", methods=["GET"])
 @login_required
-def form_admin():
+def profile():
     user_markdowns = list_user_markdowns()
     return render_template("admin/profile.html", name=current_user.name, email=current_user.email, user_markdowns=user_markdowns)
 
