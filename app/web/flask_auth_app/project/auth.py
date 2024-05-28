@@ -66,7 +66,7 @@ def signup_post():
 
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
-    new_user = User(email=email, name=name, password=hashed_password)
+    new_user = User(email=email, name=name, password=hashed_password, avatar='avatar.png')
 
     db.session.add(new_user)
     db.session.commit()
