@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script>
+        function countWords(str) {
+            return str.trim().split(/\s+/).length;
+        }
+
+        function validateBio() {
+            const bioField = document.getElementById('bio');
+            const bioWarning = document.getElementById('bio-warning');
+            const maxWords = 200;
+            const wordCount = countWords(bioField.value);
+            
+            if (wordCount > maxWords) {
+                bioWarning.style.display = 'block';
+                bioWarning.textContent = `Bio exceeds ${maxWords} words. Current word count: ${wordCount}`;
+                return false;
+            } else {
+                bioWarning.style.display = 'none';
+                return true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const bioField = document.getElementById('bio');
+            bioField.addEventListener('input', validateBio);
+        });
+    </script>
+</head>
+<body>
+    <h1>Profile</h1>
+    <form action="{{ url_for('auth.update_profile') }}" method="post" enctype="multipart/form-data" onsubmit="return validateBio()">
+        <!-- Other fields here -->
+        <div>
+            <label for="bio">Bio:</label>
+            <textarea name="bio" id="bio" rows="4">{{ current_user.bio }}</textarea>
+            <p id="bio-warning" style="color: red; display: none;"></p>
+        </div>
+        <div>
+            <label for="avatar">Avatar:</label>
+            <input type="file" name="avatar" id="avatar">
+            {% if current_user.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}" alt="Avatar" width="100">
+            {% endif %}
+        </div>
+        <div>
+            <label for="coverphoto">Cover Photo:</label>
+            <input type="file" name="coverphoto" id="coverphoto">
+            {% if current_user.coverphoto %}
+                <img src="{{ url_for('static', filename='uploads/' + current_user.coverphoto) }}" alt="Cover Photo" width="200">
+            {% endif %}
+        </div>
+        <div>
+            <button type="submit">Update Profile</button>
+        </div>
+    </form>
+</body>
+</html>
