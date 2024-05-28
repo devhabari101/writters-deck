@@ -15,6 +15,6 @@ class User(UserMixin, db.Model):
     address_line1 = db.Column(db.String(200))
     address_line2 = db.Column(db.String(200))
     zip_code = db.Column(db.String(20))
-    avatar = db.Column(db.String(200), default='avatar.png')  # Default avatar
+    avatar = db.Column(db.String(200), default='avatar.jpg')  # Default avatar
     coverphoto = db.Column(db.String(200))
     bio = db.Column(db.Text)  # Add bio field
