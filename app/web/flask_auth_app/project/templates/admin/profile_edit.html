@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+
+<!-- Favicon icon-->
+<link rel="shortcut icon" type="image/x-icon" href="/static/admin-ui/assets/images/favicon/favicon.ico">
+
+<!-- Libs CSS -->
+
+
+<link href="/static/admin-ui/assets/libs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link href="/static/admin-ui/assets/libs/dropzone/dist/dropzone.css"  rel="stylesheet">
+<link href="/static/admin-ui/assets/libs/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet" />
+<link href="/static/admin-ui/assets/libs/prismjs/themes/prism-okaidia.css" rel="stylesheet">
+
+
+
+
+
+
+
+
+<!-- Theme CSS -->
+<link rel="stylesheet" href="/static/admin-ui/assets/css/theme.min.css">
+  <title>Forget Password | Dash Ui - Bootstrap 5 Admin Dashboard Template</title>
+  <script>
+        function countWords(str) {
+            return str.trim().split(/\s+/).length;
+        }
+
+        function validateBio() {
+            const bioField = document.getElementById('bio');
+            const bioWarning = document.getElementById('bio-warning');
+            const maxWords = 200;
+            const wordCount = countWords(bioField.value);
+            
+            if (wordCount > maxWords) {
+                bioWarning.style.display = 'block';
+                bioWarning.textContent = `Bio exceeds ${maxWords} words. Current word count: ${wordCount}`;
+                return false;
+            } else {
+                bioWarning.style.display = 'none';
+                return true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const bioField = document.getElementById('bio');
+            bioField.addEventListener('input', validateBio);
+        });
+    </script>
+</head>
+
+<body class="bg-light">
+  <div class="container d-flex flex-column">
+    <div class="row align-items-center justify-content-center g-0
+        min-vh-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xxl-4 py-8 py-xl-0">
+        <!-- Card -->
+        <div class="card smooth-shadow-md">
+          <!-- Card body -->
+          <div class="card-body p-6">
+            <div class="mb-4">
+              <a href="../index.html"><img src="/static/admin-ui/assets/images/brand/logo/logo-primary.svg" class="mb-2" alt=""></a>
+              <p class="mb-6">Don't worry, we'll send you an email to reset your password.
+              </p>
+            </div>
+            <!-- Form -->
+            <form action="{{ url_for('auth.update_profile') }}" method="post">
+              
+            <div class="mb-3">
+            <label for="first_name">First Name:</label>
+            <input type="text" name="first_name" id="first_name" value="{{ current_user.first_name }}">
+            </div>
+              
+            <div class="mb-3">
+            <label for="last_name">Last Name:</label>
+            <input type="text" name="last_name" id="last_name" value="{{ current_user.last_name }}">
+            </div> 
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-control" name="email" placeholder="Enter Your Email" required="">
+              </div>
+               <div class="mb-3">
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" name="phone_number" id="phone_number" value="{{ current_user.phone_number }}">
+        </div>
+        <div class="mb-3">
+            <label for="location">Location:</label>
+            <input type="text" name="location" id="location" value="{{ current_user.location }}">
+        </div>
+            <div class="mb-3">
+            <label for="institution">Institution/Organization Name:</label>
+            <input type="text" name="institution" id="institution" value="{{ current_user.institution }}">
+        </div>
+        <div class="mb-3">
+            <label for="role">Your Role:</label>
+            <input type="text" name="role" id="role" value="{{ current_user.role }}">
+        </div>
+        <div class="mb-3">
+            <label for="address_line1">Address Line 1:</label>
+            <input type="text" name="address_line1" id="address_line1" value="{{ current_user.address_line1 }}">
+        </div>
+        <div class="mb-3">
+            <label for="address_line2">Address Line 2:</label>
+            <input type="text" name="address_line2" id="address_line2" value="{{ current_user.address_line2 }}">
+        </div>
+        <div class="mb-3">
+            <label for="zip_code">Zip Code:</label>
+            <input type="text" name="zip_code" id="zip_code" value="{{ current_user.zip_code }}">
+        </div>
+            <div class="mb-3">
+            <label for="bio">Bio:</label>
+            <textarea name="bio" id="bio" rows="4">{{ current_user.bio }}</textarea>
+            <p id="bio-warning" style="color: red; display: none;"></p>
+        </div>
+            <div class="mb-3">
+            <label for="avatar">Avatar:</label>
+            <input type="file" name="avatar" id="avatar">
+            {% if current_user.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}" alt="Avatar" width="100">
+            {% endif %}
+        </div>
+            <div class="mb-3">
+            <label for="coverphoto">Cover Photo:</label>
+            <input type="file" name="coverphoto" id="coverphoto">
+            {% if current_user.coverphoto %}
+                <img src="{{ url_for('static', filename='uploads/' + current_user.coverphoto) }}" alt="Cover Photo" width="200">
+            {% endif %}
+        </div>
+              <!-- Button -->
+              <div class="mb-3 d-grid">
+                <button type="submit" class="btn btn-primary">
+                    Reset Password
+                  </button>
+              </div>
+              <span>Don't have an account? <a href="sign-in.html">sign in</a></span>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <!-- Libs JS -->
+<script src="/static/admin-ui/assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="/static/admin-ui/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/admin-ui/assets/libs/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/static/admin-ui/assets/libs/feather-icons/dist/feather.min.js"></script>
+<script src="/static/admin-ui/assets/libs/prismjs/prism.js"></script>
+<script src="/static/admin-ui/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+<script src="/static/admin-ui/assets/libs/dropzone/dist/min/dropzone.min.js"></script>
+<script src="/static/admin-ui/assets/libs/prismjs/plugins/toolbar/prism-toolbar.min.js"></script>
+<script src="/static/admin-ui/assets/libs/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+
+
+
+
+<!-- Theme JS -->
+<script src="/static/admin-ui/assets/js/theme.min.js"></script>
+</body>
+
+</html>
