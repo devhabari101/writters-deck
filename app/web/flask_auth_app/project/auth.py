@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_login import login_user, login_required, logout_user, current_user, LoginManager
 from .models import User
 from . import db
@@ -22,8 +23,7 @@ UPLOAD_FOLDER = 'static/admin-ui/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     
 @auth_blueprint.route('/login')
 def login():
@@ -115,12 +115,7 @@ def dashboard():
 @login_required
 def profile():
     return render_template("admin/profile_edit.html")
-    
-@auth_blueprint.route("/writer", methods=["GET"])
-@login_required
-def writer_form():
-    return render_template("admin/form.html")
-    
+
 @auth_blueprint.route('/profile', methods=['POST'])
 @login_required
 def update_profile():
@@ -152,6 +147,28 @@ def update_profile():
     db.session.commit()
 
     flash('Your profile has been updated!')
+    return redirect(url_for('auth.profile'))
+
+@auth_blueprint.route('/profile', methods=['POST'])
+@login_required
+def update_profile():
+    action = request.form.get('action')
+    
+    if action == 'update_profile':
+        current_user.first_name = request.form.get('first_name')
+        current_user.last_name = request.form.get('last_name')
+        current_user.phone_number = request.form.get('phone_number')
+        current_user.location = request.form.get('location')
+        current_user.institution = request.form.get('institution')
+        current_user.role = request.form.get('role')
+        current_user.address_line1 = request.form.get('address_line1')
+        current_user.address_line2 = request.form.get('address_line2')
+        current_user.zip_code = request.form.get('zip_code')
+        current_user.bio = request.form.get('bio')
+        
+        db.session.commit()
+        flash('Profile updated successfully', 'success')
+    
     elif action == 'change_avatar':
         if 'avatar' not in request.files:
             flash('No file part', 'error')
