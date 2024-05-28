@@ -152,4 +152,49 @@ def update_profile():
     db.session.commit()
 
     flash('Your profile has been updated!')
+    elif action == 'change_avatar':
+        if 'avatar' not in request.files:
+            flash('No file part', 'error')
+            return redirect(request.url)
+        
+        file = request.files['avatar']
+        
+        if file.filename == '':
+            flash('No selected file', 'error')
+            return redirect(request.url)
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            current_user.avatar = filename
+            db.session.commit()
+            flash('Avatar updated successfully', 'success')
+        else:
+            flash('Invalid file type', 'error')
+    
+    elif action == 'remove_avatar':
+        current_user.avatar = None
+        db.session.commit()
+        flash('Avatar removed successfully', 'success')
+    
+    elif action == 'change_coverphoto':
+        if 'coverphoto' not in request.files:
+            flash('No file part', 'error')
+            return redirect(request.url)
+        
+        file = request.files['coverphoto']
+        
+        if file.filename == '':
+            flash('No selected file', 'error')
+            return redirect(request.url)
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            current_user.coverphoto = filename
+            db.session.commit()
+            flash('Cover photo updated successfully', 'success')
+        else:
+            flash('Invalid file type', 'error')
+    
     return redirect(url_for('auth.profile'))
