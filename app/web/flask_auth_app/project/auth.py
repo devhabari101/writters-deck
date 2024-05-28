@@ -107,3 +107,36 @@ def form_admin():
 @login_required
 def writer_form():
     return render_template("admin/form.html")
+    
+@auth_blueprint.route('/profile', methods=['POST'])
+@login_required
+def update_profile():
+    current_user.first_name = request.form.get('first_name')
+    current_user.last_name = request.form.get('last_name')
+    current_user.phone_number = request.form.get('phone_number')
+    current_user.location = request.form.get('location')
+    current_user.institution = request.form.get('institution')
+    current_user.role = request.form.get('role')
+    current_user.address_line1 = request.form.get('address_line1')
+    current_user.address_line2 = request.form.get('address_line2')
+    current_user.zip_code = request.form.get('zip_code')
+    current_user.bio = request.form.get('bio')
+
+    if 'avatar' in request.files:
+        avatar_file = request.files['avatar']
+        if avatar_file and allowed_file(avatar_file.filename):
+            avatar_filename = secure_filename(avatar_file.filename)
+            avatar_file.save(os.path.join(UPLOAD_FOLDER, avatar_filename))
+            current_user.avatar = avatar_filename
+
+    if 'coverphoto' in request.files:
+        coverphoto_file = request.files['coverphoto']
+        if coverphoto_file and allowed_file(coverphoto_file.filename):
+            coverphoto_filename = secure_filename(coverphoto_file.filename)
+            coverphoto_file.save(os.path.join(UPLOAD_FOLDER, coverphoto_filename))
+            current_user.coverphoto = coverphoto_filename
+
+    db.session.commit()
+
+    flash('Your profile has been updated!')
+    return redirect(url_for('auth.profile'))
