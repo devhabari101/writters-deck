@@ -105,11 +105,13 @@ def list_user_markdowns():
     
     return user_markdowns
 
-@auth_blueprint.route("/admin", methods=["GET"])
+@auth_blueprint.route('/admin', methods=['GET'])
 @login_required
 def dashboard():
+    print("Reached the /admin route")
     user_markdowns = list_user_markdowns()
-    return render_template("admin/dashboard.html", name=current_user.name, email=current_user.email, user_markdowns=user_markdowns)
+    return render_template('admin/dashboard.html', name=current_user.name, email=current_user.email, user_markdowns=user_markdowns)
+
 
 @auth_blueprint.route('/admin/profile/edit')
 @login_required
