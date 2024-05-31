@@ -104,7 +104,12 @@ def list_user_markdowns():
                     user_markdowns.append(metadata_dict)
     
     return user_markdowns
-
+    
+@auth_blueprint.route('/writer', methods=["GET"])
+@login_required
+def writer_form():
+    return render_template('admin/form.html')
+    
 @auth_blueprint.route('/admin', methods=['GET'])
 @login_required
 def dashboard():
