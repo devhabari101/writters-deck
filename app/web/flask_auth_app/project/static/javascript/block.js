@@ -68,3 +68,38 @@ export function getLatestPopularMarkdown(popularMarkdowns) {
 
     return markdownContentDiv;
 }
+
+// Define the function
+export function renderLatestTrendingMarkdowns(trendingMarkdowns) {
+    const trendingContainer = document.createElement('div');
+    trendingContainer.classList.add('trending-markdowns-container');
+
+    trendingMarkdowns.forEach(markdown => {
+        const markdownDiv = document.createElement('div');
+        markdownDiv.classList.add('markdown-item');
+
+        const titleLink = document.createElement('a');
+        titleLink.href = markdown.metadata.link;
+        titleLink.textContent = markdown.metadata.title;
+        titleLink.classList.add('trending-title');
+
+        const dateSpan = document.createElement('span');
+        dateSpan.classList.add('trending-date');
+        dateSpan.textContent = markdown.metadata.date;
+
+        const excerptDiv = document.createElement('div');
+        excerptDiv.classList.add('trending-excerpt');
+        const excerptText = markdown.content.split(/\s+/).slice(0, 50).join(' ') + '...';
+        excerptDiv.textContent = excerptText;
+
+        markdownDiv.appendChild(titleLink);
+        markdownDiv.appendChild(dateSpan);
+        markdownDiv.appendChild(excerptDiv);
+        trendingContainer.appendChild(markdownDiv);
+    });
+
+    return trendingContainer;
+}
+
+// Ensure you have this export statement
+export { renderLatestTrendingMarkdowns };
