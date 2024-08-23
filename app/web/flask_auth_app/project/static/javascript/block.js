@@ -1,3 +1,4 @@
+// Define the getLatestPopularMarkdown function
 export function getLatestPopularMarkdown(popularMarkdowns) {
     const latestPopularMarkdown = popularMarkdowns[0];
 
@@ -69,7 +70,7 @@ export function getLatestPopularMarkdown(popularMarkdowns) {
     return markdownContentDiv;
 }
 
-// Define the function
+// Define the renderLatestTrendingMarkdowns function
 export function renderLatestTrendingMarkdowns(trendingMarkdowns) {
     const trendingContainer = document.createElement('div');
     trendingContainer.classList.add('trending-markdowns-container');
@@ -100,6 +101,3 @@ export function renderLatestTrendingMarkdowns(trendingMarkdowns) {
 
     return trendingContainer;
 }
-
-// Ensure you have this export statement
-export { renderLatestTrendingMarkdowns };
