@@ -58,7 +58,7 @@ export function createSidebar(categories, popularMarkdowns) {
 
     const popularMarkdownsList = document.createElement('ul');
 
-    // Sort popularMarkdowns by date (assuming markdown.metadata.date is a Date object or a parsable date string)
+    // Sort popularMarkdowns by date
     popularMarkdowns.sort((a, b) => new Date(b.metadata.date) - new Date(a.metadata.date));
 
     popularMarkdowns.forEach(markdown => {
@@ -97,10 +97,51 @@ export function createSidebar(categories, popularMarkdowns) {
     popularMarkdownsDiv.appendChild(popularMarkdownsTitle);
     popularMarkdownsDiv.appendChild(popularMarkdownsList);
 
-    // Append search bar, categories, and popular markdowns to sidebar
+    // Archive section
+    const archiveDiv = document.createElement('div');
+    archiveDiv.classList.add('p-t-65');
+
+    const archiveTitle = document.createElement('h4');
+    archiveTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
+    archiveTitle.textContent = 'Archive';
+
+    const archiveList = document.createElement('ul');
+
+    // Group popularMarkdowns by month and year
+    const archiveData = popularMarkdowns.reduce((acc, markdown) => {
+        const date = new Date(markdown.metadata.date);
+        const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+        if (!acc[monthYear]) {
+            acc[monthYear] = 0;
+        }
+        acc[monthYear] += 1;
+
+        return acc;
+    }, {});
+
+    // Create archive list items
+    Object.keys(archiveData).forEach(monthYear => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('bor18', 'p-tb-10');
+
+        const archiveLink = document.createElement('a');
+        archiveLink.href = '#';
+        archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-lr-4');
+        archiveLink.textContent = `${monthYear} (${archiveData[monthYear]})`;
+
+        listItem.appendChild(archiveLink);
+        archiveList.appendChild(listItem);
+    });
+
+    archiveDiv.appendChild(archiveTitle);
+    archiveDiv.appendChild(archiveList);
+
+    // Append search bar, categories, popular markdowns, and archive to sidebar
     sideMenuDiv.appendChild(searchDiv);
     sideMenuDiv.appendChild(categoriesDiv);
     sideMenuDiv.appendChild(popularMarkdownsDiv);
+    sideMenuDiv.appendChild(archiveDiv);
 
     // Append sidebar to sidebar column
     sidebarColumnDiv.appendChild(sideMenuDiv);
