@@ -108,7 +108,7 @@ export function createSidebar(categories, allMarkdowns) {
 
     const archiveList = document.createElement('ul');
 
-    // Group posts by year and month
+    // Group all posts by year and month
     const archiveMap = new Map();
     allMarkdowns.forEach(markdown => {
         const [day, month, year] = markdown.metadata.date.split('-');
