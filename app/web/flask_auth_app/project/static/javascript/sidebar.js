@@ -1,4 +1,4 @@
-export function createSidebar(categories, popularMarkdowns) {
+export function createSidebar(categories, allMarkdowns) {
     const sidebarColumnDiv = document.createElement('div');
     sidebarColumnDiv.classList.add('col-md-4', 'col-lg-3', 'p-b-80');
 
@@ -58,8 +58,9 @@ export function createSidebar(categories, popularMarkdowns) {
 
     const popularMarkdownsList = document.createElement('ul');
 
-    // Sort popularMarkdowns by date
-    popularMarkdowns.sort((a, b) => new Date(parseDate(b.metadata.date)) - new Date(parseDate(a.metadata.date)));
+    // Sort popularMarkdowns by date (assuming markdown.metadata.date is a Date object or a parsable date string)
+    const popularMarkdowns = allMarkdowns.filter(markdown => markdown.metadata.popular === "on");
+    popularMarkdowns.sort((a, b) => new Date(b.metadata.date) - new Date(a.metadata.date));
 
     popularMarkdowns.forEach(markdown => {
         const listItem = document.createElement('li');
@@ -97,61 +98,55 @@ export function createSidebar(categories, popularMarkdowns) {
     popularMarkdownsDiv.appendChild(popularMarkdownsTitle);
     popularMarkdownsDiv.appendChild(popularMarkdownsList);
 
-    // Archives
-    const archivesDiv = document.createElement('div');
-    archivesDiv.classList.add('p-t-65');
+    // Archive
+    const archiveDiv = document.createElement('div');
+    archiveDiv.classList.add('p-t-65');
 
-    const archivesTitle = document.createElement('h4');
-    archivesTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
-    archivesTitle.textContent = 'Archive';
+    const archiveTitle = document.createElement('h4');
+    archiveTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
+    archiveTitle.textContent = 'Archive';
 
-    const archivesList = document.createElement('ul');
+    const archiveList = document.createElement('ul');
 
-    // Group posts by month and year
+    // Group posts by year and month
     const archiveMap = new Map();
-
-    popularMarkdowns.forEach(markdown => {
-        const date = parseDate(markdown.metadata.date);
-        const monthYear = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
-
-        if (!archiveMap.has(monthYear)) {
-            archiveMap.set(monthYear, 0);
+    allMarkdowns.forEach(markdown => {
+        const [day, month, year] = markdown.metadata.date.split('-');
+        const key = `${year}-${month}`;
+        if (!archiveMap.has(key)) {
+            archiveMap.set(key, []);
         }
-
-        archiveMap.set(monthYear, archiveMap.get(monthYear) + 1);
+        archiveMap.get(key).push(markdown);
     });
 
-    // Create archive list items
-    archiveMap.forEach((count, monthYear) => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('bor18');
+    // Sort the archive keys and display them
+    const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
+    sortedArchiveKeys.forEach(key => {
+        const [year, month] = key.split('-');
+        const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
+        const posts = archiveMap.get(key);
+        const archiveItem = document.createElement('li');
 
         const archiveLink = document.createElement('a');
-        archiveLink.href = '#'; // Add the appropriate link for archive pages if available
+        archiveLink.href = '#'; // You might want to add a specific link here
         archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
-        archiveLink.textContent = `${monthYear} (${count})`;
+        archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
 
-        listItem.appendChild(archiveLink);
-        archivesList.appendChild(listItem);
+        archiveItem.appendChild(archiveLink);
+        archiveList.appendChild(archiveItem);
     });
 
-    archivesDiv.appendChild(archivesTitle);
-    archivesDiv.appendChild(archivesList);
+    archiveDiv.appendChild(archiveTitle);
+    archiveDiv.appendChild(archiveList);
 
-    // Append everything to the sidebar
+    // Append search bar, categories, popular markdowns, and archive to sidebar
     sideMenuDiv.appendChild(searchDiv);
     sideMenuDiv.appendChild(categoriesDiv);
     sideMenuDiv.appendChild(popularMarkdownsDiv);
-    sideMenuDiv.appendChild(archivesDiv);
+    sideMenuDiv.appendChild(archiveDiv);
 
     // Append sidebar to sidebar column
     sidebarColumnDiv.appendChild(sideMenuDiv);
 
     return sidebarColumnDiv;
-}
-
-// Helper function to parse dates in "DD-MM-YYYY" format
-function parseDate(dateString) {
-    const [day, month, year] = dateString.split('-');
-    return new Date(`${year}-${month}-${day}`);
 }
