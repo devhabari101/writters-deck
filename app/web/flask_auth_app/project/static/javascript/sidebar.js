@@ -59,7 +59,7 @@ export function createSidebar(categories, popularMarkdowns) {
     const popularMarkdownsList = document.createElement('ul');
 
     // Sort popularMarkdowns by date
-    popularMarkdowns.sort((a, b) => new Date(b.metadata.date) - new Date(a.metadata.date));
+    popularMarkdowns.sort((a, b) => new Date(parseDate(b.metadata.date)) - new Date(parseDate(a.metadata.date)));
 
     popularMarkdowns.forEach(markdown => {
         const listItem = document.createElement('li');
@@ -97,54 +97,61 @@ export function createSidebar(categories, popularMarkdowns) {
     popularMarkdownsDiv.appendChild(popularMarkdownsTitle);
     popularMarkdownsDiv.appendChild(popularMarkdownsList);
 
-    // Archive section
-    const archiveDiv = document.createElement('div');
-    archiveDiv.classList.add('p-t-65');
+    // Archives
+    const archivesDiv = document.createElement('div');
+    archivesDiv.classList.add('p-t-65');
 
-    const archiveTitle = document.createElement('h4');
-    archiveTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
-    archiveTitle.textContent = 'Archive';
+    const archivesTitle = document.createElement('h4');
+    archivesTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
+    archivesTitle.textContent = 'Archive';
 
-    const archiveList = document.createElement('ul');
+    const archivesList = document.createElement('ul');
 
-    // Group popularMarkdowns by month and year
-    const archiveData = popularMarkdowns.reduce((acc, markdown) => {
-        const date = new Date(markdown.metadata.date);
-        const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+    // Group posts by month and year
+    const archiveMap = new Map();
 
-        if (!acc[monthYear]) {
-            acc[monthYear] = 0;
+    popularMarkdowns.forEach(markdown => {
+        const date = parseDate(markdown.metadata.date);
+        const monthYear = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+
+        if (!archiveMap.has(monthYear)) {
+            archiveMap.set(monthYear, 0);
         }
-        acc[monthYear] += 1;
 
-        return acc;
-    }, {});
-
-    // Create archive list items
-    Object.keys(archiveData).forEach(monthYear => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('bor18', 'p-tb-10');
-
-        const archiveLink = document.createElement('a');
-        archiveLink.href = '#';
-        archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-lr-4');
-        archiveLink.textContent = `${monthYear} (${archiveData[monthYear]})`;
-
-        listItem.appendChild(archiveLink);
-        archiveList.appendChild(listItem);
+        archiveMap.set(monthYear, archiveMap.get(monthYear) + 1);
     });
 
-    archiveDiv.appendChild(archiveTitle);
-    archiveDiv.appendChild(archiveList);
+    // Create archive list items
+    archiveMap.forEach((count, monthYear) => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('bor18');
 
-    // Append search bar, categories, popular markdowns, and archive to sidebar
+        const archiveLink = document.createElement('a');
+        archiveLink.href = '#'; // Add the appropriate link for archive pages if available
+        archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
+        archiveLink.textContent = `${monthYear} (${count})`;
+
+        listItem.appendChild(archiveLink);
+        archivesList.appendChild(listItem);
+    });
+
+    archivesDiv.appendChild(archivesTitle);
+    archivesDiv.appendChild(archivesList);
+
+    // Append everything to the sidebar
     sideMenuDiv.appendChild(searchDiv);
     sideMenuDiv.appendChild(categoriesDiv);
     sideMenuDiv.appendChild(popularMarkdownsDiv);
-    sideMenuDiv.appendChild(archiveDiv);
+    sideMenuDiv.appendChild(archivesDiv);
 
     // Append sidebar to sidebar column
     sidebarColumnDiv.appendChild(sideMenuDiv);
 
     return sidebarColumnDiv;
+}
+
+// Helper function to parse dates in "DD-MM-YYYY" format
+function parseDate(dateString) {
+    const [day, month, year] = dateString.split('-');
+    return new Date(`${year}-${month}-${day}`);
 }
