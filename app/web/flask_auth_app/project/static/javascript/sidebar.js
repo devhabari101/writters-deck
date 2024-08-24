@@ -58,7 +58,7 @@ export function createSidebar(categories, allMarkdowns) {
 
     const popularMarkdownsList = document.createElement('ul');
 
-    // Sort popularMarkdowns by date
+    // Filter and sort popular posts by date
     const popularMarkdowns = allMarkdowns.filter(markdown => markdown.metadata.popular === "on");
     popularMarkdowns.sort((a, b) => new Date(b.metadata.date) - new Date(a.metadata.date));
 
@@ -108,7 +108,7 @@ export function createSidebar(categories, allMarkdowns) {
 
     const archiveList = document.createElement('ul');
 
-    // Group posts by year and month
+    // Group posts by year and month using the full allMarkdowns array
     const archiveMap = new Map();
     allMarkdowns.forEach(markdown => {
         const [day, month, year] = markdown.metadata.date.split('-');
