@@ -1,45 +1,77 @@
-// Extract query parameters from URL
-const urlParams = new URLSearchParams(window.location.search);
-const year = urlParams.get('year');
-const month = urlParams.get('month');
+import { createSidebar } from './sidebar.js';
 
 fetch('markdown_output.json')
     .then(response => response.json())
     .then(data => {
         try {
-            console.log('Fetched data for archive:', data); // Debugging: Log fetched data
+            console.log('Fetched data:', data);
 
-            // Filter data based on query parameters
-            const filteredData = data.filter(item => {
-                const [itemDay, itemMonth, itemYear] = item.metadata.date.split('-');
-                return itemYear === year && itemMonth === month;
+            const parseDate = (dateString) => {
+                const dateParts = dateString.split('-');
+                if (dateParts.length === 3) {
+                    const [day, month, year] = dateParts;
+                    return new Date(`${year}-${month}-${day}`);
+                } else {
+                    console.error('Invalid date format:', dateString);
+                    return new Date(dateString);
+                }
+            };
+
+            data.sort((a, b) => parseDate(b.metadata.date) - parseDate(a.metadata.date));
+
+            console.log('Sorted data:', data);
+
+            const archiveContainer = document.getElementById('archive-container');
+            const converter = new showdown.Converter();
+
+            const archiveMap = new Map();
+            data.forEach(markdown => {
+                const [day, month, year] = markdown.metadata.date.split('-');
+                const key = `${year}-${month}`;
+                if (!archiveMap.has(key)) {
+                    archiveMap.set(key, []);
+                }
+                archiveMap.get(key).push(markdown);
             });
 
-            console.log('Filtered data for archive:', filteredData); // Debugging: Log filtered data
+            const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
 
-            const archiveContentDiv = document.getElementById('archive-content');
+            sortedArchiveKeys.forEach(key => {
+                const [year, month] = key.split('-');
+                const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
+                const posts = archiveMap.get(key);
 
-            // Create new elements for the filtered data
-            filteredData.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.classList.add('archive-item');
+                const monthYearHeader = document.createElement('h3');
+                monthYearHeader.textContent = `${monthName} ${year}`;
+                archiveContainer.appendChild(monthYearHeader);
 
-                const titleElement = document.createElement('h3');
-                titleElement.textContent = item.metadata.title;
+                posts.forEach(post => {
+                    const postDiv = document.createElement('div');
+                    postDiv.classList.add('p-b-63');
 
-                const dateElement = document.createElement('p');
-                const [day, month, year] = item.metadata.date.split('-');
-                dateElement.textContent = `${day}-${month}-${year}`;
+                    const titleElement = document.createElement('h4');
+                    const titleLink = document.createElement('a');
+                    titleLink.href = 'blog-detail.html';
+                    titleLink.textContent = post.metadata.title;
+                    titleElement.appendChild(titleLink);
 
-                itemDiv.appendChild(titleElement);
-                itemDiv.appendChild(dateElement);
+                    const dateElement = document.createElement('p');
+                    dateElement.textContent = post.metadata.date;
 
-                archiveContentDiv.appendChild(itemDiv);
+                    const contentElement = document.createElement('p');
+                    contentElement.innerHTML = converter.makeHtml(post.content);
+
+                    postDiv.appendChild(titleElement);
+                    postDiv.appendChild(dateElement);
+                    postDiv.appendChild(contentElement);
+
+                    archiveContainer.appendChild(postDiv);
+                });
             });
         } catch (error) {
-            console.error('Error processing archive data:', error);
+            console.error('Error processing data:', error);
         }
     })
     .catch(error => {
-        console.error('Error fetching archive data:', error);
+        console.error('Error fetching markdown data:', error);
     });
