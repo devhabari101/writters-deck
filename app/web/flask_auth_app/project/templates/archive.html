@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Title page -->
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/static/images/bg-02.jpg');">
+    <h2 class="ltext-105 cl0 txt-center">
+        Archive
+    </h2>
+</section>
+
+<div class="bg0 m-t-23 p-b-140">
+    <div class="container">
+        <!-- Categories Filter -->
+        <div class="flex-w flex-sb-m p-b-52">
+            <div class="flex-w flex-l-m filter-tope-group m-tb-10" id="category-filter">
+                <!-- Buttons will be dynamically added by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Archive Content -->
+        <div id="archive-container"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+<script type="module" src="/static/javascript/sidebar.js"></script>
+<script type="module" src="/static/javascript/archive.js"></script>
+
+{% endblock %}
