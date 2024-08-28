@@ -185,6 +185,14 @@ fetch('markdown_output.json')
                 archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
                 archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
 
+                // Add event listener for archive link clicks
+                archiveLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    console.log(`Archive link clicked: ${monthName} ${year}`);
+                    // Handle the click event to display posts for the selected month and year
+                    displayArchivePosts(posts);
+                });
+
                 archiveItem.appendChild(archiveLink);
                 archiveList.appendChild(archiveItem);
             });
@@ -197,9 +205,106 @@ fetch('markdown_output.json')
             sidebar.appendChild(archiveDiv);
 
             rowDiv.appendChild(sidebar);
+
             markdownContentDiv.appendChild(section);
+
         } catch (error) {
-            console.error('Error sorting/rendering data:', error);
+            console.error('Error processing data:', error);
         }
     })
-    .catch(error => console.error('Error fetching JSON:', error));
+    .catch(error => {
+        console.error('Error fetching markdown data:', error);
+    });
+
+// Function to display archive posts based on the selected month and year
+function displayArchivePosts(posts) {
+    // Clear the current content
+    const innerColumnDiv = document.querySelector('.p-r-45');
+    innerColumnDiv.innerHTML = '';
+
+    posts.forEach(post => {
+        // Reuse the same code to create post elements as before
+        const itemBlogDiv = document.createElement('div');
+        itemBlogDiv.classList.add('p-b-63');
+
+        const linkElement = document.createElement('a');
+        linkElement.href = 'blog-detail.html';
+        linkElement.classList.add('hov-img0', 'how-pos5-parent');
+
+        const imageElement = document.createElement('img');
+        imageElement.src = post.metadata.image_url;
+        imageElement.alt = 'IMG-BLOG';
+
+        const dateDiv = document.createElement('div');
+        dateDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
+
+        const [day, month, year] = post.metadata.date.split('-');
+        const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
+
+        const daySpan = document.createElement('span');
+        daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
+        daySpan.textContent = day;
+
+        const monthYearSpan = document.createElement('span');
+        monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
+        monthYearSpan.textContent = `${monthName} ${year}`;
+
+        dateDiv.appendChild(daySpan);
+        dateDiv.appendChild(monthYearSpan);
+        linkElement.appendChild(imageElement);
+        linkElement.appendChild(dateDiv);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('p-t-32');
+
+        const titleElement = document.createElement('h4');
+        titleElement.classList.add('p-b-15');
+
+        const titleLink = document.createElement('a');
+        titleLink.href = 'blog-detail.html';
+        titleLink.classList.add('ltext-108', 'cl2', 'hov-cl1', 'trans-04');
+        titleLink.textContent = post.metadata.title;
+
+        titleElement.appendChild(titleLink);
+
+        const contentParagraph = document.createElement('p');
+        contentParagraph.classList.add('stext-117', 'cl6');
+        const converter = new showdown.Converter();
+        const htmlContent = converter.makeHtml(post.content);
+        contentParagraph.innerHTML = htmlContent;
+
+        contentDiv.appendChild(titleElement);
+        contentDiv.appendChild(contentParagraph);
+
+        const authorCategoryDiv = document.createElement('div');
+        authorCategoryDiv.classList.add('flex-w', 'flex-sb-m', 'p-t-18');
+
+        const authorSpan = document.createElement('span');
+        authorSpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
+        authorSpan.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
+
+        const categorySpan = document.createElement('span');
+        categorySpan.textContent = post.metadata.category;
+        categorySpan.classList.add('cl4'); // Add category color class if needed
+
+        const separatorSpan = document.createElement('span');
+        separatorSpan.classList.add('cl12', 'm-l-4', 'm-r-6');
+        separatorSpan.textContent = '|';
+
+        authorSpan.appendChild(categorySpan);
+        authorSpan.appendChild(separatorSpan);
+
+        const continueReadingLink = document.createElement('a');
+        continueReadingLink.href = 'blog-detail.html';
+        continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
+        continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
+
+        authorCategoryDiv.appendChild(authorSpan);
+        authorCategoryDiv.appendChild(continueReadingLink);
+
+        itemBlogDiv.appendChild(linkElement);
+        itemBlogDiv.appendChild(contentDiv);
+        itemBlogDiv.appendChild(authorCategoryDiv);
+        innerColumnDiv.appendChild(itemBlogDiv);
+    });
+}
