@@ -9,6 +9,11 @@ main_blueprint = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
+@main_blueprint.route('/archive.html')
+def archive():
+    return render_template('archive.html')
+
+
 @main_blueprint.route('/profile')
 @login_required
 def profile():
