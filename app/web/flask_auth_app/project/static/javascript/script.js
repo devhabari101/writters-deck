@@ -159,27 +159,28 @@ fetch('markdown_output.json')
 
             const archiveList = document.createElement('ul');
 
-            sortedArchiveKeys.forEach(key => {
-                const [year, month] = key.split('-');
-                const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
-                const posts = archiveMap.get(key);
-                const archiveItem = document.createElement('li');
+           sortedArchiveKeys.forEach(key => {
+    const [year, month] = key.split('-');
+    const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
+    const posts = archiveMap.get(key);
+    const archiveItem = document.createElement('li');
 
-                const archiveLink = document.createElement('a');
-                archiveLink.href = `/archive.html?month=${month}&year=${year}`;
-                archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
-                archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
+    const archiveLink = document.createElement('a');
+    archiveLink.href = `/archive.html?month=${month}&year=${year}`;
+    archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
+    archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
 
+    // Remove the click event listener if you want to navigate to archive.html
+    // archiveLink.addEventListener('click', (event) => {
+    //     event.preventDefault();
+    //     displayArchivePosts(posts);
+    // });
 
-                archiveLink.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    displayArchivePosts(posts);
-                });
+    archiveItem.appendChild(archiveLink);
+    document.getElementById('archive-list').appendChild(archiveItem);
+});
 
-                archiveItem.appendChild(archiveLink);
-                archiveList.appendChild(archiveItem);
-            });
-
+               
             archiveDiv.appendChild(archiveTitle);
             archiveDiv.appendChild(archiveList);
 
