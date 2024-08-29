@@ -169,10 +169,7 @@ fetch('markdown_output.json')
                 archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
                 archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
 
-                archiveLink.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    displayArchivePosts(posts);
-                });
+               
 
                 archiveItem.appendChild(archiveLink);
                 archiveList.appendChild(archiveItem);
