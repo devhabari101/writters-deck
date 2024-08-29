@@ -4,7 +4,7 @@ fetch('markdown_output.json')
     .then(response => response.json())
     .then(data => {
         try {
-            console.log('Fetched data:', data); // Debugging: Log fetched data
+            console.log('Fetched data:', data);
 
             const parseDate = (dateString) => {
                 const dateParts = dateString.split('-');
@@ -13,7 +13,7 @@ fetch('markdown_output.json')
                     return new Date(`${year}-${month}-${day}`);
                 } else {
                     console.error('Invalid date format:', dateString);
-                    return new Date(dateString); // Fallback parsing
+                    return new Date(dateString);
                 }
             };
 
@@ -23,7 +23,7 @@ fetch('markdown_output.json')
                 return dateB - dateA;
             });
 
-            console.log('Sorted data:', data); // Debugging: Log sorted data
+            console.log('Sorted data:', data);
 
             const markdownContentDiv = document.getElementById('markdown-content');
             const converter = new showdown.Converter();
@@ -47,9 +47,8 @@ fetch('markdown_output.json')
             columnDiv.appendChild(innerColumnDiv);
             rowDiv.appendChild(columnDiv);
 
-            // Handle archive display
             const displayArchivePosts = (posts) => {
-                innerColumnDiv.innerHTML = ''; // Clear the current content
+                innerColumnDiv.innerHTML = '';
 
                 posts.forEach(post => {
                     const itemBlogDiv = document.createElement('div');
@@ -169,7 +168,10 @@ fetch('markdown_output.json')
                 archiveLink.href = `/archive.html?month=${month}&year=${year}`;
                 archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
                 archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
-;
+
+                archiveLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    displayArchivePosts(posts);
                 });
 
                 archiveItem.appendChild(archiveLink);
@@ -185,7 +187,6 @@ fetch('markdown_output.json')
             rowDiv.appendChild(sidebar);
             markdownContentDiv.appendChild(section);
 
-            // Automatically display the latest archive posts
             if (sortedArchiveKeys.length > 0) {
                 displayArchivePosts(archiveMap.get(sortedArchiveKeys[0]));
             }
