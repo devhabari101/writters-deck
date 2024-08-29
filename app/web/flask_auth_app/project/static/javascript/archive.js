@@ -58,9 +58,15 @@ fetch('markdown_output.json')
                     const dateElement = document.createElement('p');
                     dateElement.textContent = post.metadata.date;
 
+                    const imageElement = document.createElement('img');
+                    imageElement.src = post.metadata.image_url; // Set the image URL
+                    imageElement.alt = post.metadata.title; // Optional: Set alt text using the title
+                    imageElement.classList.add('img-blog'); // Add any necessary CSS class for styling
+
                     const contentElement = document.createElement('p');
                     contentElement.innerHTML = converter.makeHtml(post.content);
 
+                    postDiv.appendChild(imageElement); // Add the image element to the post div
                     postDiv.appendChild(titleElement);
                     postDiv.appendChild(dateElement);
                     postDiv.appendChild(contentElement);
