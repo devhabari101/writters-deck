@@ -37,13 +37,11 @@ fetch('markdown_output.json')
             const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
 
             sortedArchiveKeys.forEach(key => {
-                const [year, month] = key.split('-');
-                const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
                 const posts = archiveMap.get(key);
 
                 posts.forEach(post => {
                     const postDiv = document.createElement('div');
-                    postDiv.classList.add('col-sm-6', 'col-md-4', 'col-lg-3', 'p-b-35', 'isotope-item', 'women');
+                    postDiv.classList.add('archive-item', 'col-sm-6', 'col-md-4', 'col-lg-3', 'p-b-35', 'isotope-item', 'women');
 
                     const blockDiv = document.createElement('div');
                     blockDiv.classList.add('block2');
