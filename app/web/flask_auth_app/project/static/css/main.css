@@ -808,6 +808,19 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   }
 }
 
+/*//////////////////////////////////////////////////////////////////
+[ custom for archive ]*/
+
+#archive-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust the gap between items */
+}
+
+.archive-item {
+    flex: 1 1 calc(25% - 20px); /* Adjusts the width to fit 4 items per row */
+    box-sizing: border-box;
+}
 
 /*//////////////////////////////////////////////////////////////////
 [ Sidebar ]*/
