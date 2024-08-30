@@ -84,12 +84,12 @@ fetch('markdown_output.json')
 
                     const iconHeart1 = document.createElement('img');
                     iconHeart1.classList.add('icon-heart1', 'dis-block', 'trans-04');
-                    iconHeart1.src = 'images/icons/icon-heart-01.png';
+                    iconHeart1.src = '/static/images/icons/icon-heart-01.png';
                     //iconHeart1.alt = 'ICON';
 
                     const iconHeart2 = document.createElement('img');
                     iconHeart2.classList.add('icon-heart2', 'dis-block', 'trans-04', 'ab-t-l');
-                    iconHeart2.src = 'images/icons/icon-heart-02.png';
+                    iconHeart2.src = 'static/images/icons/icon-heart-02.png';
                     //iconHeart2.alt = 'ICON';
 
                     wishLink.appendChild(iconHeart1);
