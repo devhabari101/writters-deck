@@ -1,20 +1,22 @@
 import { createSidebar } from './sidebar.js';
 
-fetch('markdown_output.json')
-    .then(response => response.json())
-    .then(data => {
-        try {
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('markdown_output.json')
+        .then(response => response.json())
+        .then(data => {
             console.log('Fetched data:', data);
 
             const urlParams = new URLSearchParams(window.location.search);
             const slug = urlParams.get('slug');
+            console.log('Requested slug:', slug);
 
             const post = data.find(item => item.metadata.slug === slug);
-
             if (!post) {
                 console.error('Post not found');
                 return;
             }
+
+            console.log('Post data:', post);
 
             // Populate Image Section
             const postImage = document.getElementById('post-image');
@@ -27,14 +29,15 @@ fetch('markdown_output.json')
             document.getElementById('post-month-year').textContent = `${monthName} ${year}`;
 
             // Populate Content Section
-            document.getElementById('post-author').textContent = post.metadata.author || 'Admin';
+            document.getElementById('post-author').textContent = post.metadata.user_id || 'Admin';
             document.getElementById('post-date').textContent = post.metadata.date;
             document.getElementById('post-categories').textContent = post.metadata.category;
             document.getElementById('post-title').textContent = post.metadata.title;
 
+            // Convert Markdown to HTML
             const converter = new showdown.Converter();
             const postContent = document.getElementById('post-content');
-            postContent.innerHTML = converter.makeHtml(post.content);
+            postContent.innerHTML = converter.makeHtml(post.content || '');
 
             // Handle Sidebar
             const categories = data.map(item => item.metadata.category);
@@ -84,10 +87,8 @@ fetch('markdown_output.json')
             const rowDiv = document.querySelector('.row');
             rowDiv.appendChild(sidebar);
 
-        } catch (error) {
-            console.error('Error processing data:', error);
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching markdown data:', error);
-    });
+        })
+        .catch(error => {
+            console.error('Error fetching markdown data:', error);
+        });
+});
