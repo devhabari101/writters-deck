@@ -2,6 +2,7 @@ import os
 import markdown
 import json
 import re
+import unicodedata
 from flask import Blueprint, render_template, send_file, request, redirect, url_for, current_app
 from flask_login import current_user, login_required, LoginManager  # Correct import
 from watchdog.observers import Observer
@@ -15,15 +16,34 @@ login_manager.login_view = 'auth.login'
 markdown_dir = "content"
 json_output_file = "markdown_output.json"
 
+# Function to Generate the Slug
+
+def generate_slug(title):
+    # Convert title to lowercase
+    slug = title.lower()
+    # Replace spaces with hyphens
+    slug = slug.replace(" ", "-")
+    # Remove special characters
+    slug = re.sub(r'[^\w\s-]', '', slug)
+    # Normalize the string
+    slug = unicodedata.normalize('NFKD', slug)
+    return slug
+
+
 # Function to save form data to Markdown file
 def save_to_markdown(data, user_id):
-    # Create a filename based on the form title
-    filename = os.path.join(markdown_dir, f"{data['title']}.md")
+    # Generate the slug from the title
+    slug = generate_slug(data['title'])
+    
+    # Create a filename based on the slug
+    filename = os.path.join(markdown_dir, f"{slug}.md")
+    
     # Write form data to Markdown file
     with open(filename, "w") as file:
         file.write(f"---\n")
         file.write(f"title: {data['title']}\n")
-        file.write(f"image_url: {data['image_url']}\n")  # Include image URL field
+        file.write(f"slug: {slug}\n")  # Include the generated slug
+        file.write(f"image_url: {data['image_url']}\n")
         file.write(f"imageAttribution: {data['imageAttribution']}\n")
         file.write(f"date: {data['date']}\n")
         file.write(f"category: {data['category']}\n")
@@ -32,10 +52,11 @@ def save_to_markdown(data, user_id):
         file.write(f"popular: {data['popular']}\n")
         file.write(f"link: {data['link']}\n")
         file.write(f"body: {data['body']}\n")
-        file.write(f"youtube_link: {data['youtube_link']}\n")  # New field
+        file.write(f"youtube_link: {data['youtube_link']}\n")
         file.write(f"user_id: {user_id}\n")
         file.write(f"---\n\n{data['content']}")
     print(f"Markdown file saved: {filename}")
+
 
 # Function to convert Markdown to HTML and update JSON file
 def convert_markdown_to_json():
@@ -64,6 +85,7 @@ def convert_markdown_to_json():
     with open(json_output_file, "w", encoding="utf-8") as output_file:
         json.dump(json_data_list, output_file, indent=4)
     print(f"JSON file updated: {json_output_file}")
+
 
 # Define a custom event handler to monitor file system changes
 class MarkdownFileEventHandler(FileSystemEventHandler):
