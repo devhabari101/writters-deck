@@ -1,3 +1,5 @@
+import { createSidebar } from './sidebar.js';
+
 fetch('markdown_output.json')
     .then(response => response.json())
     .then(data => {
@@ -166,6 +168,8 @@ fetch('markdown_output.json')
                 archiveLink.href = `/archive.html?month=${month}&year=${year}`;
                 archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
                 archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
+
+               
 
                 archiveItem.appendChild(archiveLink);
                 archiveList.appendChild(archiveItem);
