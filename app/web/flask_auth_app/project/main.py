@@ -16,11 +16,9 @@ def archive():
 @main_blueprint.route('/post-detail.html')
 def post_detail():
     slug = request.args.get('slug')
-    if not slug:
-        return "Slug not provided", 400
-
-    # Assuming you might want to pass the slug or other data to the template
-    return render_template('post-detail.html', slug=slug)
+    # Load the content associated with the slug
+    post_data = get_post_by_slug(slug)  # Implement this function based on your data storage
+    return render_template('post-detail.html', post=post_data)
 
 
 @main_blueprint.route('/profile')
