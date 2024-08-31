@@ -1,5 +1,3 @@
-import { createSidebar } from './sidebar.js';
-
 document.addEventListener('DOMContentLoaded', () => {
     fetch('markdown_output.json')
         .then(response => response.json())
@@ -11,33 +9,55 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Requested slug:', slug);
 
             const post = data.find(item => item.metadata.slug === slug);
+            console.log('Post data:', post);
+
             if (!post) {
                 console.error('Post not found');
                 return;
             }
 
-            console.log('Post data:', post);
-
             // Populate Image Section
             const postImage = document.getElementById('post-image');
-            postImage.src = post.metadata.image_url;
+            if (postImage) {
+                postImage.src = post.metadata.image_url;
+            } else {
+                console.error('Post image element not found');
+            }
 
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
-            document.getElementById('post-day').textContent = day;
-            document.getElementById('post-month-year').textContent = `${monthName} ${year}`;
+            const postDay = document.getElementById('post-day');
+            const postMonthYear = document.getElementById('post-month-year');
+            if (postDay && postMonthYear) {
+                postDay.textContent = day;
+                postMonthYear.textContent = `${monthName} ${year}`;
+            } else {
+                console.error('Date elements not found');
+            }
 
             // Populate Content Section
-            document.getElementById('post-author').textContent = post.metadata.user_id || 'Admin';
-            document.getElementById('post-date').textContent = post.metadata.date;
-            document.getElementById('post-categories').textContent = post.metadata.category;
-            document.getElementById('post-title').textContent = post.metadata.title;
+            const postAuthor = document.getElementById('post-author');
+            const postDate = document.getElementById('post-date');
+            const postCategories = document.getElementById('post-categories');
+            const postTitle = document.getElementById('post-title');
+            if (postAuthor && postDate && postCategories && postTitle) {
+                postAuthor.textContent = post.metadata.user_id || 'Admin';
+                postDate.textContent = post.metadata.date;
+                postCategories.textContent = post.metadata.category;
+                postTitle.textContent = post.metadata.title;
+            } else {
+                console.error('Content elements not found');
+            }
 
             // Convert Markdown to HTML
             const converter = new showdown.Converter();
             const postContent = document.getElementById('post-content');
-            postContent.innerHTML = converter.makeHtml(post.content || '');
+            if (postContent) {
+                postContent.innerHTML = converter.makeHtml(post.content || '');
+            } else {
+                console.error('Post content element not found');
+            }
 
             // Handle Sidebar
             const categories = data.map(item => item.metadata.category);
@@ -85,7 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
             sidebar.appendChild(archiveDiv);
 
             const rowDiv = document.querySelector('.row');
-            rowDiv.appendChild(sidebar);
+            if (rowDiv) {
+                rowDiv.appendChild(sidebar);
+            } else {
+                console.error('Row div not found');
+            }
 
         })
         .catch(error => {
