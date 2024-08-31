@@ -1,74 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Detail</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <!-- Extend base.html or include necessary content here -->
-    
-    <!-- Title page -->
-    <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/static/images/bg-02.jpg');">
-        <h2 class="ltext-105 cl0 txt-center">Blog</h2>
-    </section>
+{% extends "base.html" %}
 
-    <!-- Content page -->
-    <section class="bg0 p-t-52 p-b-20">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-lg-9 p-b-80">
-                    <div class="p-r-45 p-r-0-lg">
-                        <!-- Image Section -->
-                        <div class="wrap-pic-w how-pos5-parent">
-                            <img id="post-image" src="" alt="IMG-BLOG">
-                            <div class="flex-col-c-m size-123 bg9 how-pos5">
-                                <span class="ltext-107 cl2 txt-center" id="post-day"></span>
-                                <span class="stext-109 cl3 txt-center" id="post-month-year"></span>
-                            </div>
-                        </div>
+{% block content %}
+<!-- Title page -->
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/static/images/bg-02.jpg');">
+    <h2 class="ltext-105 cl0 txt-center">
+        Blog
+    </h2>
+</section>
 
-                        <!-- Content Section -->
-                        <div class="p-t-32">
-                            <span class="flex-w flex-m stext-111 cl2 p-b-19">
-                                <span>
-                                    <span class="cl4">By</span> <span id="post-author"></span>
-                                    <span class="cl12 m-l-4 m-r-6">|</span>
-                                </span>
-
-                                <span>
-                                    <span id="post-date"></span>
-                                    <span class="cl12 m-l-4 m-r-6">|</span>
-                                </span>
-
-                                <span>
-                                    <span id="post-categories"></span>
-                                    <span class="cl12 m-l-4 m-r-6">|</span>
-                                </span>
-
-                                <span>8 Comments</span>
-                            </span>
-
-                            <h4 class="ltext-109 cl2 p-b-28" id="post-title"></h4>
-                            <div id="post-content" class="stext-117 cl6 p-b-26"></div>
+<!-- Content page -->
+<section class="bg0 p-t-52 p-b-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-9 p-b-80">
+                <div class="p-r-45 p-r-0-lg">
+                    <!-- Image Section -->
+                    <div class="wrap-pic-w how-pos5-parent">
+                        <img id="post-image" src="" alt="IMG-BLOG">
+                        <div class="flex-col-c-m size-123 bg9 how-pos5">
+                            <span class="ltext-107 cl2 txt-center" id="post-day"></span>
+                            <span class="stext-109 cl3 txt-center" id="post-month-year"></span>
                         </div>
                     </div>
-                </div>
 
-                <!-- Sidebar (if needed) -->
-                <div class="col-md-4 col-lg-3">
-                    <!-- Sidebar content will be added dynamically by JavaScript -->
+                    <!-- Content Section -->
+                    <div class="p-t-32">
+                        <span class="flex-w flex-m stext-111 cl2 p-b-19">
+                            <span>
+                                <span class="cl4">By</span> <span id="post-author"></span>
+                                <span class="cl12 m-l-4 m-r-6">|</span>
+                            </span>
+
+                            <span>
+                                <span id="post-date"></span>
+                                <span class="cl12 m-l-4 m-r-6">|</span>
+                            </span>
+
+                            <span>
+                                <span id="post-categories"></span>
+                                <span class="cl12 m-l-4 m-r-6">|</span>
+                            </span>
+
+                            <span>
+                                8 Comments
+                            </span>
+                        </span>
+
+                        <h4 class="ltext-109 cl2 p-b-28" id="post-title"></h4>
+                        <div id="post-content" class="stext-117 cl6 p-b-26"></div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Sidebar (if needed) -->
+            <div class="col-md-4 col-lg-3">
+                <!-- Sidebar content will be added dynamically by JavaScript -->
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Include JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+{% endblock %}
 
-    <!-- Include Custom JavaScript -->
-    <script type="module" src="/static/javascript/post-detail.js"></script>
-    <script type="module" src="/static/javascript/sidebar.js"></script>
-</body>
-</html>
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+<script type="module" src="/static/javascript/post-detail.js"></script>
+<script type="module" src="/static/javascript/sidebar.js"></script>
+{% endblock %}
