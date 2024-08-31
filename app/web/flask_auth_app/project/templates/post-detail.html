@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="bg0 p-t-52 p-b-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-9 p-b-80">
+                <div class="p-r-45 p-r-0-lg">
+                    <!-- Image and Date Container -->
+                    <div class="wrap-pic-w how-pos5-parent">
+                        <img id="post-image" src="" alt="IMG-BLOG"> <!-- Dynamic Post Image -->
+
+                        <div class="flex-col-c-m size-123 bg9 how-pos5">
+                            <span class="ltext-107 cl2 txt-center" id="post-day"></span> <!-- Dynamic Day -->
+                            <span class="stext-109 cl3 txt-center" id="post-month-year"></span> <!-- Dynamic Month and Year -->
+                        </div>
+                    </div>
+
+                    <!-- Post Content -->
+                    <div class="p-t-32">
+                        <span class="flex-w flex-m stext-111 cl2 p-b-19">
+                            <span>
+                                <span class="cl4">By</span> Admin
+                                <span class="cl12 m-l-4 m-r-6">|</span>
+                            </span>
+
+                            <span id="post-date"></span> <!-- Dynamic Date -->
+                            <span class="cl12 m-l-4 m-r-6">|</span>
+
+                            <span id="post-category"></span> <!-- Dynamic Category -->
+                        </span>
+
+                        <h4 class="ltext-109 cl2 p-b-28" id="post-title"></h4> <!-- Dynamic Post Title -->
+
+                        <div id="post-content" class="stext-117 cl6 p-b-26"></div> <!-- Dynamic Post Content -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-md-4 col-lg-3">
+                {% include 'sidebar.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
