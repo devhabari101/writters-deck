@@ -1,4 +1,6 @@
+console.log('post-detail.js script loaded');
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
     fetch('markdown_output.json')
         .then(response => response.json())
         .then(data => {
