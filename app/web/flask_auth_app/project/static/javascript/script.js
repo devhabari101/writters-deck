@@ -55,7 +55,7 @@ fetch('markdown_output.json')
                     itemBlogDiv.classList.add('p-b-63');
 
                     const linkElement = document.createElement('a');
-                    linkElement.href = 'blog-detail.html';
+                    linkElement.href = 'post-detail.html?slug=${post.metadata.slug}';
                     linkElement.classList.add('hov-img0', 'how-pos5-parent');
 
                     const imageElement = document.createElement('img');
@@ -88,7 +88,7 @@ fetch('markdown_output.json')
                     titleElement.classList.add('p-b-15');
 
                     const titleLink = document.createElement('a');
-                    titleLink.href = 'blog-detail.html';
+                    titleLink.href = 'post-detail.html?slug=${post.metadata.slug}';
                     titleLink.classList.add('ltext-108', 'cl2', 'hov-cl1', 'trans-04');
                     titleLink.textContent = post.metadata.title;
 
@@ -121,7 +121,7 @@ fetch('markdown_output.json')
                     authorSpan.appendChild(separatorSpan);
 
                     const continueReadingLink = document.createElement('a');
-                    continueReadingLink.href = 'blog-detail.html';
+                    continueReadingLink.href = 'post-detail.html?slug=${post.metadata.slug}';
                     continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
                     continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
 
