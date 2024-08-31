@@ -32,6 +32,7 @@ def save_to_markdown(data, user_id):
         file.write(f"popular: {data['popular']}\n")
         file.write(f"link: {data['link']}\n")
         file.write(f"body: {data['body']}\n")
+        file.write(f"youtube_link: {data['youtube_link']}\n")  # New field
         file.write(f"user_id: {user_id}\n")
         file.write(f"---\n\n{data['content']}")
     print(f"Markdown file saved: {filename}")
@@ -99,6 +100,7 @@ def submit_form():
     popular = request.form.get("popular")
     link = request.form.get("link")
     body = request.form.get("body", "")  # Initialize with empty string if not provided
+    youtube_link = request.form.get("youtube_link", "")  # New field for YouTube link
     user_id = current_user.id
     
     # Construct the form data dictionary including all fields
@@ -114,6 +116,7 @@ def submit_form():
         "popular": popular,
         "link": link,
         "body": body,
+        "youtube_link": youtube_link,  # Include the YouTube link in the form data
         "user_id": user_id
     }
 
