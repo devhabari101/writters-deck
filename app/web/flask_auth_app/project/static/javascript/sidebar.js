@@ -65,9 +65,10 @@ export function createSidebar(categories, allMarkdowns) {
     popularMarkdowns.forEach(markdown => {
         const listItem = document.createElement('li');
         listItem.classList.add('flex-w', 'flex-t', 'p-b-30');
-
+        // Update the href to point to the correct post detail page with the slug
+        const postDetailUrl = `post-detail.html?slug=${markdown.metadata.slug}`;
         const linkWrapper = document.createElement('a');
-        linkWrapper.href = markdown.metadata.link;
+        linkWrapper.href = postDetailUrl;
         linkWrapper.classList.add('wrao-pic-w', 'size-214', 'hov-ovelay1', 'm-r-20');
 
         const image = document.createElement('img');
