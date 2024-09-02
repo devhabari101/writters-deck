@@ -79,7 +79,7 @@ export function createSidebar(categories, allMarkdowns) {
         titleWrapper.classList.add('size-215', 'flex-col-t', 'p-t-8');
 
         const titleLink = document.createElement('a');
-        titleLink.href = markdown.metadata.link;
+        titleLink.href = `post-detail.html?slug=${post.metadata.slug}`;
         titleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
         titleLink.textContent = markdown.metadata.title;
 
