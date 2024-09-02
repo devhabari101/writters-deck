@@ -107,11 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
             sidebar.appendChild(archiveDiv);
 
-            const rowDiv = document.querySelector('.row');
-            if (rowDiv) {
-                rowDiv.appendChild(sidebar);
+            // Instead of appending to `.row`, append to `#sidebar-container`
+            const sidebarContainer = document.getElementById('sidebar-container');
+            if (sidebarContainer) {
+                sidebarContainer.appendChild(sidebar);
             } else {
-                console.error('Row div not found');
+                console.error('Sidebar container not found');
             }
 
         })
