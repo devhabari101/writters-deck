@@ -1,3 +1,4 @@
+import { createSidebar } from './sidebar.js';
 console.log('post-detail.js script loaded');
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
