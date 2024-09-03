@@ -120,13 +120,13 @@ fetch('markdown_output.json')
                     authorSpan.appendChild(categorySpan);
                     authorSpan.appendChild(separatorSpan);
 
-                    const continueReadingLink = document.createElement('a');
-                    continueReadingLink.href = `post-detail.html?slug=${post.metadata.slug}`;
-                    continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
-                    continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
+                    //const continueReadingLink = document.createElement('a');
+                    //continueReadingLink.href = `post-detail.html?slug=${post.metadata.slug}`;
+                    //continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
+                    //continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
 
                     authorCategoryDiv.appendChild(authorSpan);
-                    authorCategoryDiv.appendChild(continueReadingLink);
+                    //authorCategoryDiv.appendChild(continueReadingLink);
 
                     itemBlogDiv.appendChild(linkElement);
                     itemBlogDiv.appendChild(contentDiv);
