@@ -120,14 +120,7 @@ fetch('markdown_output.json')
                     authorSpan.appendChild(categorySpan);
                     authorSpan.appendChild(separatorSpan);
 
-                    //const continueReadingLink = document.createElement('a');
-                    //continueReadingLink.href = `post-detail.html?slug=${post.metadata.slug}`;
-                    //continueReadingLink.classList.add('stext-101', 'cl2', 'hov-cl1', 'trans-04', 'm-tb-10');
-                    //continueReadingLink.innerHTML = `Continue Reading <i class="fa fa-long-arrow-right m-l-9"></i>`;
-
                     authorCategoryDiv.appendChild(authorSpan);
-                    //authorCategoryDiv.appendChild(continueReadingLink);
-
                     itemBlogDiv.appendChild(linkElement);
                     itemBlogDiv.appendChild(contentDiv);
                     itemBlogDiv.appendChild(authorCategoryDiv);
@@ -168,8 +161,6 @@ fetch('markdown_output.json')
                 archiveLink.href = `/archive.html?month=${month}&year=${year}`;
                 archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
                 archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
-
-               
 
                 archiveItem.appendChild(archiveLink);
                 archiveList.appendChild(archiveItem);
