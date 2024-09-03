@@ -8,61 +8,11 @@
     </h2>
 </section>
 
-<!-- Content page -->
-<section class="bg0 p-t-52 p-b-20">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-lg-9 p-b-80">
-                <div class="p-r-45 p-r-0-lg">
-                    <!-- Image Section -->
-                    <div class="wrap-pic-w how-pos5-parent">
-                        <img id="post-image" src="" alt="IMG-BLOG">
-                        <div class="flex-col-c-m size-123 bg9 how-pos5">
-                            <span class="ltext-107 cl2 txt-center" id="post-day"></span>
-                            <span class="stext-109 cl3 txt-center" id="post-month-year"></span>
-                        </div>
-                    </div>
-
-                    <!-- Content Section -->
-                    <div class="p-t-32">
-                        <span class="flex-w flex-m stext-111 cl2 p-b-19">
-                            <span>
-                                <span class="cl4">By</span> <span id="post-author"></span>
-                                <span class="cl12 m-l-4 m-r-6">|</span>
-                            </span>
-
-                            <span>
-                                <span id="post-date"></span>
-                                <span class="cl12 m-l-4 m-r-6">|</span>
-                            </span>
-
-                            <span>
-                                <span id="post-categories"></span>
-                                <span class="cl12 m-l-4 m-r-6">|</span>
-                            </span>
-
-                            <span>
-                                8 Comments
-                            </span>
-                        </span>
-
-                        <h4 class="ltext-109 cl2 p-b-28" id="post-title"></h4>
-                        <div id="post-content" class="stext-117 cl6 p-b-26"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="col-md-4 col-lg-3 p-b-80" id="sidebar-container">
-                <!-- Sidebar will be dynamically injected here -->
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Script Section -->
+<div id="markdown-content"></div>
 <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
 <script type="module" src="/static/javascript/sidebar.js"></script>
 <script type="module" src="/static/javascript/post-detail.js"></script>
+
+
 
 {% endblock %}
