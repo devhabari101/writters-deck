@@ -1,5 +1,3 @@
-import { createSidebar } from './sidebar.js';
-
 fetch('markdown_output.json')
     .then(response => response.json())
     .then(data => {
@@ -29,7 +27,7 @@ fetch('markdown_output.json')
             const converter = new showdown.Converter();
 
             const section = document.createElement('section');
-            section.classList.add('bg0', 'p-t-62', 'p-b-60');
+            section.classList.add('bg0', 'p-t-52', 'p-b-20');
 
             const containerDiv = document.createElement('div');
             containerDiv.classList.add('container');
@@ -47,137 +45,96 @@ fetch('markdown_output.json')
             columnDiv.appendChild(innerColumnDiv);
             rowDiv.appendChild(columnDiv);
 
-            const displayArchivePosts = (posts) => {
-                innerColumnDiv.innerHTML = '';
+            data.forEach(post => {
+                const itemBlogDiv = document.createElement('div');
+                itemBlogDiv.classList.add('wrap-pic-w', 'how-pos5-parent');
 
-                posts.forEach(post => {
-                    const itemBlogDiv = document.createElement('div');
-                    itemBlogDiv.classList.add('p-b-63');
+                const imageElement = document.createElement('img');
+                imageElement.src = post.metadata.image_url;
+                imageElement.alt = 'IMG-BLOG';
+                itemBlogDiv.appendChild(imageElement);
 
-                    const linkElement = document.createElement('a');
-                    linkElement.href = `post-detail.html?slug=${post.metadata.slug}`;
-                    linkElement.classList.add('hov-img0', 'how-pos5-parent');
+                const dateDiv = document.createElement('div');
+                dateDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
 
-                    const imageElement = document.createElement('img');
-                    imageElement.src = post.metadata.image_url;
-                    imageElement.alt = 'IMG-BLOG';
+                const [day, month, year] = post.metadata.date.split('-');
+                const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
-                    const dateDiv = document.createElement('div');
-                    dateDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
+                const daySpan = document.createElement('span');
+                daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
+                daySpan.textContent = day;
 
-                    const [day, month, year] = post.metadata.date.split('-');
-                    const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
+                const monthYearSpan = document.createElement('span');
+                monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
+                monthYearSpan.textContent = `${monthName} ${year}`;
 
-                    const daySpan = document.createElement('span');
-                    daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
-                    daySpan.textContent = day;
+                dateDiv.appendChild(daySpan);
+                dateDiv.appendChild(monthYearSpan);
+                itemBlogDiv.appendChild(dateDiv);
 
-                    const monthYearSpan = document.createElement('span');
-                    monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
-                    monthYearSpan.textContent = `${monthName} ${year}`;
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('p-t-32');
 
-                    dateDiv.appendChild(daySpan);
-                    dateDiv.appendChild(monthYearSpan);
-                    linkElement.appendChild(imageElement);
-                    linkElement.appendChild(dateDiv);
+                const authorCategoryDiv = document.createElement('span');
+                authorCategoryDiv.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-b-19');
 
-                    const contentDiv = document.createElement('div');
-                    contentDiv.classList.add('p-t-32');
+                const authorSpan = document.createElement('span');
+                authorSpan.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
 
-                    const titleElement = document.createElement('h4');
-                    titleElement.classList.add('p-b-15');
+                const dateSpan = document.createElement('span');
+                dateSpan.innerHTML = `${day} ${monthName}, ${year} <span class="cl12 m-l-4 m-r-6">|</span>`;
 
-                    const titleLink = document.createElement('a');
-                    titleLink.href = `post-detail.html?slug=${post.metadata.slug}`;
-                    titleLink.classList.add('ltext-108', 'cl2', 'hov-cl1', 'trans-04');
-                    titleLink.textContent = post.metadata.title;
+                const categorySpan = document.createElement('span');
+                categorySpan.innerHTML = `${post.metadata.category} <span class="cl12 m-l-4 m-r-6">|</span>`;
 
-                    titleElement.appendChild(titleLink);
+                const commentsSpan = document.createElement('span');
+                commentsSpan.textContent = `${post.metadata.comments || '0 Comments'}`;
 
-                    const contentParagraph = document.createElement('p');
-                    contentParagraph.classList.add('stext-117', 'cl6');
-                    const htmlContent = converter.makeHtml(post.content);
-                    contentParagraph.innerHTML = htmlContent;
+                authorCategoryDiv.appendChild(authorSpan);
+                authorCategoryDiv.appendChild(dateSpan);
+                authorCategoryDiv.appendChild(categorySpan);
+                authorCategoryDiv.appendChild(commentsSpan);
 
-                    contentDiv.appendChild(titleElement);
-                    contentDiv.appendChild(contentParagraph);
+                const titleElement = document.createElement('h4');
+                titleElement.classList.add('ltext-109', 'cl2', 'p-b-28');
+                titleElement.textContent = post.metadata.title;
 
-                    const authorCategoryDiv = document.createElement('div');
-                    authorCategoryDiv.classList.add('flex-w', 'flex-sb-m', 'p-t-18');
+                const contentParagraph = document.createElement('p');
+                contentParagraph.classList.add('stext-117', 'cl6', 'p-b-26');
+                const htmlContent = converter.makeHtml(post.content);
+                contentParagraph.innerHTML = htmlContent;
 
-                    const authorSpan = document.createElement('span');
-                    authorSpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
-                    authorSpan.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
+                contentDiv.appendChild(authorCategoryDiv);
+                contentDiv.appendChild(titleElement);
+                contentDiv.appendChild(contentParagraph);
 
-                    const categorySpan = document.createElement('span');
-                    categorySpan.textContent = post.metadata.category;
-                    categorySpan.classList.add('cl4');
-
-                    const separatorSpan = document.createElement('span');
-                    separatorSpan.classList.add('cl12', 'm-l-4', 'm-r-6');
-                    separatorSpan.textContent = '|';
-
-                    authorSpan.appendChild(categorySpan);
-                    authorSpan.appendChild(separatorSpan);
-
-                    authorCategoryDiv.appendChild(authorSpan);
-                    itemBlogDiv.appendChild(linkElement);
-                    itemBlogDiv.appendChild(contentDiv);
-                    itemBlogDiv.appendChild(authorCategoryDiv);
-                    innerColumnDiv.appendChild(itemBlogDiv);
-                });
-            };
-
-            const categories = data.map(item => item.metadata.category);
-            const uniqueCategories = [...new Set(categories)];
-
-            const archiveMap = new Map();
-            data.forEach(markdown => {
-                const [day, month, year] = markdown.metadata.date.split('-');
-                const key = `${year}-${month}`;
-                if (!archiveMap.has(key)) {
-                    archiveMap.set(key, []);
-                }
-                archiveMap.get(key).push(markdown);
+                innerColumnDiv.appendChild(itemBlogDiv);
+                innerColumnDiv.appendChild(contentDiv);
             });
 
-            const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
-            const archiveDiv = document.createElement('div');
-            archiveDiv.classList.add('p-t-65');
+            const tagsDiv = document.createElement('div');
+            tagsDiv.classList.add('flex-w', 'flex-t', 'p-t-16');
 
-            const archiveTitle = document.createElement('h4');
-            archiveTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
-            archiveTitle.textContent = 'Archive';
+            const tagsLabel = document.createElement('span');
+            tagsLabel.classList.add('size-216', 'stext-116', 'cl8', 'p-t-4');
+            tagsLabel.textContent = 'Tags';
 
-            const archiveList = document.createElement('ul');
+            const tagsListDiv = document.createElement('div');
+            tagsListDiv.classList.add('flex-w', 'size-217');
 
-            sortedArchiveKeys.forEach(key => {
-                const [year, month] = key.split('-');
-                const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
-                const posts = archiveMap.get(key);
-                const archiveItem = document.createElement('li');
-
-                const archiveLink = document.createElement('a');
-                archiveLink.href = `/archive.html?month=${month}&year=${year}`;
-                archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
-                archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
-
-                archiveItem.appendChild(archiveLink);
-                archiveList.appendChild(archiveItem);
+            post.metadata.tags.forEach(tag => {
+                const tagLink = document.createElement('a');
+                tagLink.href = '#';
+                tagLink.classList.add('flex-c-m', 'stext-107', 'cl6', 'size-301', 'bor7', 'p-lr-15', 'hov-tag1', 'trans-04', 'm-r-5', 'm-b-5');
+                tagLink.textContent = tag;
+                tagsListDiv.appendChild(tagLink);
             });
 
-            archiveDiv.appendChild(archiveTitle);
-            archiveDiv.appendChild(archiveList);
+            tagsDiv.appendChild(tagsLabel);
+            tagsDiv.appendChild(tagsListDiv);
+            innerColumnDiv.appendChild(tagsDiv);
 
-            const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
-            sidebar.appendChild(archiveDiv);
-
-            rowDiv.appendChild(sidebar);
             markdownContentDiv.appendChild(section);
-
-            if (sortedArchiveKeys.length > 0) {
-                displayArchivePosts(archiveMap.get(sortedArchiveKeys[0]));
-            }
 
         } catch (error) {
             console.error('Error processing data:', error);
