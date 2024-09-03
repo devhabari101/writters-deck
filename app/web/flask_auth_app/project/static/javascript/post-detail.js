@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 console.log('Fetched data:', data);
 
+                // Function to parse date
                 const parseDate = (dateString) => {
                     const dateParts = dateString.split('-');
                     if (dateParts.length === 3) {
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 };
 
+                // Sort data by date
                 data.sort((a, b) => {
                     const dateA = parseDate(a.metadata.date);
                     const dateB = parseDate(b.metadata.date);
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const converter = new showdown.Converter();
 
+                // Render each post's details
                 data.forEach(post => {
                     console.log('Processing post:', post);
 
@@ -155,6 +158,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     console.log('Content appended for post:', post.metadata.title);
                 });
+
+                // Handle Sidebar
+                const categories = data.map(item => item.metadata.category);
+                const uniqueCategories = [...new Set(categories)];
+
+                const archiveMap = new Map();
+                data.forEach(markdown => {
+                    const [day, month, year] = markdown.metadata.date.split('-');
+                    const key = `${year}-${month}`;
+                    if (!archiveMap.has(key)) {
+                        archiveMap.set(key, []);
+                    }
+                    archiveMap.get(key).push(markdown);
+                });
+
+                const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
+                const archiveDiv = document.createElement('div');
+                archiveDiv.classList.add('p-t-65');
+
+                const archiveTitle = document.createElement('h4');
+                archiveTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
+                archiveTitle.textContent = 'Archive';
+
+                const archiveList = document.createElement('ul');
+
+                sortedArchiveKeys.forEach(key => {
+                    const [year, month] = key.split('-');
+                    const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
+                    const posts = archiveMap.get(key);
+                    const archiveItem = document.createElement('li');
+
+                    const archiveLink = document.createElement('a');
+                    archiveLink.href = `/archive.html?month=${month}&year=${year}`;
+                    archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
+                    archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
+
+                    archiveItem.appendChild(archiveLink);
+                    archiveList.appendChild(archiveItem);
+                });
+
+                archiveDiv.appendChild(archiveTitle);
+                archiveDiv.appendChild(archiveList);
+
+                const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
+                sidebar.appendChild(archiveDiv);
+
+                // Append the sidebar to #sidebar-container
+                const sidebarContainer = document.getElementById('sidebar-container');
+                if (sidebarContainer) {
+                    sidebarContainer.appendChild(sidebar);
+                } else {
+                    console.error('Sidebar container not found');
+                }
 
             } catch (error) {
                 console.error('Error processing data:', error);
