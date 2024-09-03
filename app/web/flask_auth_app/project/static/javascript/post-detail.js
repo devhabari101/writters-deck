@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const converter = new showdown.Converter();
 
                 data.forEach(post => {
+                    console.log('Processing post:', post);
+
                     const section = document.createElement('section');
                     section.classList.add('bg0', 'p-t-52', 'p-b-20');
 
@@ -133,19 +135,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     const tagsListDiv = document.createElement('div');
                     tagsListDiv.classList.add('flex-w', 'size-217');
 
-                    post.metadata.tags.forEach(tag => {
-                        const tagLink = document.createElement('a');
-                        tagLink.href = '#';
-                        tagLink.classList.add('flex-c-m', 'stext-107', 'cl6', 'size-301', 'bor7', 'p-lr-15', 'hov-tag1', 'trans-04', 'm-r-5', 'm-b-5');
-                        tagLink.textContent = tag;
-                        tagsListDiv.appendChild(tagLink);
-                    });
+                    if (post.metadata.tags) {
+                        post.metadata.tags.forEach(tag => {
+                            const tagLink = document.createElement('a');
+                            tagLink.href = '#';
+                            tagLink.classList.add('flex-c-m', 'stext-107', 'cl6', 'size-301', 'bor7', 'p-lr-15', 'hov-tag1', 'trans-04', 'm-r-5', 'm-b-5');
+                            tagLink.textContent = tag;
+                            tagsListDiv.appendChild(tagLink);
+                        });
+                    } else {
+                        console.warn('No tags found for post:', post);
+                    }
 
                     tagsDiv.appendChild(tagsLabel);
                     tagsDiv.appendChild(tagsListDiv);
                     innerColumnDiv.appendChild(tagsDiv);
 
                     markdownContentDiv.appendChild(section);
+
+                    console.log('Content appended for post:', post.metadata.title);
                 });
 
             } catch (error) {
