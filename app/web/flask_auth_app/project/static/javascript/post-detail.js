@@ -22,65 +22,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Create and populate Image Section
-            const postImageContainer = document.createElement('div');
-            const postImage = document.createElement('img');
-            postImage.id = 'post-image';
-            postImage.src = post.metadata.image_url;
-            postImage.alt = 'Post Image';
-            postImageContainer.appendChild(postImage);
+            // Create and populate the image section
+            const imageWrapper = document.createElement('div');
+            imageWrapper.classList.add('wrap-pic-w', 'how-pos5-parent');
 
-            // Create and populate Date Section
+            const postImage = document.createElement('img');
+            postImage.src = post.metadata.image_url;
+            postImage.alt = 'IMG-BLOG';
+            imageWrapper.appendChild(postImage);
+
+            const dateContainer = document.createElement('div');
+            dateContainer.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
+
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
-            const postDateContainer = document.createElement('div');
-            const postDay = document.createElement('span');
-            postDay.id = 'post-day';
-            postDay.textContent = day;
+            const daySpan = document.createElement('span');
+            daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
+            daySpan.textContent = day;
 
-            const postMonthYear = document.createElement('span');
-            postMonthYear.id = 'post-month-year';
-            postMonthYear.textContent = `${monthName} ${year}`;
+            const monthYearSpan = document.createElement('span');
+            monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
+            monthYearSpan.textContent = `${monthName} ${year}`;
 
-            postDateContainer.appendChild(postDay);
-            postDateContainer.appendChild(postMonthYear);
+            dateContainer.appendChild(daySpan);
+            dateContainer.appendChild(monthYearSpan);
+            imageWrapper.appendChild(dateContainer);
 
-            // Create and populate Metadata Section
-            const postMetadataContainer = document.createElement('div');
-            const postAuthor = document.createElement('span');
-            postAuthor.id = 'post-author';
-            postAuthor.textContent = post.metadata.user_id || 'Admin';
+            // Create and populate metadata section
+            const metadataContainer = document.createElement('div');
+            metadataContainer.classList.add('p-t-32');
 
-            const postDate = document.createElement('span');
-            postDate.id = 'post-date';
-            postDate.textContent = post.metadata.date;
+            const metadataFlex = document.createElement('span');
+            metadataFlex.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-b-19');
 
-            const postCategories = document.createElement('span');
-            postCategories.id = 'post-categories';
-            postCategories.textContent = post.metadata.category;
+            const authorSpan = document.createElement('span');
+            authorSpan.innerHTML = `<span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span>`;
+            metadataFlex.appendChild(authorSpan);
 
-            const postTitle = document.createElement('h1');
-            postTitle.id = 'post-title';
-            postTitle.textContent = post.metadata.title;
+            const dateSpan = document.createElement('span');
+            dateSpan.innerHTML = `${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span>`;
+            metadataFlex.appendChild(dateSpan);
 
-            postMetadataContainer.appendChild(postAuthor);
-            postMetadataContainer.appendChild(postDate);
-            postMetadataContainer.appendChild(postCategories);
+            const categorySpan = document.createElement('span');
+            categorySpan.textContent = post.metadata.category;
+            metadataFlex.appendChild(categorySpan);
 
-            // Convert Markdown to HTML and populate Content Section
+            metadataContainer.appendChild(metadataFlex);
+
+            // Convert Markdown to HTML and populate the content section
             const converter = new showdown.Converter();
             const postContent = document.createElement('div');
-            postContent.id = 'post-content';
+            postContent.classList.add('post-content');
             postContent.innerHTML = converter.makeHtml(post.content || '');
 
             // Append all created elements to the main container
             const mainContainer = document.getElementById('main-content');
             if (mainContainer) {
-                mainContainer.appendChild(postImageContainer);
-                mainContainer.appendChild(postDateContainer);
-                mainContainer.appendChild(postMetadataContainer);
-                mainContainer.appendChild(postTitle);
+                mainContainer.appendChild(imageWrapper);
+                mainContainer.appendChild(metadataContainer);
                 mainContainer.appendChild(postContent);
             } else {
                 console.error('Main content container not found');
@@ -131,14 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
             sidebar.appendChild(archiveDiv);
 
-            // Append sidebar to the sidebar container
             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
                 sidebarContainer.appendChild(sidebar);
             } else {
                 console.error('Sidebar container not found');
             }
-
         })
         .catch(error => {
             console.error('Error fetching markdown data:', error);
