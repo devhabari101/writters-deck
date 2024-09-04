@@ -47,6 +47,13 @@ fetch('markdown_output.json')
             columnDiv.appendChild(innerColumnDiv);
             rowDiv.appendChild(columnDiv);
 
+            const truncateWords = (content, wordLimit) => {
+                const words = content.split(' ');
+                return words.length > wordLimit 
+                    ? words.slice(0, wordLimit).join(' ') + '...' 
+                    : content;
+            };
+
             const displayArchivePosts = (posts) => {
                 innerColumnDiv.innerHTML = '';
 
@@ -97,7 +104,8 @@ fetch('markdown_output.json')
                     const contentParagraph = document.createElement('p');
                     contentParagraph.classList.add('stext-117', 'cl6');
                     const htmlContent = converter.makeHtml(post.content);
-                    contentParagraph.innerHTML = htmlContent;
+                    const truncatedContent = truncateWords(htmlContent, 40);  // Limit to 40 words
+                    contentParagraph.innerHTML = truncatedContent;
 
                     contentDiv.appendChild(titleElement);
                     contentDiv.appendChild(contentParagraph);
@@ -168,8 +176,6 @@ fetch('markdown_output.json')
                 archiveLink.href = `/archive.html?month=${month}&year=${year}`;
                 archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
                 archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
-
-               
 
                 archiveItem.appendChild(archiveLink);
                 archiveList.appendChild(archiveItem);
