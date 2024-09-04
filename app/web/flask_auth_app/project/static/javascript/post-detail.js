@@ -87,6 +87,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainContainer.appendChild(metadataContainer);
                 mainContainer.appendChild(postTitle);
                 mainContainer.appendChild(postContent);
+
+                // Check for YouTube link and embed the video
+                if (post.metadata.youtube_link) {
+                    const videoContainer = document.createElement('div');
+                    videoContainer.className = 'video-container p-t-32';
+                    
+                    const iframe = document.createElement('iframe');
+                    iframe.width = "560";
+                    iframe.height = "315";
+                    iframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link.split('v=')[1]}`;
+                    iframe.frameBorder = "0";
+                    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                    iframe.allowFullscreen = true;
+
+                    videoContainer.appendChild(iframe);
+                    mainContainer.appendChild(videoContainer);
+                }
             } else {
                 console.error('Main content container not found');
             }
