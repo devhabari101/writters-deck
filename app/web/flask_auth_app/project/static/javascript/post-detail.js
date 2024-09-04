@@ -1,21 +1,11 @@
-import { createSidebar } from './sidebar.js';
-
-console.log('post-detail.js script loaded');
-
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
-
     fetch('markdown_output.json')
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched data:', data);
-
             const urlParams = new URLSearchParams(window.location.search);
             const slug = urlParams.get('slug');
-            console.log('Requested slug:', slug);
 
             const post = data.find(item => item.metadata.slug === slug);
-            console.log('Post data:', post);
 
             if (!post) {
                 console.error('Post not found');
@@ -76,6 +66,24 @@ document.addEventListener('DOMContentLoaded', () => {
             postContent.classList.add('post-content');
             postContent.innerHTML = converter.makeHtml(post.content || '');
 
+            // Append the YouTube video if the link is present
+            if (post.metadata.youtube_link) {
+                const youtubeWrapper = document.createElement('div');
+                youtubeWrapper.classList.add('youtube-video', 'p-t-32');
+
+                const iframe = document.createElement('iframe');
+                iframe.width = "560";
+                iframe.height = "315";
+                iframe.src = `https://www.youtube.com/embed/${getYouTubeID(post.metadata.youtube_link)}`;
+                iframe.title = "YouTube video player";
+                iframe.frameBorder = "0";
+                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+                iframe.allowFullscreen = true;
+
+                youtubeWrapper.appendChild(iframe);
+                postContent.appendChild(youtubeWrapper);
+            }
+
             // Append all created elements to the main container
             const mainContainer = document.getElementById('main-content');
             if (mainContainer) {
@@ -85,60 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.error('Main content container not found');
             }
-
-            // Handle Sidebar
-            const categories = data.map(item => item.metadata.category);
-            const uniqueCategories = [...new Set(categories)];
-
-            const archiveMap = new Map();
-            data.forEach(markdown => {
-                const [day, month, year] = markdown.metadata.date.split('-');
-                const key = `${year}-${month}`;
-                if (!archiveMap.has(key)) {
-                    archiveMap.set(key, []);
-                }
-                archiveMap.get(key).push(markdown);
-            });
-
-            const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
-            const archiveDiv = document.createElement('div');
-            archiveDiv.classList.add('p-t-65');
-
-            const archiveTitle = document.createElement('h4');
-            archiveTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
-            archiveTitle.textContent = 'Archive';
-
-            const archiveList = document.createElement('ul');
-
-            sortedArchiveKeys.forEach(key => {
-                const [year, month] = key.split('-');
-                const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
-                const posts = archiveMap.get(key);
-                const archiveItem = document.createElement('li');
-
-                const archiveLink = document.createElement('a');
-                archiveLink.href = `/archive.html?month=${month}&year=${year}`;
-                archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
-                archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
-
-                archiveItem.appendChild(archiveLink);
-                archiveList.appendChild(archiveItem);
-            });
-
-            archiveDiv.appendChild(archiveTitle);
-            archiveDiv.appendChild(archiveList);
-
-            const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
-            sidebar.appendChild(archiveDiv);
-
-            const sidebarContainer = document.getElementById('sidebar-container');
-            if (sidebarContainer) {
-                sidebarContainer.appendChild(sidebar);
-            } else {
-                console.error('Sidebar container not found');
-            }
         })
         .catch(error => {
             console.error('Error fetching markdown data:', error);
         });
 });
+
+// Helper function to extract the YouTube video ID from a full URL
+function getYouTubeID(url) {
+    const urlObj = new URL(url);
+    if (urlObj.searchParams.get('v')) {
+        return urlObj.searchParams.get('v');
+    }
+    return urlObj.pathname.split('/').pop();
+}
