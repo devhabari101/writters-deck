@@ -1,7 +1,10 @@
 import { createSidebar } from './sidebar.js';
+
 console.log('post-detail.js script loaded');
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
+
     fetch('markdown_output.json')
         .then(response => response.json())
         .then(data => {
@@ -128,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
             sidebar.appendChild(archiveDiv);
 
-            // Instead of appending to `.row`, append to `#sidebar-container`
+            // Append sidebar to the sidebar container
             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
                 sidebarContainer.appendChild(sidebar);
