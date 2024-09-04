@@ -22,51 +22,73 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Breadcrumb population
-            const breadcrumbSpan = document.querySelector('.bread-crumb span.stext-109.cl4');
-            breadcrumbSpan.textContent = post.metadata.title;
-
-            // Populate image and date in the content page
-            const postImage = document.querySelector('.wrap-pic-w img');
+            // Populate Image Section
+            const postImageContainer = document.createElement('div');
+            postImageContainer.className = 'wrap-pic-w how-pos5-parent';
+            const postImage = document.createElement('img');
             postImage.src = post.metadata.image_url;
-            postImage.alt = post.metadata.title;
+            postImage.alt = 'Post Image';
 
-            const postDay = document.querySelector('.wrap-pic-w .ltext-107.cl2');
-            const postMonthYear = document.querySelector('.wrap-pic-w .stext-109.cl3');
+            const dateContainer = document.createElement('div');
+            dateContainer.className = 'flex-col-c-m size-123 bg9 how-pos5';
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
+
+            const postDay = document.createElement('span');
+            postDay.className = 'ltext-107 cl2 txt-center';
             postDay.textContent = day;
+
+            const postMonthYear = document.createElement('span');
+            postMonthYear.className = 'stext-109 cl3 txt-center';
             postMonthYear.textContent = `${monthName} ${year}`;
 
-            // Populate metadata section
-            const postAuthor = document.querySelector('.stext-111 .cl4 + span');
-            const postDate = document.querySelector('.stext-111 .cl12 + span');
-            const postCategories = document.querySelector('.stext-111 .cl12 + span + span');
+            dateContainer.appendChild(postDay);
+            dateContainer.appendChild(postMonthYear);
+            postImageContainer.appendChild(postImage);
+            postImageContainer.appendChild(dateContainer);
 
-            postAuthor.textContent = post.metadata.user_id || 'Admin';
-            postDate.textContent = `${day} ${monthName}, ${year}`;
-            postCategories.textContent = post.metadata.category.split(', ').join(', ');
+            // Populate Metadata Section
+            const metadataContainer = document.createElement('div');
+            metadataContainer.className = 'p-t-32';
 
-            // Populate post title
-            const postTitle = document.querySelector('.ltext-109.cl2.p-b-28');
+            const metadataInfo = document.createElement('span');
+            metadataInfo.className = 'flex-w flex-m stext-111 cl2 p-b-19';
+
+            const author = document.createElement('span');
+            author.innerHTML = `<span class="cl4">By</span> ${post.metadata.user_id || 'Admin'} <span class="cl12 m-l-4 m-r-6">|</span>`;
+            const postDate = document.createElement('span');
+            postDate.textContent = `${day} ${monthName}, ${year} `;
+            postDate.className = 'cl12 m-l-4 m-r-6';
+
+            const categories = document.createElement('span');
+            categories.textContent = post.metadata.category;
+            categories.className = 'cl12 m-l-4 m-r-6';
+
+            metadataInfo.appendChild(author);
+            metadataInfo.appendChild(postDate);
+            metadataInfo.appendChild(categories);
+            metadataContainer.appendChild(metadataInfo);
+
+            // Create and populate Title Section
+            const postTitle = document.createElement('h4');
+            postTitle.className = 'ltext-109 cl2 p-b-28';
             postTitle.textContent = post.metadata.title;
 
-            // Convert Markdown to HTML and populate content section
+            // Convert Markdown to HTML and populate Content Section
             const converter = new showdown.Converter();
-            const postContent = document.querySelector('.stext-117.cl6.p-b-26');
+            const postContent = document.createElement('div');
+            postContent.className = 'stext-117 cl6 p-b-26';
             postContent.innerHTML = converter.makeHtml(post.content || '');
 
-            // Handle YouTube Link
-            if (post.metadata.youtube_link) {
-                const youtubeContainer = document.createElement('div');
-                youtubeContainer.classList.add('youtube-video-container');
-                youtubeContainer.innerHTML = `
-                    <iframe width="560" height="315" src="${post.metadata.youtube_link}" 
-                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                    </iframe>
-                `;
-                postContent.appendChild(youtubeContainer);
+            // Append all created elements to the main container
+            const mainContainer = document.getElementById('main-content');
+            if (mainContainer) {
+                mainContainer.appendChild(postImageContainer);
+                mainContainer.appendChild(metadataContainer);
+                mainContainer.appendChild(postTitle);
+                mainContainer.appendChild(postContent);
+            } else {
+                console.error('Main content container not found');
             }
 
             // Handle Sidebar
