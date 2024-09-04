@@ -19,47 +19,68 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Populate Image Section
-            const postImage = document.getElementById('post-image');
-            if (postImage) {
-                postImage.src = post.metadata.image_url;
-            } else {
-                console.error('Post image element not found');
-            }
+            // Create and populate Image Section
+            const postImageContainer = document.createElement('div');
+            const postImage = document.createElement('img');
+            postImage.id = 'post-image';
+            postImage.src = post.metadata.image_url;
+            postImage.alt = 'Post Image';
+            postImageContainer.appendChild(postImage);
 
+            // Create and populate Date Section
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
-            const postDay = document.getElementById('post-day');
-            const postMonthYear = document.getElementById('post-month-year');
-            if (postDay && postMonthYear) {
-                postDay.textContent = day;
-                postMonthYear.textContent = `${monthName} ${year}`;
-            } else {
-                console.error('Date elements not found');
-            }
+            const postDateContainer = document.createElement('div');
+            const postDay = document.createElement('span');
+            postDay.id = 'post-day';
+            postDay.textContent = day;
 
-            // Populate Content Section
-            const postAuthor = document.getElementById('post-author');
-            const postDate = document.getElementById('post-date');
-            const postCategories = document.getElementById('post-categories');
-            const postTitle = document.getElementById('post-title');
-            if (postAuthor && postDate && postCategories && postTitle) {
-                postAuthor.textContent = post.metadata.user_id || 'Admin';
-                postDate.textContent = post.metadata.date;
-                postCategories.textContent = post.metadata.category;
-                postTitle.textContent = post.metadata.title;
-            } else {
-                console.error('Content elements not found');
-            }
+            const postMonthYear = document.createElement('span');
+            postMonthYear.id = 'post-month-year';
+            postMonthYear.textContent = `${monthName} ${year}`;
 
-            // Convert Markdown to HTML
+            postDateContainer.appendChild(postDay);
+            postDateContainer.appendChild(postMonthYear);
+
+            // Create and populate Metadata Section
+            const postMetadataContainer = document.createElement('div');
+            const postAuthor = document.createElement('span');
+            postAuthor.id = 'post-author';
+            postAuthor.textContent = post.metadata.user_id || 'Admin';
+
+            const postDate = document.createElement('span');
+            postDate.id = 'post-date';
+            postDate.textContent = post.metadata.date;
+
+            const postCategories = document.createElement('span');
+            postCategories.id = 'post-categories';
+            postCategories.textContent = post.metadata.category;
+
+            const postTitle = document.createElement('h1');
+            postTitle.id = 'post-title';
+            postTitle.textContent = post.metadata.title;
+
+            postMetadataContainer.appendChild(postAuthor);
+            postMetadataContainer.appendChild(postDate);
+            postMetadataContainer.appendChild(postCategories);
+
+            // Convert Markdown to HTML and populate Content Section
             const converter = new showdown.Converter();
-            const postContent = document.getElementById('post-content');
-            if (postContent) {
-                postContent.innerHTML = converter.makeHtml(post.content || '');
+            const postContent = document.createElement('div');
+            postContent.id = 'post-content';
+            postContent.innerHTML = converter.makeHtml(post.content || '');
+
+            // Append all created elements to the main container
+            const mainContainer = document.getElementById('main-content');
+            if (mainContainer) {
+                mainContainer.appendChild(postImageContainer);
+                mainContainer.appendChild(postDateContainer);
+                mainContainer.appendChild(postMetadataContainer);
+                mainContainer.appendChild(postTitle);
+                mainContainer.appendChild(postContent);
             } else {
-                console.error('Post content element not found');
+                console.error('Main content container not found');
             }
 
             // Handle Sidebar
