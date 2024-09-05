@@ -29,8 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Clear any existing content in the main container
-            mainContent.innerHTML = '';
+            if (mainContent) {
+              console.log('Clearing content of mainContent:', mainContent);
+             // mainContent.innerHTML = ''; // Comment this out to see if the issue persists
+            } else {
+              console.error('Main content container not found');
+            }
+
 
             // Breadcrumbs
             const breadcrumbContainer = document.querySelector('.bread-crumb');
@@ -46,10 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="stext-109 cl4">${post.metadata.title}</span>
             `;
 
+            console.log('Breadcrumbs updated with post title:', post.metadata.title);
+
             // Image Section
             const postImage = document.querySelector('.wrap-pic-w img');
             postImage.src = post.metadata.image_url;
             postImage.alt = 'Post Image';
+            console.log('Post image set to:', post.metadata.image_url);
 
             const postDaySpan = document.querySelector('.flex-col-c-m .ltext-107');
             const postMonthYearSpan = document.querySelector('.flex-col-c-m .stext-109');
@@ -57,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
             postDaySpan.textContent = day;
             postMonthYearSpan.textContent = `${monthName} ${year}`;
+            console.log('Post date set:', day, monthName, year);
 
             // Author, Date, Categories, and Comments
             const postMeta = document.querySelector('.flex-w.stext-111');
@@ -66,14 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
                 <span>8 Comments</span>
             `;
+            console.log('Post meta data updated:', post.metadata.user_id, post.metadata.category);
 
             // Title and Content
             const postTitle = document.querySelector('.ltext-109');
             postTitle.textContent = post.metadata.title;
+            console.log('Post title set:', post.metadata.title);
 
             const postContent = document.querySelector('.stext-117');
             const converter = new showdown.Converter();
             postContent.innerHTML = converter.makeHtml(post.content || '');
+            console.log('Post content set:', post.content);
 
             // Handle YouTube Video (if exists)
             if (post.metadata.youtube_link) {
@@ -82,11 +94,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <iframe width="560" height="315" src="${post.metadata.youtube_link}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 `;
                 postContent.appendChild(videoContainer);
+                console.log('YouTube video embedded:', post.metadata.youtube_link);
             }
 
             // Handle Sidebar
             const categories = data.map(item => item.metadata.category);
             const uniqueCategories = [...new Set(categories)];
+            console.log('Unique categories:', uniqueCategories);
 
             const archiveMap = new Map();
             data.forEach(markdown => {
@@ -97,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 archiveMap.get(key).push(markdown);
             });
+            console.log('Archive map created:', archiveMap);
 
             const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
             const archiveDiv = document.createElement('div');
@@ -107,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
             archiveTitle.textContent = 'Archive';
 
             const archiveList = document.createElement('ul');
-
             sortedArchiveKeys.forEach(key => {
                 const [year, month] = key.split('-');
                 const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
@@ -128,10 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
             sidebar.appendChild(archiveDiv);
+            console.log('Sidebar created and archive section appended');
 
             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
                 sidebarContainer.appendChild(sidebar);
+                console.log('Sidebar appended to container');
             } else {
                 console.error('Sidebar container not found');
             }
