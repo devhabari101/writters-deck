@@ -22,90 +22,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Populate Image Section
-            const postImageContainer = document.createElement('div');
-            postImageContainer.className = 'wrap-pic-w how-pos5-parent';
-            const postImage = document.createElement('img');
+            // Breadcrumbs
+            const breadcrumbContainer = document.querySelector('.bread-crumb');
+            breadcrumbContainer.innerHTML = `
+                <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+                    Home
+                    <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+                </a>
+                <a href="blog.html" class="stext-109 cl8 hov-cl1 trans-04">
+                    Blog
+                    <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+                </a>
+                <span class="stext-109 cl4">${post.metadata.title}</span>
+            `;
+
+            // Image Section
+            const postImage = document.querySelector('.wrap-pic-w img');
             postImage.src = post.metadata.image_url;
             postImage.alt = 'Post Image';
 
-            const dateContainer = document.createElement('div');
-            dateContainer.className = 'flex-col-c-m size-123 bg9 how-pos5';
+            const postDaySpan = document.querySelector('.flex-col-c-m .ltext-107');
+            const postMonthYearSpan = document.querySelector('.flex-col-c-m .stext-109');
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
+            postDaySpan.textContent = day;
+            postMonthYearSpan.textContent = `${monthName} ${year}`;
 
-            const postDay = document.createElement('span');
-            postDay.className = 'ltext-107 cl2 txt-center';
-            postDay.textContent = day;
+            // Author, Date, Categories, and Comments
+            const postMeta = document.querySelector('.flex-w.stext-111');
+            postMeta.innerHTML = `
+                <span><span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>8 Comments</span>
+            `;
 
-            const postMonthYear = document.createElement('span');
-            postMonthYear.className = 'stext-109 cl3 txt-center';
-            postMonthYear.textContent = `${monthName} ${year}`;
-
-            dateContainer.appendChild(postDay);
-            dateContainer.appendChild(postMonthYear);
-            postImageContainer.appendChild(postImage);
-            postImageContainer.appendChild(dateContainer);
-
-            // Populate Metadata Section
-            const metadataContainer = document.createElement('div');
-            metadataContainer.className = 'p-t-32';
-
-            const metadataInfo = document.createElement('span');
-            metadataInfo.className = 'flex-w flex-m stext-111 cl2 p-b-19';
-
-            const author = document.createElement('span');
-            author.innerHTML = `<span class="cl4">By</span> ${post.metadata.user_id || 'Admin'} <span class="cl12 m-l-4 m-r-6">|</span>`;
-            const postDate = document.createElement('span');
-            postDate.textContent = `${day} ${monthName}, ${year} `;
-            postDate.className = 'cl12 m-l-4 m-r-6';
-
-            const categories = document.createElement('span');
-            categories.textContent = post.metadata.category;
-            categories.className = 'cl12 m-l-4 m-r-6';
-
-            metadataInfo.appendChild(author);
-            metadataInfo.appendChild(postDate);
-            metadataInfo.appendChild(categories);
-            metadataContainer.appendChild(metadataInfo);
-
-            // Create and populate Title Section
-            const postTitle = document.createElement('h4');
-            postTitle.className = 'ltext-109 cl2 p-b-28';
+            // Title and Content
+            const postTitle = document.querySelector('.ltext-109');
             postTitle.textContent = post.metadata.title;
 
-            // Convert Markdown to HTML and populate Content Section
+            const postContent = document.querySelector('.stext-117');
             const converter = new showdown.Converter();
-            const postContent = document.createElement('div');
-            postContent.className = 'stext-117 cl6 p-b-26';
             postContent.innerHTML = converter.makeHtml(post.content || '');
 
-            // Append all created elements to the main container
-            const mainContainer = document.getElementById('main-content');
-            if (mainContainer) {
-                mainContainer.appendChild(postImageContainer);
-                mainContainer.appendChild(metadataContainer);
-                mainContainer.appendChild(postTitle);
-                mainContainer.appendChild(postContent);
-
-                // Check for YouTube link and embed the video
-                if (post.metadata.youtube_link) {
-                    const videoContainer = document.createElement('div');
-                    videoContainer.className = 'video-container p-t-32';
-                    
-                    const iframe = document.createElement('iframe');
-                    iframe.width = "560";
-                    iframe.height = "315";
-                    iframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link.split('v=')[1]}`;
-                    iframe.frameBorder = "0";
-                    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                    iframe.allowFullscreen = true;
-
-                    videoContainer.appendChild(iframe);
-                    mainContainer.appendChild(videoContainer);
-                }
-            } else {
-                console.error('Main content container not found');
+            // Handle YouTube Video (if exists)
+            if (post.metadata.youtube_link) {
+                const videoContainer = document.createElement('div');
+                videoContainer.innerHTML = `
+                    <iframe width="560" height="315" src="${post.metadata.youtube_link}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                `;
+                postContent.appendChild(videoContainer);
             }
 
             // Handle Sidebar
@@ -153,14 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
             sidebar.appendChild(archiveDiv);
 
-            // Append sidebar to the sidebar container
             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
                 sidebarContainer.appendChild(sidebar);
             } else {
                 console.error('Sidebar container not found');
             }
-
         })
         .catch(error => {
             console.error('Error fetching markdown data:', error);
