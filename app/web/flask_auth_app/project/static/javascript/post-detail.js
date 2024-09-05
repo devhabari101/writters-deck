@@ -21,24 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Post not found');
                 return;
             }
-             // Breadcrumb dynamic title
+
+            // Breadcrumb dynamic title
             const breadcrumbTitle = document.querySelector('.bread-crumb .stext-109.cl4');
             breadcrumbTitle.textContent = post.metadata.title;
-              // Author, Date, Categories, and Comments
-            const postMeta = document.querySelector('.flex-w.stext-111');
-            postMeta.innerHTML = `
-                <span><span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>8 Comments</span>
-            `;
-            console.log('Post meta data updated:', post.metadata.user_id, post.metadata.category);
-			
-			
-			 // Create and populate Image Section
-            const [day, month, year] = post.metadata.date.split('-');
-            const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
+            // Create and populate Image Section
             const postImageContainer = document.createElement('div');
             postImageContainer.classList.add('wrap-pic-w', 'how-pos5-parent');
 
@@ -50,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const dateContainer = document.createElement('div');
             dateContainer.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
-            
 
             // Create and populate Date Section
             const [day, month, year] = post.metadata.date.split('-');
@@ -65,10 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
             postMonthYear.id = 'post-month-year';
             postMonthYear.textContent = `${monthName} ${year}`;
 
-            postDateContainer.appendChild(postDay);
-            postDateContainer.appendChild(postMonthYear);
+            dateContainer.appendChild(postDay);
+            dateContainer.appendChild(postMonthYear);
 
             // Create and populate Metadata Section
+            const postMeta = document.querySelector('.flex-w.stext-111');
+            postMeta.innerHTML = `
+                <span><span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>8 Comments</span>
+            `;
+            console.log('Post meta data updated:', post.metadata.user_id, post.metadata.category);
+
             const postMetadataContainer = document.createElement('div');
             const postAuthor = document.createElement('span');
             postAuthor.id = 'post-author';
@@ -100,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mainContainer = document.getElementById('main-content');
             if (mainContainer) {
                 mainContainer.appendChild(postImageContainer);
-                mainContainer.appendChild(postDateContainer);
+                mainContainer.appendChild(dateContainer);
                 mainContainer.appendChild(postMetadataContainer);
                 mainContainer.appendChild(postTitle);
                 mainContainer.appendChild(postContent);
@@ -160,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.error('Sidebar container not found');
             }
-
         })
         .catch(error => {
             console.error('Error fetching markdown data:', error);
