@@ -5,6 +5,7 @@ console.log('post-detail.js script loaded');
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
 
+
     fetch('markdown_output.json')
         .then(response => response.json())
         .then(data => {
@@ -36,7 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
-            const postDateContainer = document.createElement('div');
+            const dateContainer = document.createElement('div');
+            dateContainer.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
+
             const postDay = document.createElement('span');
             postDay.id = 'post-day';
             postDay.textContent = day;
@@ -45,30 +48,28 @@ document.addEventListener('DOMContentLoaded', () => {
             postMonthYear.id = 'post-month-year';
             postMonthYear.textContent = `${monthName} ${year}`;
 
-            postDateContainer.appendChild(postDay);
-            postDateContainer.appendChild(postMonthYear);
+            dateContainer.appendChild(postDay);
+            dateContainer.appendChild(postMonthYear);
 
             // Create and populate Metadata Section
             const postMetadataContainer = document.createElement('div');
+            postMetadataContainer.classList.add('post-metadata', 'p-t-10');
+
             const postAuthor = document.createElement('span');
             postAuthor.id = 'post-author';
-            postAuthor.textContent = post.metadata.user_id || 'Admin';
-
-            const postDate = document.createElement('span');
-            postDate.id = 'post-date';
-            postDate.textContent = post.metadata.date;
+            postAuthor.textContent = `By ${post.metadata.user_id || 'Admin'}`;
 
             const postCategories = document.createElement('span');
             postCategories.id = 'post-categories';
-            postCategories.textContent = post.metadata.category;
+            postCategories.textContent = `Category: ${post.metadata.category}`;
 
+            postMetadataContainer.appendChild(postAuthor);
+            postMetadataContainer.appendChild(postCategories);
+
+            // Create and populate Title Section
             const postTitle = document.createElement('h1');
             postTitle.id = 'post-title';
             postTitle.textContent = post.metadata.title;
-
-            postMetadataContainer.appendChild(postAuthor);
-            postMetadataContainer.appendChild(postDate);
-            postMetadataContainer.appendChild(postCategories);
 
             // Convert Markdown to HTML and populate Content Section
             const converter = new showdown.Converter();
@@ -80,14 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const mainContainer = document.getElementById('main-content');
             if (mainContainer) {
                 mainContainer.appendChild(postImageContainer);
-                mainContainer.appendChild(postDateContainer);
-                mainContainer.appendChild(postMetadataContainer);
+                mainContainer.appendChild(dateContainer);
                 mainContainer.appendChild(postTitle);
+                mainContainer.appendChild(postMetadataContainer);
                 mainContainer.appendChild(postContent);
             } else {
                 console.error('Main content container not found');
             }
-
             // Handle YouTube Video Embedding
             if (post.metadata.youtube_link) {
                 const youtubeContainer = document.createElement('div');
@@ -104,55 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 youtubeContainer.appendChild(youtubeIframe);
                 mainContainer.appendChild(youtubeContainer);
             }
-
-            // Handle Sidebar
-            const categories = data.map(item => item.metadata.category);
-            const uniqueCategories = [...new Set(categories)];
-
-            const archiveMap = new Map();
-            data.forEach(markdown => {
-                const [day, month, year] = markdown.metadata.date.split('-');
-                const key = `${year}-${month}`;
-                if (!archiveMap.has(key)) {
-                    archiveMap.set(key, []);
-                }
-                archiveMap.get(key).push(markdown);
-            });
-
-            const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
-            const archiveDiv = document.createElement('div');
-            archiveDiv.classList.add('p-t-65');
-
-            const archiveTitle = document.createElement('h4');
-            archiveTitle.classList.add('mtext-112', 'cl2', 'p-b-33');
-            archiveTitle.textContent = 'Archive';
-
-            const archiveList = document.createElement('ul');
-
-            sortedArchiveKeys.forEach(key => {
-                const [year, month] = key.split('-');
-                const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
-                const posts = archiveMap.get(key);
-                const archiveItem = document.createElement('li');
-
-                const archiveLink = document.createElement('a');
-                archiveLink.href = `/archive.html?month=${month}&year=${year}`;
-                archiveLink.classList.add('dis-block', 'stext-115', 'cl6', 'hov-cl1', 'trans-04', 'p-tb-8', 'p-lr-4');
-                archiveLink.textContent = `${monthName} ${year} (${posts.length})`;
-
-                archiveItem.appendChild(archiveLink);
-                archiveList.appendChild(archiveItem);
-            });
-
-            archiveDiv.appendChild(archiveTitle);
-            archiveDiv.appendChild(archiveList);
-
-            const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
-            sidebar.appendChild(archiveDiv);
-
-            // Append sidebar to the sidebar container
+            // Handle Sidebar (Optional)
             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
+                const sidebar = createSidebar(data);
                 sidebarContainer.appendChild(sidebar);
             } else {
                 console.error('Sidebar container not found');
