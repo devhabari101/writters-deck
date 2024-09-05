@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Create and populate Image Section
+           // Create and populate Image Section with Date Overlay
             const postImageContainer = document.createElement('div');
-            postImageContainer.classList.add('wrap-pic-w', 'how-pos5-parent');
+            postImageContainer.classList.add('wrap-pic-w', 'how-pos5-parent', 'position-relative');  // Ensure the container is positioned relative
 
             const postImage = document.createElement('img');
             postImage.src = post.metadata.image_url;
@@ -33,12 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
             postImage.classList.add('img-fluid');
             postImageContainer.appendChild(postImage);
 
-            // Create and populate Date Section
-            const [day, month, year] = post.metadata.date.split('-');
-            const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
-
+            // Create Date Container to overlay on the image
             const dateContainer = document.createElement('div');
-            dateContainer.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
+            dateContainer.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5', 'position-absolute', 'top-0', 'left-0');  // Make it absolute
 
             const postDay = document.createElement('span');
             postDay.id = 'post-day';
@@ -50,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             dateContainer.appendChild(postDay);
             dateContainer.appendChild(postMonthYear);
+            postImageContainer.appendChild(dateContainer);  // Add date container to image container
+
 
             // Create and populate Metadata Section
             const postMetadataContainer = document.createElement('div');
@@ -88,22 +87,23 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.error('Main content container not found');
             }
-      // Append the YouTube video if the link is present
-            if (post.metadata.youtube_link) {
-                const youtubeWrapper = document.createElement('div');
-                youtubeWrapper.classList.add('youtube-video', 'p-t-32');
+      if (post.metadata.youtube_link) {
+                    const youtubeVideoContainer = document.createElement('div');
+                    youtubeVideoContainer.classList.add('video-container');
 
-                const iframe = document.createElement('iframe');
-                iframe.width = "560";
-                iframe.height = "315";
-                iframe.src = `https://www.youtube.com/embed/${getYouTubeID(post.metadata.youtube_link)}`;
-                iframe.title = "YouTube video player";
-                iframe.frameBorder = "0";
-                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-                iframe.allowFullscreen = true;
+                    const iframe = document.createElement('iframe');
+                    iframe.src = `https://www.youtube.com/embed/${extractYouTubeID(post.metadata.youtube_link)}`;
+                    iframe.width = '560';
+                    iframe.height = '315';
+                    iframe.frameBorder = '0';
+                    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                    iframe.allowFullscreen = true;
 
-                youtubeWrapper.appendChild(iframe);
-                postContent.appendChild(youtubeWrapper);
+                    youtubeVideoContainer.appendChild(iframe);
+                    mainContainer.appendChild(youtubeVideoContainer);
+                }
+            } else {
+                console.error('Main content container not found');
             }
             // Handle Sidebar (Optional)
             const sidebarContainer = document.getElementById('sidebar-container');
