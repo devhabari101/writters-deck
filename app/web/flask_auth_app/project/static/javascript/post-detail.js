@@ -39,26 +39,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             // Breadcrumbs
-            const breadcrumbContainer = document.querySelector('.bread-crumb');
-            breadcrumbContainer.innerHTML = `
-                <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-                    Home
-                    <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-                </a>
-                <a href="blog.html" class="stext-109 cl8 hov-cl1 trans-04">
-                    Blog
-                    <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-                </a>
-                <span class="stext-109 cl4">${post.metadata.title}</span>
-            `;
+           // const breadcrumbContainer = document.querySelector('.bread-crumb');
+          //  breadcrumbContainer.innerHTML = `
+             //   <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+             //       Home
+             //       <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+             //   </a>
+            //    <a href="blog.html" class="stext-109 cl8 hov-cl1 trans-04">
+             //       Blog
+             //       <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+             //   </a>
+             //   <span class="stext-109 cl4">${post.metadata.title}</span>
+           // `;
 
-            console.log('Breadcrumbs updated with post title:', post.metadata.title);
+            //console.log('Breadcrumbs updated with post title:', post.metadata.title);
 
             // Image Section
-            const postImage = document.querySelector('.wrap-pic-w img');
+            //const postImage = document.querySelector('.wrap-pic-w img');
+           // postImage.src = post.metadata.image_url;
+           // postImage.alt = 'Post Image';
+           // console.log('Post image set to:', post.metadata.image_url);
+
+             // Create and populate Image Section
+            const postImageContainer = document.createElement('div');
+            const postImage = document.createElement('img');
+            postImage.id = 'post-image';
             postImage.src = post.metadata.image_url;
             postImage.alt = 'Post Image';
-            console.log('Post image set to:', post.metadata.image_url);
+            postImageContainer.appendChild(postImage);
 
             const postDaySpan = document.querySelector('.flex-col-c-m .ltext-107');
             const postMonthYearSpan = document.querySelector('.flex-col-c-m .stext-109');
