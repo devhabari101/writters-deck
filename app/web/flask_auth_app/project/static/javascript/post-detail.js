@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (mainContent) {
               console.log('Clearing content of mainContent:', mainContent);
              // mainContent.innerHTML = ''; // Comment this out to see if the issue persists
+             mainContent.innerHTML = '<h2>Test Post Title</h2><p>This is a test post content.</p>';   
             } else {
               console.error('Main content container not found');
             }
