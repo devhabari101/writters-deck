@@ -24,106 +24,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Breadcrumb dynamic title
             const breadcrumbTitle = document.querySelector('.bread-crumb .stext-109.cl4');
-            if (breadcrumbTitle) {
-                breadcrumbTitle.textContent = post.metadata.title;
-            } else {
-                console.error('Breadcrumb title element not found');
-            }
+            breadcrumbTitle.textContent = post.metadata.title;
 
             // Author, Date, Categories, and Comments
-            const postMeta = document.querySelector('.flex-w.stext-111');
-            if (postMeta) {
-                const [day, month, year] = post.metadata.date.split('-');
-                const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
-                
-                postMeta.innerHTML = `
-                    <span><span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                    <span>${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                    <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                    <span>8 Comments</span>
-                `;
-                console.log('Post meta data updated:', post.metadata.user_id, post.metadata.category);
-            } else {
-                console.error('Post meta element not found');
-            }
-
-            // Create and populate Image Section
-            const postImageContainer = document.createElement('div');
-            const postImage = document.createElement('img');
-            postImage.id = 'post-image';
-            postImage.src = post.metadata.image_url;
-            postImage.alt = 'Post Image';
-            postImageContainer.appendChild(postImage);
-
-            // Create and populate Date Section
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
-            const postDateContainer = document.createElement('div');
-            const postDay = document.createElement('span');
-            postDay.id = 'post-day';
-            postDay.textContent = day;
+            const postMeta = document.querySelector('.flex-w.stext-111');
+            postMeta.innerHTML = `
+                <span><span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                <span>${post.comments || '0'} Comments</span>
+            `;
+            console.log('Post meta data updated:', post.metadata.user_id, post.metadata.category);
 
-            const postMonthYear = document.createElement('span');
-            postMonthYear.id = 'post-month-year';
-            postMonthYear.textContent = `${monthName} ${year}`;
+            // Create and populate Image Section
+            const postImageContainer = document.createElement('div');
+            postImageContainer.classList.add('wrap-pic-w', 'how-pos5-parent');
 
-            postDateContainer.appendChild(postDay);
-            postDateContainer.appendChild(postMonthYear);
+            const postImage = document.createElement('img');
+            postImage.src = post.metadata.image_url;
+            postImage.alt = 'Post Image';
+            postImage.classList.add('img-fluid');
+            postImageContainer.appendChild(postImage);
+
+            const dateContainer = document.createElement('div');
+            dateContainer.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
+            dateContainer.innerHTML = `
+                <span class="ltext-107 cl2 txt-center">${day}</span>
+                <span class="stext-109 cl3 txt-center">${monthName} ${year}</span>
+            `;
+            postImageContainer.appendChild(dateContainer);
 
             // Create and populate Metadata Section
             const postMetadataContainer = document.createElement('div');
-            const postAuthor = document.createElement('span');
-            postAuthor.id = 'post-author';
-            postAuthor.textContent = post.metadata.user_id || 'Admin';
+            postMetadataContainer.classList.add('p-t-32');
 
-            const postDateSpan = document.createElement('span');
-            postDateSpan.id = 'post-date';
-            postDateSpan.textContent = post.metadata.date;
-
-            const postCategories = document.createElement('span');
-            postCategories.id = 'post-categories';
-            postCategories.textContent = post.metadata.category;
-
-            const postTitle = document.createElement('h1');
-            postTitle.id = 'post-title';
+            const postTitle = document.createElement('h4');
+            postTitle.classList.add('ltext-109', 'cl2', 'p-b-28');
             postTitle.textContent = post.metadata.title;
 
-            postMetadataContainer.appendChild(postAuthor);
-            postMetadataContainer.appendChild(postDateSpan);
-            postMetadataContainer.appendChild(postCategories);
+            const postContent = document.createElement('div');
+            postContent.classList.add('stext-117', 'cl6', 'p-b-26');
 
             // Convert Markdown to HTML and populate Content Section
             const converter = new showdown.Converter();
-            const postContent = document.createElement('div');
-            postContent.id = 'post-content';
             postContent.innerHTML = converter.makeHtml(post.content || '');
 
             // Append all created elements to the main container
-            const mainContainer = document.getElementById('main-content');
+            const mainContainer = document.querySelector('.col-md-8.col-lg-9.p-b-80');
             if (mainContainer) {
+                mainContainer.innerHTML = ''; // Clear existing content
                 mainContainer.appendChild(postImageContainer);
-                mainContainer.appendChild(postDateContainer);
-                mainContainer.appendChild(postMetadataContainer);
                 mainContainer.appendChild(postTitle);
                 mainContainer.appendChild(postContent);
-
-                // Handle YouTube Link
-                if (post.metadata.youtube_link) {
-                    const youtubeContainer = document.createElement('div');
-                    youtubeContainer.id = 'youtube-container';
-                    const youtubeIframe = document.createElement('iframe');
-                    youtubeIframe.width = '560';
-                    youtubeIframe.height = '315';
-                    youtubeIframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link}`;
-                    youtubeIframe.frameBorder = '0';
-                    youtubeIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                    youtubeIframe.allowFullscreen = true;
-                    youtubeContainer.appendChild(youtubeIframe);
-                    mainContainer.appendChild(youtubeContainer);
-                }
             } else {
                 console.error('Main content container not found');
+            }
+
+            // Create and populate Tags Section
+            const tagsContainer = document.createElement('div');
+            tagsContainer.classList.add('flex-w', 'flex-t', 'p-t-16');
+            tagsContainer.innerHTML = `
+                <span class="size-216 stext-116 cl8 p-t-4">Tags</span>
+                <div class="flex-w size-217">
+                    ${post.metadata.tags.map(tag => `
+                        <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                            ${tag}
+                        </a>
+                    `).join('')}
+                </div>
+            `;
+
+            const tagsContainerDiv = document.createElement('div');
+            tagsContainerDiv.classList.add('p-t-32');
+            tagsContainerDiv.appendChild(tagsContainer);
+
+            if (mainContainer) {
+                mainContainer.appendChild(tagsContainerDiv);
             }
 
             // Handle Sidebar
