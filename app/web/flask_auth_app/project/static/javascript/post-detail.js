@@ -88,21 +88,22 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.error('Main content container not found');
             }
-            // Handle YouTube Video Embedding
+      // Append the YouTube video if the link is present
             if (post.metadata.youtube_link) {
-                const youtubeContainer = document.createElement('div');
-                youtubeContainer.classList.add('video-container');
+                const youtubeWrapper = document.createElement('div');
+                youtubeWrapper.classList.add('youtube-video', 'p-t-32');
 
-                const youtubeIframe = document.createElement('iframe');
-                youtubeIframe.width = '560';
-                youtubeIframe.height = '315';
-                youtubeIframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link.split('v=')[1]}`;
-                youtubeIframe.frameborder = '0';
-                youtubeIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                youtubeIframe.allowFullscreen = true;
+                const iframe = document.createElement('iframe');
+                iframe.width = "560";
+                iframe.height = "315";
+                iframe.src = `https://www.youtube.com/embed/${getYouTubeID(post.metadata.youtube_link)}`;
+                iframe.title = "YouTube video player";
+                iframe.frameBorder = "0";
+                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+                iframe.allowFullscreen = true;
 
-                youtubeContainer.appendChild(youtubeIframe);
-                mainContainer.appendChild(youtubeContainer);
+                youtubeWrapper.appendChild(iframe);
+                postContent.appendChild(youtubeWrapper);
             }
             // Handle Sidebar (Optional)
             const sidebarContainer = document.getElementById('sidebar-container');
