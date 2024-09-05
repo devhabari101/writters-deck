@@ -5,7 +5,6 @@ console.log('post-detail.js script loaded');
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
 
-
     fetch('markdown_output.json')
         .then(response => response.json())
         .then(data => {
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-           // Create and populate Image Section with Date Overlay
+            // Create and populate Image Section with Date Overlay
             const postImageContainer = document.createElement('div');
             postImageContainer.classList.add('wrap-pic-w', 'how-pos5-parent', 'position-relative');  // Ensure the container is positioned relative
 
@@ -37,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const dateContainer = document.createElement('div');
             dateContainer.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5', 'position-absolute', 'top-0', 'left-0');  // Make it absolute
 
+            const [day, month, year] = post.metadata.date.split('-');
+            const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
+
             const postDay = document.createElement('span');
             postDay.id = 'post-day';
             postDay.textContent = day;
@@ -48,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dateContainer.appendChild(postDay);
             dateContainer.appendChild(postMonthYear);
             postImageContainer.appendChild(dateContainer);  // Add date container to image container
-
 
             // Create and populate Metadata Section
             const postMetadataContainer = document.createElement('div');
@@ -80,31 +81,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const mainContainer = document.getElementById('main-content');
             if (mainContainer) {
                 mainContainer.appendChild(postImageContainer);
-                mainContainer.appendChild(dateContainer);
                 mainContainer.appendChild(postTitle);
                 mainContainer.appendChild(postMetadataContainer);
                 mainContainer.appendChild(postContent);
             } else {
                 console.error('Main content container not found');
             }
-      if (post.metadata.youtube_link) {
-                    const youtubeVideoContainer = document.createElement('div');
-                    youtubeVideoContainer.classList.add('video-container');
 
-                    const iframe = document.createElement('iframe');
-                    iframe.src = `https://www.youtube.com/embed/${extractYouTubeID(post.metadata.youtube_link)}`;
-                    iframe.width = '560';
-                    iframe.height = '315';
-                    iframe.frameBorder = '0';
-                    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                    iframe.allowFullscreen = true;
+            // Append the YouTube video if the link is present
+            if (post.metadata.youtube_link) {
+                const youtubeVideoContainer = document.createElement('div');
+                youtubeVideoContainer.classList.add('video-container');
 
-                    youtubeVideoContainer.appendChild(iframe);
-                    mainContainer.appendChild(youtubeVideoContainer);
-                }
-            } else {
-                console.error('Main content container not found');
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${extractYouTubeID(post.metadata.youtube_link)}`;
+                iframe.width = '560';
+                iframe.height = '315';
+                iframe.frameBorder = '0';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
+
+                youtubeVideoContainer.appendChild(iframe);
+                mainContainer.appendChild(youtubeVideoContainer);
             }
+
             // Handle Sidebar (Optional)
             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
@@ -119,3 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching markdown data:', error);
         });
 });
+
+// Function to extract YouTube ID
+function extractYouTubeID(url) {
+    const regExp = /^.*(youtu\.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|&v=|\/v\/|\/embed\/)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
