@@ -23,8 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Breadcrumb dynamic title
-            const breadcrumbTitle = document.querySelector('.bread-crumb .stext-109.cl4');
-            breadcrumbTitle.textContent = post.metadata.title;
+          const breadcrumbTitle = document.querySelector('.bread-crumb .stext-109.cl4');
+          if (breadcrumbTitle) {
+          breadcrumbTitle.textContent = post.metadata.title;
+        } else {
+       console.error('Breadcrumb title element not found');
+       }
+
 
             // Create and populate Image Section
             const postImageContainer = document.createElement('div');
