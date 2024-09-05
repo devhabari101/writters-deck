@@ -22,6 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Find the main content container
+            const mainContent = document.getElementById('main-content');
+            if (!mainContent) {
+                console.error('Main content container not found');
+                return;
+            }
+
+            // Clear any existing content in the main container
+            mainContent.innerHTML = '';
+
             // Breadcrumbs
             const breadcrumbContainer = document.querySelector('.bread-crumb');
             breadcrumbContainer.innerHTML = `
