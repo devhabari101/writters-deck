@@ -22,45 +22,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Find the main content container
-            const mainContent = document.getElementById('main-content');
-            if (!mainContent) {
-                console.error('Main content container not found');
-                return;
-            }
-
-            if (mainContent) {
-              console.log('Clearing content of mainContent:', mainContent);
-             // mainContent.innerHTML = ''; // Comment this out to see if the issue persists
-             mainContent.innerHTML = '<h2>Test Post Title</h2><p>This is a test post content.</p>';   
+            // Breadcrumb dynamic title
+            const breadcrumbTitle = document.querySelector('.bread-crumb .stext-109.cl4');
+            if (breadcrumbTitle) {
+                breadcrumbTitle.textContent = post.metadata.title;
             } else {
-              console.error('Main content container not found');
+                console.error('Breadcrumb title element not found');
             }
 
+            // Author, Date, Categories, and Comments
+            const postMeta = document.querySelector('.flex-w.stext-111');
+            if (postMeta) {
+                const [day, month, year] = post.metadata.date.split('-');
+                const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
+                
+                postMeta.innerHTML = `
+                    <span><span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                    <span>${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                    <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
+                    <span>8 Comments</span>
+                `;
+                console.log('Post meta data updated:', post.metadata.user_id, post.metadata.category);
+            } else {
+                console.error('Post meta element not found');
+            }
 
-            // Breadcrumbs
-           // const breadcrumbContainer = document.querySelector('.bread-crumb');
-          //  breadcrumbContainer.innerHTML = `
-             //   <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-             //       Home
-             //       <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-             //   </a>
-            //    <a href="blog.html" class="stext-109 cl8 hov-cl1 trans-04">
-             //       Blog
-             //       <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-             //   </a>
-             //   <span class="stext-109 cl4">${post.metadata.title}</span>
-           // `;
-
-            //console.log('Breadcrumbs updated with post title:', post.metadata.title);
-
-            // Image Section
-            //const postImage = document.querySelector('.wrap-pic-w img');
-           // postImage.src = post.metadata.image_url;
-           // postImage.alt = 'Post Image';
-           // console.log('Post image set to:', post.metadata.image_url);
-
-             // Create and populate Image Section
+            // Create and populate Image Section
             const postImageContainer = document.createElement('div');
             const postImage = document.createElement('img');
             postImage.id = 'post-image';
@@ -68,48 +55,80 @@ document.addEventListener('DOMContentLoaded', () => {
             postImage.alt = 'Post Image';
             postImageContainer.appendChild(postImage);
 
-            const postDaySpan = document.querySelector('.flex-col-c-m .ltext-107');
-            const postMonthYearSpan = document.querySelector('.flex-col-c-m .stext-109');
+            // Create and populate Date Section
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
-            postDaySpan.textContent = day;
-            postMonthYearSpan.textContent = `${monthName} ${year}`;
-            console.log('Post date set:', day, monthName, year);
 
-            // Author, Date, Categories, and Comments
-            const postMeta = document.querySelector('.flex-w.stext-111');
-            postMeta.innerHTML = `
-                <span><span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>8 Comments</span>
-            `;
-            console.log('Post meta data updated:', post.metadata.user_id, post.metadata.category);
+            const postDateContainer = document.createElement('div');
+            const postDay = document.createElement('span');
+            postDay.id = 'post-day';
+            postDay.textContent = day;
 
-            // Title and Content
-            const postTitle = document.querySelector('.ltext-109');
+            const postMonthYear = document.createElement('span');
+            postMonthYear.id = 'post-month-year';
+            postMonthYear.textContent = `${monthName} ${year}`;
+
+            postDateContainer.appendChild(postDay);
+            postDateContainer.appendChild(postMonthYear);
+
+            // Create and populate Metadata Section
+            const postMetadataContainer = document.createElement('div');
+            const postAuthor = document.createElement('span');
+            postAuthor.id = 'post-author';
+            postAuthor.textContent = post.metadata.user_id || 'Admin';
+
+            const postDateSpan = document.createElement('span');
+            postDateSpan.id = 'post-date';
+            postDateSpan.textContent = post.metadata.date;
+
+            const postCategories = document.createElement('span');
+            postCategories.id = 'post-categories';
+            postCategories.textContent = post.metadata.category;
+
+            const postTitle = document.createElement('h1');
+            postTitle.id = 'post-title';
             postTitle.textContent = post.metadata.title;
-            console.log('Post title set:', post.metadata.title);
 
-            const postContent = document.querySelector('.stext-117');
+            postMetadataContainer.appendChild(postAuthor);
+            postMetadataContainer.appendChild(postDateSpan);
+            postMetadataContainer.appendChild(postCategories);
+
+            // Convert Markdown to HTML and populate Content Section
             const converter = new showdown.Converter();
+            const postContent = document.createElement('div');
+            postContent.id = 'post-content';
             postContent.innerHTML = converter.makeHtml(post.content || '');
-            console.log('Post content set:', post.content);
 
-            // Handle YouTube Video (if exists)
-            if (post.metadata.youtube_link) {
-                const videoContainer = document.createElement('div');
-                videoContainer.innerHTML = `
-                    <iframe width="560" height="315" src="${post.metadata.youtube_link}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                `;
-                postContent.appendChild(videoContainer);
-                console.log('YouTube video embedded:', post.metadata.youtube_link);
+            // Append all created elements to the main container
+            const mainContainer = document.getElementById('main-content');
+            if (mainContainer) {
+                mainContainer.appendChild(postImageContainer);
+                mainContainer.appendChild(postDateContainer);
+                mainContainer.appendChild(postMetadataContainer);
+                mainContainer.appendChild(postTitle);
+                mainContainer.appendChild(postContent);
+
+                // Handle YouTube Link
+                if (post.metadata.youtube_link) {
+                    const youtubeContainer = document.createElement('div');
+                    youtubeContainer.id = 'youtube-container';
+                    const youtubeIframe = document.createElement('iframe');
+                    youtubeIframe.width = '560';
+                    youtubeIframe.height = '315';
+                    youtubeIframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link}`;
+                    youtubeIframe.frameBorder = '0';
+                    youtubeIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                    youtubeIframe.allowFullscreen = true;
+                    youtubeContainer.appendChild(youtubeIframe);
+                    mainContainer.appendChild(youtubeContainer);
+                }
+            } else {
+                console.error('Main content container not found');
             }
 
             // Handle Sidebar
             const categories = data.map(item => item.metadata.category);
             const uniqueCategories = [...new Set(categories)];
-            console.log('Unique categories:', uniqueCategories);
 
             const archiveMap = new Map();
             data.forEach(markdown => {
@@ -120,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 archiveMap.get(key).push(markdown);
             });
-            console.log('Archive map created:', archiveMap);
 
             const sortedArchiveKeys = Array.from(archiveMap.keys()).sort((a, b) => new Date(b) - new Date(a));
             const archiveDiv = document.createElement('div');
@@ -131,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             archiveTitle.textContent = 'Archive';
 
             const archiveList = document.createElement('ul');
+
             sortedArchiveKeys.forEach(key => {
                 const [year, month] = key.split('-');
                 const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
@@ -151,15 +170,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
             sidebar.appendChild(archiveDiv);
-            console.log('Sidebar created and archive section appended');
 
+            // Append sidebar to the sidebar container
             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
                 sidebarContainer.appendChild(sidebar);
-                console.log('Sidebar appended to container');
             } else {
                 console.error('Sidebar container not found');
             }
+
         })
         .catch(error => {
             console.error('Error fetching markdown data:', error);
