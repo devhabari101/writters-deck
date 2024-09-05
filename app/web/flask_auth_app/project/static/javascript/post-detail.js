@@ -22,27 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Breadcrumb dynamic title
-          const breadcrumbTitle = document.querySelector('.bread-crumb .stext-109.cl4');
-          if (breadcrumbTitle) {
-          breadcrumbTitle.textContent = post.metadata.title;
-        } else {
-       console.error('Breadcrumb title element not found');
-       }
-
-
             // Create and populate Image Section
             const postImageContainer = document.createElement('div');
-            postImageContainer.classList.add('wrap-pic-w', 'how-pos5-parent');
-
             const postImage = document.createElement('img');
+            postImage.id = 'post-image';
             postImage.src = post.metadata.image_url;
             postImage.alt = 'Post Image';
-            postImage.classList.add('img-fluid');
             postImageContainer.appendChild(postImage);
-
-            const dateContainer = document.createElement('div');
-            dateContainer.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
 
             // Create and populate Date Section
             const [day, month, year] = post.metadata.date.split('-');
@@ -57,19 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
             postMonthYear.id = 'post-month-year';
             postMonthYear.textContent = `${monthName} ${year}`;
 
-            dateContainer.appendChild(postDay);
-            dateContainer.appendChild(postMonthYear);
+            postDateContainer.appendChild(postDay);
+            postDateContainer.appendChild(postMonthYear);
 
             // Create and populate Metadata Section
-            const postMeta = document.querySelector('.flex-w.stext-111');
-            postMeta.innerHTML = `
-                <span><span class="cl4">By</span> ${post.metadata.user_id || 'Admin'}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>${day} ${monthName}, ${year}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>${post.metadata.category}<span class="cl12 m-l-4 m-r-6">|</span></span>
-                <span>8 Comments</span>
-            `;
-            console.log('Post meta data updated:', post.metadata.user_id, post.metadata.category);
-
             const postMetadataContainer = document.createElement('div');
             const postAuthor = document.createElement('span');
             postAuthor.id = 'post-author';
@@ -101,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mainContainer = document.getElementById('main-content');
             if (mainContainer) {
                 mainContainer.appendChild(postImageContainer);
-                mainContainer.appendChild(dateContainer);
+                mainContainer.appendChild(postDateContainer);
                 mainContainer.appendChild(postMetadataContainer);
                 mainContainer.appendChild(postTitle);
                 mainContainer.appendChild(postContent);
@@ -161,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.error('Sidebar container not found');
             }
+
         })
         .catch(error => {
             console.error('Error fetching markdown data:', error);
