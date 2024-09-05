@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postImage.alt = 'Post Image';
             postImage.classList.add('img-fluid');
             postImageContainer.appendChild(postImage);
+
             // Create and populate Date Section
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
@@ -85,6 +86,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainContainer.appendChild(postContent);
             } else {
                 console.error('Main content container not found');
+            }
+
+            // Handle YouTube Video Embedding
+            if (post.metadata.youtube_link) {
+                const youtubeContainer = document.createElement('div');
+                youtubeContainer.classList.add('video-container');
+
+                const youtubeIframe = document.createElement('iframe');
+                youtubeIframe.width = '560';
+                youtubeIframe.height = '315';
+                youtubeIframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link.split('v=')[1]}`;
+                youtubeIframe.frameborder = '0';
+                youtubeIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                youtubeIframe.allowFullscreen = true;
+
+                youtubeContainer.appendChild(youtubeIframe);
+                mainContainer.appendChild(youtubeContainer);
             }
 
             // Handle Sidebar
