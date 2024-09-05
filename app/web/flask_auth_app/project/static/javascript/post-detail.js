@@ -24,12 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Create and populate Image Section
             const postImageContainer = document.createElement('div');
+            postImageContainer.classList.add('wrap-pic-w', 'how-pos5-parent');
+
             const postImage = document.createElement('img');
-            postImage.id = 'post-image';
             postImage.src = post.metadata.image_url;
             postImage.alt = 'Post Image';
+            postImage.classList.add('img-fluid');
             postImageContainer.appendChild(postImage);
-
             // Create and populate Date Section
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
