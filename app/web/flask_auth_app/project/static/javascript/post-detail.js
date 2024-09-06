@@ -9,6 +9,14 @@ function getQueryParam(param) {
 // Get the slug from the URL
 const slug = getQueryParam('slug');
 
+// Function to parse date and format it as needed
+function formatDate(dateString) {
+    const [day, month, year] = dateString.split('-');
+    const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
+    return { day, monthName, year };
+}
+
+// Fetch markdown data
 fetch('markdown_output.json')
     .then(response => response.json())
     .then(data => {
@@ -23,104 +31,136 @@ fetch('markdown_output.json')
             const markdownContentDiv = document.getElementById('main-content');
             const converter = new showdown.Converter();
 
-            // Create the row structure
+            // Create the main section structure
+            const section = document.createElement('section');
+            section.classList.add('bg0', 'p-t-52', 'p-b-20');
+
+            const containerDiv = document.createElement('div');
+            containerDiv.classList.add('container');
+            section.appendChild(containerDiv);
+
             const rowDiv = document.createElement('div');
             rowDiv.classList.add('row');
-            
-            // Left column for post content
-            const leftColumnDiv = document.createElement('div');
-            leftColumnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
-            rowDiv.appendChild(leftColumnDiv);
+            containerDiv.appendChild(rowDiv);
 
-            // Main content wrapper
-            const mainContentDiv = document.createElement('div');
-            mainContentDiv.id = 'main-content';
-            leftColumnDiv.appendChild(mainContentDiv);
+            // Left column for post details
+            const columnDiv = document.createElement('div');
+            columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
 
-            // Create the image container with overlay date
+            const innerColumnDiv = document.createElement('div');
+            innerColumnDiv.classList.add('p-r-45', 'p-r-0-lg');
+            columnDiv.appendChild(innerColumnDiv);
+            rowDiv.appendChild(columnDiv);
+
+            // Breadcrumbs
+            const breadcrumbDiv = document.createElement('div');
+            breadcrumbDiv.classList.add('p-b-17');
+            const breadcrumbList = document.createElement('ul');
+            breadcrumbList.classList.add('breadcrumb');
+
+            const homeItem = document.createElement('li');
+            homeItem.classList.add('breadcrumb-item');
+            homeItem.innerHTML = `<a href="/" class="cl8 hov-cl1 trans-04">Home</a>`;
+            breadcrumbList.appendChild(homeItem);
+
+            const categoryItem = document.createElement('li');
+            categoryItem.classList.add('breadcrumb-item');
+            categoryItem.innerHTML = `<a href="/category.html?category=${post.metadata.category}" class="cl8 hov-cl1 trans-04">${post.metadata.category}</a>`;
+            breadcrumbList.appendChild(categoryItem);
+
+            const titleItem = document.createElement('li');
+            titleItem.classList.add('breadcrumb-item', 'active');
+            titleItem.textContent = post.metadata.title;
+            breadcrumbList.appendChild(titleItem);
+
+            breadcrumbDiv.appendChild(breadcrumbList);
+            innerColumnDiv.appendChild(breadcrumbDiv);
+
+            // Image with overlay date
             const wrapPicDiv = document.createElement('div');
-            wrapPicDiv.classList.add('wrap-pic-w', 'how-pos5-parent', 'position-relative');
-
+            wrapPicDiv.classList.add('wrap-pic-w', 'how-pos5-parent');
             const imageElement = document.createElement('img');
             imageElement.src = post.metadata.image_url;
-            imageElement.alt = 'Post Image';
-            imageElement.classList.add('img-fluid');
+            imageElement.alt = 'IMG-BLOG';
             wrapPicDiv.appendChild(imageElement);
 
-            const dateOverlayDiv = document.createElement('div');
-            dateOverlayDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5', 'position-absolute', 'top-0', 'left-0');
+            const dateDiv = document.createElement('div');
+            dateDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
 
-            const [day, month, year] = post.metadata.date.split('-');
-            const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
+            const { day, monthName, year } = formatDate(post.metadata.date);
 
             const daySpan = document.createElement('span');
+            daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
             daySpan.textContent = day;
-            dateOverlayDiv.appendChild(daySpan);
 
             const monthYearSpan = document.createElement('span');
+            monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
             monthYearSpan.textContent = `${monthName} ${year}`;
-            dateOverlayDiv.appendChild(monthYearSpan);
 
-            wrapPicDiv.appendChild(dateOverlayDiv);
-            mainContentDiv.appendChild(wrapPicDiv);
-
-            // Title and metadata
-            const titleElement = document.createElement('h1');
-            titleElement.id = 'post-title';
-            titleElement.textContent = post.metadata.title;
-            mainContentDiv.appendChild(titleElement);
-
-            const metadataDiv = document.createElement('div');
-            metadataDiv.classList.add('post-metadata', 'p-t-10');
-
-            const authorSpan = document.createElement('span');
-            authorSpan.id = 'post-author';
-            authorSpan.textContent = `By ${post.metadata.author || 'Admin'}`;
-            metadataDiv.appendChild(authorSpan);
-
-            const categoriesSpan = document.createElement('span');
-            categoriesSpan.id = 'post-categories';
-            categoriesSpan.textContent = `Category: ${post.metadata.category}`;
-            metadataDiv.appendChild(categoriesSpan);
-
-            mainContentDiv.appendChild(metadataDiv);
+            dateDiv.appendChild(daySpan);
+            dateDiv.appendChild(monthYearSpan);
+            wrapPicDiv.appendChild(dateDiv);
+            innerColumnDiv.appendChild(wrapPicDiv);
 
             // Post content
             const contentDiv = document.createElement('div');
-            contentDiv.id = 'post-content';
-            contentDiv.innerHTML = converter.makeHtml(post.content);
-            mainContentDiv.appendChild(contentDiv);
+            contentDiv.classList.add('p-t-32');
 
-            // Add YouTube video
+            // Post info (author, date, categories)
+            const infoSpan = document.createElement('span');
+            infoSpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-b-19');
+
+            const authorSpan = document.createElement('span');
+            authorSpan.innerHTML = `<span class="cl4">By</span> ${post.metadata.author || 'Admin'}`;
+            authorSpan.innerHTML += '<span class="cl12 m-l-4 m-r-6">|</span>';
+
+            const dateSpan = document.createElement('span');
+            dateSpan.textContent = `${day} ${monthName}, ${year}`;
+            dateSpan.innerHTML += '<span class="cl12 m-l-4 m-r-6">|</span>';
+
+            const categoriesSpan = document.createElement('span');
+            categoriesSpan.textContent = post.metadata.category;
+
+            infoSpan.appendChild(authorSpan);
+            infoSpan.appendChild(dateSpan);
+            infoSpan.appendChild(categoriesSpan);
+            contentDiv.appendChild(infoSpan);
+
+            // Post title
+            const titleElement = document.createElement('h4');
+            titleElement.classList.add('ltext-109', 'cl2', 'p-b-28');
+            titleElement.textContent = post.metadata.title;
+            contentDiv.appendChild(titleElement);
+
+            // Post body content
+            const contentParagraph = document.createElement('p');
+            contentParagraph.classList.add('stext-117', 'cl6', 'p-b-26');
+            contentParagraph.innerHTML = converter.makeHtml(post.content);
+            contentDiv.appendChild(contentParagraph);
+
+            // YouTube video embedding (if available)
             if (post.metadata.youtube_link) {
-                const videoContainerDiv = document.createElement('div');
-                videoContainerDiv.classList.add('video-container');
+                const youtubeDiv = document.createElement('div');
+                youtubeDiv.classList.add('p-t-32', 'p-b-32');
 
-                const iframeElement = document.createElement('iframe');
-                iframeElement.src = post.metadata.youtube_link;
-                iframeElement.width = '560';
-                iframeElement.height = '315';
-                iframeElement.frameborder = '0';
-                iframeElement.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                iframeElement.allowFullscreen = true;
+                const iframe = document.createElement('iframe');
+                iframe.width = '560';
+                iframe.height = '315';
+                iframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link}`;
+                iframe.title = 'YouTube video player';
+                iframe.frameBorder = '0';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
 
-                videoContainerDiv.appendChild(iframeElement);
-                mainContentDiv.appendChild(videoContainerDiv);
+                youtubeDiv.appendChild(iframe);
+                contentDiv.appendChild(youtubeDiv);
             }
 
-            // Right column for the sidebar
-            const rightColumnDiv = document.createElement('div');
-            rightColumnDiv.classList.add('col-md-4', 'col-lg-3', 'p-b-80');
-            rowDiv.appendChild(rightColumnDiv);
+            innerColumnDiv.appendChild(contentDiv);
+            markdownContentDiv.appendChild(section);
 
-            // Sidebar container
-            const sidebarContainerDiv = document.createElement('div');
-            sidebarContainerDiv.id = 'sidebar-container';
-            rightColumnDiv.appendChild(sidebarContainerDiv);
-
-            // Append the entire row structure to the main container
-            markdownContentDiv.appendChild(rowDiv);
-
+            // Create and append sidebar using the imported function
+            createSidebar(data);
         } catch (error) {
             console.error('Error parsing JSON:', error);
         }
@@ -128,5 +168,3 @@ fetch('markdown_output.json')
     .catch(error => {
         console.error('Error fetching JSON:', error);
     });
-
-createSidebar();
