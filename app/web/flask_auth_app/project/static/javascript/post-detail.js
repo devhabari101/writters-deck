@@ -44,6 +44,31 @@ fetch('markdown_output.json')
             columnDiv.appendChild(innerColumnDiv);
             rowDiv.appendChild(columnDiv);
 
+            // Breadcrumbs
+            const breadcrumbDiv = document.createElement('div');
+            breadcrumbDiv.classList.add('p-b-17');
+
+            const breadcrumbList = document.createElement('ul');
+            breadcrumbList.classList.add('breadcrumb');
+
+            const homeItem = document.createElement('li');
+            homeItem.classList.add('breadcrumb-item');
+            homeItem.innerHTML = `<a href="/" class="cl8 hov-cl1 trans-04">Home</a>`;
+            breadcrumbList.appendChild(homeItem);
+
+            const categoryItem = document.createElement('li');
+            categoryItem.classList.add('breadcrumb-item');
+            categoryItem.innerHTML = `<a href="/category.html?category=${post.metadata.category}" class="cl8 hov-cl1 trans-04">${post.metadata.category}</a>`;
+            breadcrumbList.appendChild(categoryItem);
+
+            const titleItem = document.createElement('li');
+            titleItem.classList.add('breadcrumb-item', 'active');
+            titleItem.textContent = post.metadata.title;
+            breadcrumbList.appendChild(titleItem);
+
+            breadcrumbDiv.appendChild(breadcrumbList);
+            innerColumnDiv.appendChild(breadcrumbDiv);
+
             // Create wrap-pic-w div for image and date overlay
             const wrapPicDiv = document.createElement('div');
             wrapPicDiv.classList.add('wrap-pic-w', 'how-pos5-parent');
@@ -114,6 +139,24 @@ fetch('markdown_output.json')
 
             contentDiv.appendChild(contentParagraph1);
 
+            // YouTube video embedding (if available)
+            if (post.metadata.youtube_link) {
+                const youtubeDiv = document.createElement('div');
+                youtubeDiv.classList.add('p-t-32', 'p-b-32');
+
+                const iframe = document.createElement('iframe');
+                iframe.width = '560';
+                iframe.height = '315';
+                iframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link}`;
+                iframe.title = 'YouTube video player';
+                iframe.frameBorder = '0';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
+
+                youtubeDiv.appendChild(iframe);
+                contentDiv.appendChild(youtubeDiv);
+            }
+
             // Append content div to inner column div
             innerColumnDiv.appendChild(contentDiv);
 
@@ -183,14 +226,14 @@ fetch('markdown_output.json')
             const popularList = document.createElement('ul');
             popularList.classList.add('list-none');
 
-            const popularPosts = data.filter(item => item.metadata.popular === true);
-            popularPosts.forEach(post => {
-                const postItem = document.createElement('li');
-                const postLink = document.createElement('a');
-                postLink.href = `/post-detail.html?slug=${post.metadata.slug}`;
-                postLink.textContent = post.metadata.title;
-                postItem.appendChild(postLink);
-                popularList.appendChild(postItem);
+            const popularPosts = data.filter(item => item.metadata.popular);
+            popularPosts.forEach(popularPost => {
+                const popularItem = document.createElement('li');
+                const popularLink = document.createElement('a');
+                popularLink.href = `/post-detail.html?slug=${popularPost.metadata.slug}`;
+                popularLink.textContent = popularPost.metadata.title;
+                popularItem.appendChild(popularLink);
+                popularList.appendChild(popularItem);
             });
 
             popularDiv.appendChild(popularList);
@@ -208,15 +251,13 @@ fetch('markdown_output.json')
             const archiveList = document.createElement('ul');
             archiveList.classList.add('list-none');
 
-            const groupedByYearMonth = {};
-            data.forEach(post => {
-                const [day, month, year] = post.metadata.date.split('-');
+            const groupedByYearMonth = data.reduce((acc, item) => {
+                const [day, month, year] = item.metadata.date.split('-');
                 const yearMonth = `${year}-${month}`;
-                if (!groupedByYearMonth[yearMonth]) {
-                    groupedByYearMonth[yearMonth] = [];
-                }
-                groupedByYearMonth[yearMonth].push(post);
-            });
+                if (!acc[yearMonth]) acc[yearMonth] = [];
+                acc[yearMonth].push(item);
+                return acc;
+            }, {});
 
             Object.keys(groupedByYearMonth).forEach(yearMonth => {
                 const [year, month] = yearMonth.split('-');
