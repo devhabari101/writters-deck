@@ -35,6 +35,7 @@ fetch('markdown_output.json')
             rowDiv.classList.add('row');
             containerDiv.appendChild(rowDiv);
 
+            // Left column for post details
             const columnDiv = document.createElement('div');
             columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
 
@@ -133,15 +134,64 @@ fetch('markdown_output.json')
                 innerColumnDiv.appendChild(youtubeVideoContainer);
             }
 
-            // Add sidebar for related posts
-            const categories = data.map(item => item.metadata.category);
-            const uniqueCategories = [...new Set(categories)];
-
-            const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
-            rowDiv.appendChild(sidebar);
-
             // Append the final section to the main content div
             markdownContentDiv.appendChild(section);
+
+            // Sidebar Section
+            const sidebarDiv = document.createElement('div');
+            sidebarDiv.classList.add('col-md-4', 'col-lg-3', 'p-b-80');
+
+            const sideMenuDiv = document.createElement('div');
+            sideMenuDiv.classList.add('side-menu');
+
+            const searchDiv = document.createElement('div');
+            searchDiv.classList.add('bor17', 'of-hidden', 'pos-relative');
+
+            const searchInput = document.createElement('input');
+            searchInput.classList.add('stext-103', 'cl2', 'plh4', 'size-116', 'p-l-28', 'p-r-55');
+            searchInput.type = 'text';
+            searchInput.name = 'search';
+            searchInput.placeholder = 'Search';
+            searchDiv.appendChild(searchInput);
+
+            const searchButton = document.createElement('button');
+            searchButton.classList.add('flex-c-m', 'size-122', 'ab-t-r', 'fs-18', 'cl4', 'hov-cl1', 'trans-04');
+            searchButton.innerHTML = `<i class="zmdi zmdi-search"></i>`;
+            searchDiv.appendChild(searchButton);
+
+            sideMenuDiv.appendChild(searchDiv);
+
+            // Categories Section in Sidebar
+            const categoriesDiv = document.createElement('div');
+            categoriesDiv.classList.add('p-t-55');
+
+            const categoriesHeading = document.createElement('h4');
+            categoriesHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
+            categoriesHeading.textContent = 'Categories';
+            categoriesDiv.appendChild(categoriesHeading);
+
+            // List the categories dynamically
+            const categoriesList = document.createElement('ul');
+            categoriesList.classList.add('list-none');
+
+            const categories = [...new Set(data.map(item => item.metadata.category))];
+
+            categories.forEach(category => {
+                const categoryItem = document.createElement('li');
+                const categoryLink = document.createElement('a');
+                categoryLink.href = `/category.html?category=${category}`;
+                categoryLink.textContent = category;
+                categoryLink.classList.add('stext-113', 'cl7', 'hov-cl1', 'trans-04');
+                categoryItem.appendChild(categoryLink);
+                categoriesList.appendChild(categoryItem);
+            });
+
+            categoriesDiv.appendChild(categoriesList);
+            sideMenuDiv.appendChild(categoriesDiv);
+
+            // Append sidebar to the row
+            sidebarDiv.appendChild(sideMenuDiv);
+            rowDiv.appendChild(sidebarDiv);
 
         } catch (error) {
             console.error('Error processing post detail:', error);
