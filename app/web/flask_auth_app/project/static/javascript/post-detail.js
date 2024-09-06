@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
 
     // Check for main content container with the specific classes
-    const mainContainer = document.querySelector('.col-md-8.col-lg-9.p-b-80');
+    const mainContainer = document.getElementsByClassName('col-md-8 col-lg-9 p-b-80')[0];
     if (!mainContainer) {
         console.error('Main container not found. Ensure the HTML structure matches the expected class names.');
         return;
@@ -22,12 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Requested slug:', slug);
 
             const post = data.find(item => item.metadata.slug === slug);
-            console.log('Post data:', post);
-
             if (!post) {
                 console.error('Post not found');
                 return;
             }
+            console.log('Post data:', post);
 
             // Create and populate Image Section with Date Overlay
             const postImageContainer = document.createElement('div');
@@ -124,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Helper function to extract YouTube ID from URL
 function extractYouTubeID(url) {
-    const match = url.match(/(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^&]+)/);
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&?/]+)/;
+    const match = url.match(regex);
     return match ? match[1] : '';
 }
