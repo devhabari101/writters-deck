@@ -117,23 +117,6 @@ fetch('markdown_output.json')
             // Append content div to inner column div
             innerColumnDiv.appendChild(contentDiv);
 
-            // Append YouTube video if the link exists
-            if (post.metadata.youtube_link) {
-                const youtubeVideoContainer = document.createElement('div');
-                youtubeVideoContainer.classList.add('video-container');
-
-                const iframe = document.createElement('iframe');
-                iframe.src = `https://www.youtube.com/embed/${extractYouTubeID(post.metadata.youtube_link)}`;
-                iframe.width = '560';
-                iframe.height = '315';
-                iframe.frameBorder = '0';
-                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                iframe.allowFullscreen = true;
-
-                youtubeVideoContainer.appendChild(iframe);
-                innerColumnDiv.appendChild(youtubeVideoContainer);
-            }
-
             // Append the final section to the main content div
             markdownContentDiv.appendChild(section);
 
@@ -181,7 +164,6 @@ fetch('markdown_output.json')
                 const categoryLink = document.createElement('a');
                 categoryLink.href = `/category.html?category=${category}`;
                 categoryLink.textContent = category;
-                categoryLink.classList.add('stext-113', 'cl7', 'hov-cl1', 'trans-04');
                 categoryItem.appendChild(categoryLink);
                 categoriesList.appendChild(categoryItem);
             });
@@ -189,21 +171,77 @@ fetch('markdown_output.json')
             categoriesDiv.appendChild(categoriesList);
             sideMenuDiv.appendChild(categoriesDiv);
 
-            // Append sidebar to the row
+            // Popular Posts Section in Sidebar
+            const popularDiv = document.createElement('div');
+            popularDiv.classList.add('p-t-50');
+
+            const popularHeading = document.createElement('h4');
+            popularHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
+            popularHeading.textContent = 'Popular Posts';
+            popularDiv.appendChild(popularHeading);
+
+            const popularList = document.createElement('ul');
+            popularList.classList.add('list-none');
+
+            const popularPosts = data.filter(item => item.metadata.popular === true);
+            popularPosts.forEach(post => {
+                const postItem = document.createElement('li');
+                const postLink = document.createElement('a');
+                postLink.href = `/post-detail.html?slug=${post.metadata.slug}`;
+                postLink.textContent = post.metadata.title;
+                postItem.appendChild(postLink);
+                popularList.appendChild(postItem);
+            });
+
+            popularDiv.appendChild(popularList);
+            sideMenuDiv.appendChild(popularDiv);
+
+            // Archive Section in Sidebar
+            const archiveDiv = document.createElement('div');
+            archiveDiv.classList.add('p-t-50');
+
+            const archiveHeading = document.createElement('h4');
+            archiveHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
+            archiveHeading.textContent = 'Archive';
+            archiveDiv.appendChild(archiveHeading);
+
+            const archiveList = document.createElement('ul');
+            archiveList.classList.add('list-none');
+
+            const groupedByYearMonth = {};
+            data.forEach(post => {
+                const [day, month, year] = post.metadata.date.split('-');
+                const yearMonth = `${year}-${month}`;
+                if (!groupedByYearMonth[yearMonth]) {
+                    groupedByYearMonth[yearMonth] = [];
+                }
+                groupedByYearMonth[yearMonth].push(post);
+            });
+
+            Object.keys(groupedByYearMonth).forEach(yearMonth => {
+                const [year, month] = yearMonth.split('-');
+                const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
+
+                const archiveItem = document.createElement('li');
+                const archiveLink = document.createElement('a');
+                archiveLink.href = `/archive.html?month=${month}&year=${year}`;
+                archiveLink.textContent = `${monthName} ${year} (${groupedByYearMonth[yearMonth].length})`;
+                archiveItem.appendChild(archiveLink);
+                archiveList.appendChild(archiveItem);
+            });
+
+            archiveDiv.appendChild(archiveList);
+            sideMenuDiv.appendChild(archiveDiv);
+
             sidebarDiv.appendChild(sideMenuDiv);
             rowDiv.appendChild(sidebarDiv);
 
         } catch (error) {
-            console.error('Error processing post detail:', error);
+            console.error('Error parsing JSON:', error);
         }
     })
     .catch(error => {
-        console.error('Error fetching post data:', error);
+        console.error('Error fetching JSON:', error);
     });
 
-// Helper function to extract YouTube ID from URL
-function extractYouTubeID(url) {
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&?/]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : '';
-}
+createSidebar();
