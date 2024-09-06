@@ -107,10 +107,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Handle Sidebar (Optional)
-            const sidebarContainer = document.getElementById('sidebar-container');
+             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
-                const sidebar = createSidebar(data);
-                sidebarContainer.appendChild(sidebar);
+                console.log('Rendering sidebar...');
+                if (Array.isArray(data)) {
+                    const sidebar = createSidebar(data); // Ensure createSidebar can handle the passed data
+                    sidebarContainer.appendChild(sidebar);
+                } else {
+                    console.error('Sidebar data is not an array:', data);
+                }
             } else {
                 console.error('Sidebar container not found');
             }
