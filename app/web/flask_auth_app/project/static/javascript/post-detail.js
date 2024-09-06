@@ -106,15 +106,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainContainer.appendChild(youtubeVideoContainer);
             }
 
-            // Handle Sidebar (Optional)
-             const sidebarContainer = document.getElementById('sidebar-container');
+            // Handle Sidebar
+            const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
                 console.log('Rendering sidebar...');
-                if (Array.isArray(data)) {
-                    const sidebar = createSidebar(data); // Ensure createSidebar can handle the passed data
-                    sidebarContainer.appendChild(sidebar);
-                } else {
-                    console.error('Sidebar data is not an array:', data);
+                try {
+                    const sidebar = createSidebar(data); // Ensure createSidebar returns a valid DOM element
+                    if (sidebar) {
+                        sidebarContainer.appendChild(sidebar);
+                        console.log('Sidebar rendered successfully');
+                    } else {
+                        console.error('createSidebar did not return a valid sidebar element');
+                    }
+                } catch (error) {
+                    console.error('Error rendering sidebar:', error);
                 }
             } else {
                 console.error('Sidebar container not found');
