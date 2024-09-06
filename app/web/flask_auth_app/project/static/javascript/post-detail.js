@@ -25,7 +25,7 @@ fetch('markdown_output.json')
 
             // Create the section and container structure
             const section = document.createElement('section');
-            section.classList.add('bg0', 'p-t-62', 'p-b-60');
+            section.classList.add('bg0', 'p-t-52', 'p-b-20');
 
             const containerDiv = document.createElement('div');
             containerDiv.classList.add('container');
@@ -43,17 +43,14 @@ fetch('markdown_output.json')
             columnDiv.appendChild(innerColumnDiv);
             rowDiv.appendChild(columnDiv);
 
-            // Display detailed post
-            const itemBlogDiv = document.createElement('div');
-            itemBlogDiv.classList.add('p-b-63');
-
-            const linkElement = document.createElement('a');
-            linkElement.href = `post-detail.html?slug=${post.metadata.slug}`;
-            linkElement.classList.add('hov-img0', 'how-pos5-parent');
+            // Create wrap-pic-w div for image and date overlay
+            const wrapPicDiv = document.createElement('div');
+            wrapPicDiv.classList.add('wrap-pic-w', 'how-pos5-parent');
 
             const imageElement = document.createElement('img');
             imageElement.src = post.metadata.image_url;
             imageElement.alt = 'IMG-BLOG';
+            wrapPicDiv.appendChild(imageElement);
 
             const dateDiv = document.createElement('div');
             dateDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
@@ -71,50 +68,55 @@ fetch('markdown_output.json')
 
             dateDiv.appendChild(daySpan);
             dateDiv.appendChild(monthYearSpan);
-            linkElement.appendChild(imageElement);
-            linkElement.appendChild(dateDiv);
+            wrapPicDiv.appendChild(dateDiv);
+            innerColumnDiv.appendChild(wrapPicDiv);
 
+            // Create content div for post content
             const contentDiv = document.createElement('div');
             contentDiv.classList.add('p-t-32');
 
-            const titleElement = document.createElement('h4');
-            titleElement.classList.add('p-b-15');
-            titleElement.textContent = post.metadata.title;
-
-            const contentParagraph = document.createElement('p');
-            contentParagraph.classList.add('stext-117', 'cl6');
-            const htmlContent = converter.makeHtml(post.content);
-            contentParagraph.innerHTML = htmlContent;
-
-            contentDiv.appendChild(titleElement);
-            contentDiv.appendChild(contentParagraph);
-
-            const authorCategoryDiv = document.createElement('div');
-            authorCategoryDiv.classList.add('flex-w', 'flex-sb-m', 'p-t-18');
+            // Post info: By Admin, Date, Categories, Comments
+            const infoSpan = document.createElement('span');
+            infoSpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-b-19');
 
             const authorSpan = document.createElement('span');
-            authorSpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-r-30', 'm-tb-10');
-            authorSpan.innerHTML = `<span class="cl4">By</span> Admin <span class="cl12 m-l-4 m-r-6">|</span>`;
+            authorSpan.innerHTML = `<span class="cl4">By</span> ${post.metadata.author || 'Admin'}`;
+            authorSpan.innerHTML += '<span class="cl12 m-l-4 m-r-6">|</span>';
 
-            const categorySpan = document.createElement('span');
-            categorySpan.textContent = post.metadata.category;
-            categorySpan.classList.add('cl4');
+            const dateSpan = document.createElement('span');
+            dateSpan.textContent = `${day} ${monthName}, ${year}`;
+            dateSpan.innerHTML += '<span class="cl12 m-l-4 m-r-6">|</span>';
 
-            const separatorSpan = document.createElement('span');
-            separatorSpan.classList.add('cl12', 'm-l-4', 'm-r-6');
-            separatorSpan.textContent = '|';
+            const categoriesSpan = document.createElement('span');
+            categoriesSpan.textContent = post.metadata.category;
+            categoriesSpan.innerHTML += '<span class="cl12 m-l-4 m-r-6">|</span>';
 
-            authorSpan.appendChild(categorySpan);
-            authorSpan.appendChild(separatorSpan);
+            const commentsSpan = document.createElement('span');
+            commentsSpan.textContent = '8 Comments';  // This should be dynamic if you have comment data
 
-            authorCategoryDiv.appendChild(authorSpan);
+            infoSpan.appendChild(authorSpan);
+            infoSpan.appendChild(dateSpan);
+            infoSpan.appendChild(categoriesSpan);
+            infoSpan.appendChild(commentsSpan);
+            contentDiv.appendChild(infoSpan);
 
-            itemBlogDiv.appendChild(linkElement);
-            itemBlogDiv.appendChild(contentDiv);
-            itemBlogDiv.appendChild(authorCategoryDiv);
-            innerColumnDiv.appendChild(itemBlogDiv);
+            // Title
+            const titleElement = document.createElement('h4');
+            titleElement.classList.add('ltext-109', 'cl2', 'p-b-28');
+            titleElement.textContent = post.metadata.title;
+            contentDiv.appendChild(titleElement);
 
-            // Append the YouTube video if the link is present
+            // Post content
+            const contentParagraph1 = document.createElement('p');
+            contentParagraph1.classList.add('stext-117', 'cl6', 'p-b-26');
+            contentParagraph1.innerHTML = converter.makeHtml(post.content);
+
+            contentDiv.appendChild(contentParagraph1);
+
+            // Append content div to inner column div
+            innerColumnDiv.appendChild(contentDiv);
+
+            // Append YouTube video if the link exists
             if (post.metadata.youtube_link) {
                 const youtubeVideoContainer = document.createElement('div');
                 youtubeVideoContainer.classList.add('video-container');
@@ -137,6 +139,8 @@ fetch('markdown_output.json')
 
             const sidebar = createSidebar(uniqueCategories, data.filter(item => item.metadata.popular === 'on'));
             rowDiv.appendChild(sidebar);
+
+            // Append the final section to the main content div
             markdownContentDiv.appendChild(section);
 
         } catch (error) {
