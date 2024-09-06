@@ -23,259 +23,103 @@ fetch('markdown_output.json')
             const markdownContentDiv = document.getElementById('main-content');
             const converter = new showdown.Converter();
 
-            // Create the section and container structure
-            const section = document.createElement('section');
-            section.classList.add('bg0', 'p-t-52', 'p-b-20');
-
-            const containerDiv = document.createElement('div');
-            containerDiv.classList.add('container');
-            section.appendChild(containerDiv);
-
+            // Create the row structure
             const rowDiv = document.createElement('div');
             rowDiv.classList.add('row');
-            containerDiv.appendChild(rowDiv);
+            
+            // Left column for post content
+            const leftColumnDiv = document.createElement('div');
+            leftColumnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
+            rowDiv.appendChild(leftColumnDiv);
 
-            // Left column for post details
-            const columnDiv = document.createElement('div');
-            columnDiv.classList.add('col-md-8', 'col-lg-9', 'p-b-80');
+            // Main content wrapper
+            const mainContentDiv = document.createElement('div');
+            mainContentDiv.id = 'main-content';
+            leftColumnDiv.appendChild(mainContentDiv);
 
-            const innerColumnDiv = document.createElement('div');
-            innerColumnDiv.classList.add('p-r-45', 'p-r-0-lg');
-            columnDiv.appendChild(innerColumnDiv);
-            rowDiv.appendChild(columnDiv);
-
-            // Breadcrumbs
-            const breadcrumbDiv = document.createElement('div');
-            breadcrumbDiv.classList.add('p-b-17');
-
-            const breadcrumbList = document.createElement('ul');
-            breadcrumbList.classList.add('breadcrumb');
-
-            const homeItem = document.createElement('li');
-            homeItem.classList.add('breadcrumb-item');
-            homeItem.innerHTML = `<a href="/" class="cl8 hov-cl1 trans-04">Home</a>`;
-            breadcrumbList.appendChild(homeItem);
-
-            const categoryItem = document.createElement('li');
-            categoryItem.classList.add('breadcrumb-item');
-            categoryItem.innerHTML = `<a href="/category.html?category=${post.metadata.category}" class="cl8 hov-cl1 trans-04">${post.metadata.category}</a>`;
-            breadcrumbList.appendChild(categoryItem);
-
-            const titleItem = document.createElement('li');
-            titleItem.classList.add('breadcrumb-item', 'active');
-            titleItem.textContent = post.metadata.title;
-            breadcrumbList.appendChild(titleItem);
-
-            breadcrumbDiv.appendChild(breadcrumbList);
-            innerColumnDiv.appendChild(breadcrumbDiv);
-
-            // Create wrap-pic-w div for image and date overlay
+            // Create the image container with overlay date
             const wrapPicDiv = document.createElement('div');
-            wrapPicDiv.classList.add('wrap-pic-w', 'how-pos5-parent');
+            wrapPicDiv.classList.add('wrap-pic-w', 'how-pos5-parent', 'position-relative');
 
             const imageElement = document.createElement('img');
             imageElement.src = post.metadata.image_url;
-            imageElement.alt = 'IMG-BLOG';
+            imageElement.alt = 'Post Image';
+            imageElement.classList.add('img-fluid');
             wrapPicDiv.appendChild(imageElement);
 
-            const dateDiv = document.createElement('div');
-            dateDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5');
+            const dateOverlayDiv = document.createElement('div');
+            dateOverlayDiv.classList.add('flex-col-c-m', 'size-123', 'bg9', 'how-pos5', 'position-absolute', 'top-0', 'left-0');
 
             const [day, month, year] = post.metadata.date.split('-');
             const monthName = new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' });
 
             const daySpan = document.createElement('span');
-            daySpan.classList.add('ltext-107', 'cl2', 'txt-center');
             daySpan.textContent = day;
+            dateOverlayDiv.appendChild(daySpan);
 
             const monthYearSpan = document.createElement('span');
-            monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
             monthYearSpan.textContent = `${monthName} ${year}`;
+            dateOverlayDiv.appendChild(monthYearSpan);
 
-            dateDiv.appendChild(daySpan);
-            dateDiv.appendChild(monthYearSpan);
-            wrapPicDiv.appendChild(dateDiv);
-            innerColumnDiv.appendChild(wrapPicDiv);
+            wrapPicDiv.appendChild(dateOverlayDiv);
+            mainContentDiv.appendChild(wrapPicDiv);
 
-            // Create content div for post content
-            const contentDiv = document.createElement('div');
-            contentDiv.classList.add('p-t-32');
+            // Title and metadata
+            const titleElement = document.createElement('h1');
+            titleElement.id = 'post-title';
+            titleElement.textContent = post.metadata.title;
+            mainContentDiv.appendChild(titleElement);
 
-            // Post info: By Admin, Date, Categories, Comments
-            const infoSpan = document.createElement('span');
-            infoSpan.classList.add('flex-w', 'flex-m', 'stext-111', 'cl2', 'p-b-19');
+            const metadataDiv = document.createElement('div');
+            metadataDiv.classList.add('post-metadata', 'p-t-10');
 
             const authorSpan = document.createElement('span');
-            authorSpan.innerHTML = `<span class="cl4">By</span> ${post.metadata.author || 'Admin'}`;
-            authorSpan.innerHTML += '<span class="cl12 m-l-4 m-r-6">|</span>';
-
-            const dateSpan = document.createElement('span');
-            dateSpan.textContent = `${day} ${monthName}, ${year}`;
-            dateSpan.innerHTML += '<span class="cl12 m-l-4 m-r-6">|</span>';
+            authorSpan.id = 'post-author';
+            authorSpan.textContent = `By ${post.metadata.author || 'Admin'}`;
+            metadataDiv.appendChild(authorSpan);
 
             const categoriesSpan = document.createElement('span');
-            categoriesSpan.textContent = post.metadata.category;
-            categoriesSpan.innerHTML += '<span class="cl12 m-l-4 m-r-6">|</span>';
+            categoriesSpan.id = 'post-categories';
+            categoriesSpan.textContent = `Category: ${post.metadata.category}`;
+            metadataDiv.appendChild(categoriesSpan);
 
-            const commentsSpan = document.createElement('span');
-            commentsSpan.textContent = '8 Comments';  // This should be dynamic if you have comment data
-
-            infoSpan.appendChild(authorSpan);
-            infoSpan.appendChild(dateSpan);
-            infoSpan.appendChild(categoriesSpan);
-            infoSpan.appendChild(commentsSpan);
-            contentDiv.appendChild(infoSpan);
-
-            // Title
-            const titleElement = document.createElement('h4');
-            titleElement.classList.add('ltext-109', 'cl2', 'p-b-28');
-            titleElement.textContent = post.metadata.title;
-            contentDiv.appendChild(titleElement);
+            mainContentDiv.appendChild(metadataDiv);
 
             // Post content
-            const contentParagraph1 = document.createElement('p');
-            contentParagraph1.classList.add('stext-117', 'cl6', 'p-b-26');
-            contentParagraph1.innerHTML = converter.makeHtml(post.content);
+            const contentDiv = document.createElement('div');
+            contentDiv.id = 'post-content';
+            contentDiv.innerHTML = converter.makeHtml(post.content);
+            mainContentDiv.appendChild(contentDiv);
 
-            contentDiv.appendChild(contentParagraph1);
-
-            // YouTube video embedding (if available)
+            // Add YouTube video
             if (post.metadata.youtube_link) {
-                const youtubeDiv = document.createElement('div');
-                youtubeDiv.classList.add('p-t-32', 'p-b-32');
+                const videoContainerDiv = document.createElement('div');
+                videoContainerDiv.classList.add('video-container');
 
-                const iframe = document.createElement('iframe');
-                iframe.width = '560';
-                iframe.height = '315';
-                iframe.src = `https://www.youtube.com/embed/${post.metadata.youtube_link}`;
-                iframe.title = 'YouTube video player';
-                iframe.frameBorder = '0';
-                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                iframe.allowFullscreen = true;
+                const iframeElement = document.createElement('iframe');
+                iframeElement.src = post.metadata.youtube_link;
+                iframeElement.width = '560';
+                iframeElement.height = '315';
+                iframeElement.frameborder = '0';
+                iframeElement.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframeElement.allowFullscreen = true;
 
-                youtubeDiv.appendChild(iframe);
-                contentDiv.appendChild(youtubeDiv);
+                videoContainerDiv.appendChild(iframeElement);
+                mainContentDiv.appendChild(videoContainerDiv);
             }
 
-            // Append content div to inner column div
-            innerColumnDiv.appendChild(contentDiv);
+            // Right column for the sidebar
+            const rightColumnDiv = document.createElement('div');
+            rightColumnDiv.classList.add('col-md-4', 'col-lg-3', 'p-b-80');
+            rowDiv.appendChild(rightColumnDiv);
 
-            // Append the final section to the main content div
-            markdownContentDiv.appendChild(section);
+            // Sidebar container
+            const sidebarContainerDiv = document.createElement('div');
+            sidebarContainerDiv.id = 'sidebar-container';
+            rightColumnDiv.appendChild(sidebarContainerDiv);
 
-            // Sidebar Section
-            const sidebarDiv = document.createElement('div');
-            sidebarDiv.classList.add('col-md-4', 'col-lg-3', 'p-b-80');
-
-            const sideMenuDiv = document.createElement('div');
-            sideMenuDiv.classList.add('side-menu');
-
-            const searchDiv = document.createElement('div');
-            searchDiv.classList.add('bor17', 'of-hidden', 'pos-relative');
-
-            const searchInput = document.createElement('input');
-            searchInput.classList.add('stext-103', 'cl2', 'plh4', 'size-116', 'p-l-28', 'p-r-55');
-            searchInput.type = 'text';
-            searchInput.name = 'search';
-            searchInput.placeholder = 'Search';
-            searchDiv.appendChild(searchInput);
-
-            const searchButton = document.createElement('button');
-            searchButton.classList.add('flex-c-m', 'size-122', 'ab-t-r', 'fs-18', 'cl4', 'hov-cl1', 'trans-04');
-            searchButton.innerHTML = `<i class="zmdi zmdi-search"></i>`;
-            searchDiv.appendChild(searchButton);
-
-            sideMenuDiv.appendChild(searchDiv);
-
-            // Categories Section in Sidebar
-            const categoriesDiv = document.createElement('div');
-            categoriesDiv.classList.add('p-t-55');
-
-            const categoriesHeading = document.createElement('h4');
-            categoriesHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
-            categoriesHeading.textContent = 'Categories';
-            categoriesDiv.appendChild(categoriesHeading);
-
-            // List the categories dynamically
-            const categoriesList = document.createElement('ul');
-            categoriesList.classList.add('list-none');
-
-            const categories = [...new Set(data.map(item => item.metadata.category))];
-
-            categories.forEach(category => {
-                const categoryItem = document.createElement('li');
-                const categoryLink = document.createElement('a');
-                categoryLink.href = `/category.html?category=${category}`;
-                categoryLink.textContent = category;
-                categoryItem.appendChild(categoryLink);
-                categoriesList.appendChild(categoryItem);
-            });
-
-            categoriesDiv.appendChild(categoriesList);
-            sideMenuDiv.appendChild(categoriesDiv);
-
-            // Popular Posts Section in Sidebar
-            const popularDiv = document.createElement('div');
-            popularDiv.classList.add('p-t-50');
-
-            const popularHeading = document.createElement('h4');
-            popularHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
-            popularHeading.textContent = 'Popular Posts';
-            popularDiv.appendChild(popularHeading);
-
-            const popularList = document.createElement('ul');
-            popularList.classList.add('list-none');
-
-            const popularPosts = data.filter(item => item.metadata.popular);
-            popularPosts.forEach(popularPost => {
-                const popularItem = document.createElement('li');
-                const popularLink = document.createElement('a');
-                popularLink.href = `/post-detail.html?slug=${popularPost.metadata.slug}`;
-                popularLink.textContent = popularPost.metadata.title;
-                popularItem.appendChild(popularLink);
-                popularList.appendChild(popularItem);
-            });
-
-            popularDiv.appendChild(popularList);
-            sideMenuDiv.appendChild(popularDiv);
-
-            // Archive Section in Sidebar
-            const archiveDiv = document.createElement('div');
-            archiveDiv.classList.add('p-t-50');
-
-            const archiveHeading = document.createElement('h4');
-            archiveHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
-            archiveHeading.textContent = 'Archive';
-            archiveDiv.appendChild(archiveHeading);
-
-            const archiveList = document.createElement('ul');
-            archiveList.classList.add('list-none');
-
-            const groupedByYearMonth = data.reduce((acc, item) => {
-                const [day, month, year] = item.metadata.date.split('-');
-                const yearMonth = `${year}-${month}`;
-                if (!acc[yearMonth]) acc[yearMonth] = [];
-                acc[yearMonth].push(item);
-                return acc;
-            }, {});
-
-            Object.keys(groupedByYearMonth).forEach(yearMonth => {
-                const [year, month] = yearMonth.split('-');
-                const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
-
-                const archiveItem = document.createElement('li');
-                const archiveLink = document.createElement('a');
-                archiveLink.href = `/archive.html?month=${month}&year=${year}`;
-                archiveLink.textContent = `${monthName} ${year} (${groupedByYearMonth[yearMonth].length})`;
-                archiveItem.appendChild(archiveLink);
-                archiveList.appendChild(archiveItem);
-            });
-
-            archiveDiv.appendChild(archiveList);
-            sideMenuDiv.appendChild(archiveDiv);
-
-            sidebarDiv.appendChild(sideMenuDiv);
-            rowDiv.appendChild(sidebarDiv);
+            // Append the entire row structure to the main container
+            markdownContentDiv.appendChild(rowDiv);
 
         } catch (error) {
             console.error('Error parsing JSON:', error);
