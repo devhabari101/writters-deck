@@ -5,6 +5,13 @@ console.log('post-detail.js script loaded');
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
 
+    // Check for main content container with the specific classes
+    const mainContainer = document.querySelector('.col-md-8.col-lg-9.p-b-80');
+    if (!mainContainer) {
+        console.error('Main container not found. Ensure the HTML structure matches the expected class names.');
+        return;
+    }
+
     fetch('markdown_output.json')
         .then(response => response.json())
         .then(data => {
@@ -19,13 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!post) {
                 console.error('Post not found');
-                return;
-            }
-
-            // Ensure the main container is present
-            const mainContainer = document.getElementById('main-content');
-            if (!mainContainer) {
-                console.error('Main content container not found');
                 return;
             }
 
