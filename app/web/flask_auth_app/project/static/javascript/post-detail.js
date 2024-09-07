@@ -171,30 +171,52 @@ fetch('markdown_output.json')
             categoriesDiv.appendChild(categoriesList);
             sideMenuDiv.appendChild(categoriesDiv);
 
-            // Popular Posts Section in Sidebar
-            const popularDiv = document.createElement('div');
-            popularDiv.classList.add('p-t-50');
+           // Popular Posts
+    const popularDiv = document.createElement('div');
+    popularDiv.classList.add('p-t-50');
 
-            const popularHeading = document.createElement('h4');
-            popularHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
-            popularHeading.textContent = 'Popular Posts';
-            popularDiv.appendChild(popularHeading);
+    const popularHeading = document.createElement('h4');
+    popularHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
+    popularHeading.textContent = 'Popular Posts';
+    popularDiv.appendChild(popularHeading);
 
-            const popularList = document.createElement('ul');
-            popularList.classList.add('list-none');
+    popularPosts.forEach(popularPost => {
+        const popularItemDiv = document.createElement('div');
+        popularItemDiv.classList.add('flex-w', 'p-b-20');
 
-            const popularPosts = data.filter(item => item.metadata.popular === true);
-            popularPosts.forEach(post => {
-                const postItem = document.createElement('li');
-                const postLink = document.createElement('a');
-                postLink.href = `/post-detail.html?slug=${post.metadata.slug}`;
-                postLink.textContent = post.metadata.title;
-                postItem.appendChild(postLink);
-                popularList.appendChild(postItem);
-            });
+        const popularImageLink = document.createElement('a');
+        popularImageLink.href = `post-detail.html?slug=${popularPost.metadata.slug}`;
+        popularImageLink.classList.add('wrao-pic-w', 'size-214', 'hov-ovelay1', 'm-r-20');
 
-            popularDiv.appendChild(popularList);
-            sideMenuDiv.appendChild(popularDiv);
+        const popularImage = document.createElement('img');
+        popularImage.src = popularPost.metadata.image_url;
+        popularImage.alt = 'Popular Post Image';
+
+        popularImageLink.appendChild(popularImage);
+        popularItemDiv.appendChild(popularImageLink);
+
+        const popularContentDiv = document.createElement('div');
+        popularContentDiv.classList.add('size-215', 'flex-col-t', 'p-t-8');
+
+        const popularTitleLink = document.createElement('a');
+        popularTitleLink.href = `post-detail.html?slug=${popularPost.metadata.slug}`;
+        popularTitleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
+        popularTitleLink.textContent = popularPost.metadata.title;
+
+        popularContentDiv.appendChild(popularTitleLink);
+
+        const popularDateSpan = document.createElement('span');
+        popularDateSpan.classList.add('stext-116', 'cl6', 'p-t-20');
+        popularDateSpan.textContent = popularPost.metadata.date;
+
+        popularContentDiv.appendChild(popularDateSpan);
+        popularItemDiv.appendChild(popularContentDiv);
+
+        popularDiv.appendChild(popularItemDiv);
+    });
+
+    sideMenuDiv.appendChild(popularDiv);
+
 
             // Archive Section in Sidebar
             const archiveDiv = document.createElement('div');
