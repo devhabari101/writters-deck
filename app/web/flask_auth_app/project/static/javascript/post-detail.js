@@ -30,13 +30,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 const section = createMainContent(post, converter);
                 markdownContentDiv.appendChild(section);
 
+                // Extract categories and popular posts
                 const categories = [...new Set(data.map(item => item.metadata.category))];
                 const popularPosts = data.filter(item => item.metadata.popular === 'on');
+                
                 const sidebar = createSidebar(categories, popularPosts);
 
                 // Ensure the sidebar is placed correctly in the layout
                 const rowDiv = document.querySelector('.row');
-                rowDiv.appendChild(sidebar);
+                if (rowDiv) {
+                    rowDiv.appendChild(sidebar);
+                } else {
+                    console.error('.row div not found in the document.');
+                }
             })
             .catch(error => {
                 console.error('Error fetching markdown data:', error);
@@ -170,62 +176,70 @@ document.addEventListener('DOMContentLoaded', function () {
         searchDiv.appendChild(searchInput);
 
         const searchButton = document.createElement('button');
-        searchButton.classList.add('flex-c-m', 'size-122', 'ab-t-r', 'fs-18', 'cl4', 'hov-cl1', 'trans-04');
-        searchButton.innerHTML = `<i class="zmdi zmdi-search"></i>`;
+        searchButton.classList.add('flex-c-m', 'size-122', 'ab-t-r', 'fs-18', 'cl4', 'hov-cl1', 'trans-0-4');
+        searchButton.innerHTML = '<i class="zmdi zmdi-search"></i>';
         searchDiv.appendChild(searchButton);
 
         sideMenuDiv.appendChild(searchDiv);
 
-        // Categories Section
-        const categoriesDiv = document.createElement('div');
-        categoriesDiv.classList.add('p-t-55');
-        const categoriesHeading = document.createElement('h4');
-        categoriesHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
-        categoriesHeading.textContent = 'Categories';
-        categoriesDiv.appendChild(categoriesHeading);
+        // Categories
+        if (categories.length > 0) {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('p-t-20', 'p-b-35');
+            const title = document.createElement('h4');
+            title.classList.add('mtext-114', 'cl2', 'p-b-32');
+            title.textContent = 'Categories';
+            categoryDiv.appendChild(title);
 
-        const categoriesList = document.createElement('ul');
-        categoriesList.classList.add('list-none');
-        categories.forEach(category => {
-            const categoryItem = document.createElement('li');
-            const categoryLink = document.createElement('a');
-            categoryLink.href = `/category.html?category=${category}`;
-            categoryLink.textContent = category;
-            categoryLink.classList.add('stext-115', 'cl6', 'hov-cl1', 'trans-04');
-            categoryItem.appendChild(categoryLink);
-            categoriesList.appendChild(categoryItem);
-        });
+            const listGroupDiv = document.createElement('ul');
+            listGroupDiv.classList.add('p-b-40');
 
-        categoriesDiv.appendChild(categoriesList);
-        sideMenuDiv.appendChild(categoriesDiv);
+            categories.forEach(category => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('p-t-10');
+                const link = document.createElement('a');
+                link.href = `/archive.html?category=${category}`;
+                link.classList.add('stext-107', 'cl6', 'hov-cl1', 'trans-0-4');
+                link.textContent = category;
+                listItem.appendChild(link);
+                listGroupDiv.appendChild(listItem);
+            });
 
-        // Popular Posts Section
-        const popularPostsDiv = document.createElement('div');
-        popularPostsDiv.classList.add('p-t-55');
-        const popularPostsHeading = document.createElement('h4');
-        popularPostsHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
-        popularPostsHeading.textContent = 'Popular Posts';
-        popularPostsDiv.appendChild(popularPostsHeading);
+            categoryDiv.appendChild(listGroupDiv);
+            sideMenuDiv.appendChild(categoryDiv);
+        }
 
-        const popularPostsList = document.createElement('ul');
-        popularPostsList.classList.add('list-none');
-        popularPosts.forEach(post => {
-            const postItem = document.createElement('li');
-            const postLink = document.createElement('a');
-            postLink.href = `/post-detail.html?slug=${post.metadata.slug}`;
-            postLink.textContent = post.metadata.title;
-            postLink.classList.add('stext-115', 'cl6', 'hov-cl1', 'trans-04');
-            postItem.appendChild(postLink);
-            popularPostsList.appendChild(postItem);
-        });
+        // Popular posts
+        if (popularPosts.length > 0) {
+            const popularDiv = document.createElement('div');
+            popularDiv.classList.add('p-t-20', 'p-b-35');
+            const title = document.createElement('h4');
+            title.classList.add('mtext-114', 'cl2', 'p-b-32');
+            title.textContent = 'Popular Posts';
+            popularDiv.appendChild(title);
 
-        popularPostsDiv.appendChild(popularPostsList);
-        sideMenuDiv.appendChild(popularPostsDiv);
+            const listGroupDiv = document.createElement('ul');
+            listGroupDiv.classList.add('p-b-40');
+
+            popularPosts.forEach(post => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('p-t-10');
+                const link = document.createElement('a');
+                link.href = `/post-detail.html?slug=${post.metadata.slug}`;
+                link.classList.add('stext-107', 'cl6', 'hov-cl1', 'trans-0-4');
+                link.textContent = post.metadata.title;
+                listItem.appendChild(link);
+                listGroupDiv.appendChild(listItem);
+            });
+
+            popularDiv.appendChild(listGroupDiv);
+            sideMenuDiv.appendChild(popularDiv);
+        }
 
         sidebarDiv.appendChild(sideMenuDiv);
-
         return sidebarDiv;
     }
 
+    // Load the data when the DOM is fully loaded
     loadData();
 });
