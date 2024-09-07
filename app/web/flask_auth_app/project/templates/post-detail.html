@@ -8,22 +8,18 @@
     </h2>
 </section>
 
-<!-- Main Content and Sidebar Wrapper -->
-<section class="bg0 p-t-62 p-b-60">
-    <div class="container">
-        <div class="row">
-            <!-- Main Content Area -->
-            <div id="container" class="col-md-8 col-lg-9 p-b-80"></div>
-
-            <!-- Sidebar Area -->
-            <div id="side-menu" class="col-md-4 col-lg-3 p-b-80"></div>
+<div class="container p-t-82 p-b-60">
+    <div class="row">
+        <div class="col-md-8 col-lg-9 p-b-80">
+            <div id="markdown-content"></div> <!-- Main content container -->
+        </div>
+        <div class="col-md-4 col-lg-3 p-b-80">
+            <div id="sidebar-container"></div> <!-- Sidebar container -->
         </div>
     </div>
-</section>
+</div>
 
-<!-- Script Imports -->
 <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
 <script type="module" src="/static/javascript/sidebar.js"></script>
-<script type="module" src="/static/javascript/script.js"></script>
-
+<script type="module" src="/static/javascript/post-detail.js"></script>
 {% endblock %}
