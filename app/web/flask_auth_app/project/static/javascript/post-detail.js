@@ -33,7 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const categories = [...new Set(data.map(item => item.metadata.category))];
                 const popularPosts = data.filter(item => item.metadata.popular === 'on');
                 const sidebar = createSidebar(categories, popularPosts);
-                document.querySelector('.row').appendChild(sidebar);
+
+                // Ensure the sidebar is placed correctly in the layout
+                const rowDiv = document.querySelector('.row');
+                rowDiv.appendChild(sidebar);
             })
             .catch(error => {
                 console.error('Error fetching markdown data:', error);
@@ -220,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sideMenuDiv.appendChild(popularPostsDiv);
 
         sidebarDiv.appendChild(sideMenuDiv);
+
         return sidebarDiv;
     }
 
