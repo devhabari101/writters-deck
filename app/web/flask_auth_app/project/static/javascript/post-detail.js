@@ -50,7 +50,7 @@ fetch('markdown_output.json')
 
             const imageElement = document.createElement('img');
             imageElement.src = post.metadata.image_url;
-            imageElement.alt = 'IMG-BLOG';
+            imageElement.alt = 'Blog Image';
             wrapPicDiv.appendChild(imageElement);
 
             const dateDiv = document.createElement('div');
@@ -67,8 +67,7 @@ fetch('markdown_output.json')
             monthYearSpan.classList.add('stext-109', 'cl3', 'txt-center');
             monthYearSpan.textContent = `${monthName} ${year}`;
 
-            dateDiv.appendChild(daySpan);
-            dateDiv.appendChild(monthYearSpan);
+            dateDiv.append(daySpan, monthYearSpan);
             wrapPicDiv.appendChild(dateDiv);
             innerColumnDiv.appendChild(wrapPicDiv);
 
@@ -95,10 +94,7 @@ fetch('markdown_output.json')
             const commentsSpan = document.createElement('span');
             commentsSpan.textContent = '8 Comments';  // This should be dynamic if you have comment data
 
-            infoSpan.appendChild(authorSpan);
-            infoSpan.appendChild(dateSpan);
-            infoSpan.appendChild(categoriesSpan);
-            infoSpan.appendChild(commentsSpan);
+            infoSpan.append(authorSpan, dateSpan, categoriesSpan, commentsSpan);
             contentDiv.appendChild(infoSpan);
 
             // Title
@@ -107,12 +103,30 @@ fetch('markdown_output.json')
             titleElement.textContent = post.metadata.title;
             contentDiv.appendChild(titleElement);
 
-            // Post content
+            // Post content with Markdown to HTML conversion
             const contentParagraph1 = document.createElement('p');
             contentParagraph1.classList.add('stext-117', 'cl6', 'p-b-26');
             contentParagraph1.innerHTML = converter.makeHtml(post.content);
 
             contentDiv.appendChild(contentParagraph1);
+
+            // Check and add YouTube video if the link exists
+            if (post.metadata.youtube_link) {
+                const videoDiv = document.createElement('div');
+                videoDiv.classList.add('p-t-40', 'p-b-40');
+
+                const iframe = document.createElement('iframe');
+                iframe.width = '560';
+                iframe.height = '315';
+                iframe.src = post.metadata.youtube_link;
+                iframe.title = 'YouTube video player';
+                iframe.frameBorder = '0';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
+
+                videoDiv.appendChild(iframe);
+                contentDiv.appendChild(videoDiv);
+            }
 
             // Append content div to inner column div
             innerColumnDiv.appendChild(contentDiv);
@@ -127,6 +141,7 @@ fetch('markdown_output.json')
             const sideMenuDiv = document.createElement('div');
             sideMenuDiv.classList.add('side-menu');
 
+            // Search Section
             const searchDiv = document.createElement('div');
             searchDiv.classList.add('bor17', 'of-hidden', 'pos-relative');
 
@@ -144,7 +159,7 @@ fetch('markdown_output.json')
 
             sideMenuDiv.appendChild(searchDiv);
 
-            // Categories Section in Sidebar
+            // Categories Section
             const categoriesDiv = document.createElement('div');
             categoriesDiv.classList.add('p-t-55');
 
@@ -153,7 +168,6 @@ fetch('markdown_output.json')
             categoriesHeading.textContent = 'Categories';
             categoriesDiv.appendChild(categoriesHeading);
 
-            // List the categories dynamically
             const categoriesList = document.createElement('ul');
             categoriesList.classList.add('list-none');
 
@@ -171,99 +185,41 @@ fetch('markdown_output.json')
             categoriesDiv.appendChild(categoriesList);
             sideMenuDiv.appendChild(categoriesDiv);
 
-           // Popular Posts
-    const popularDiv = document.createElement('div');
-    popularDiv.classList.add('p-t-50');
+            // Popular Posts Section
+            const popularDiv = document.createElement('div');
+            popularDiv.classList.add('p-t-50');
 
-    const popularHeading = document.createElement('h4');
-    popularHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
-    popularHeading.textContent = 'Popular Posts';
-    popularDiv.appendChild(popularHeading);
+            const popularHeading = document.createElement('h4');
+            popularHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
+            popularHeading.textContent = 'Popular Posts';
+            popularDiv.appendChild(popularHeading);
 
-    popularPosts.forEach(popularPost => {
-        const popularItemDiv = document.createElement('div');
-        popularItemDiv.classList.add('flex-w', 'p-b-20');
+            const popularList = document.createElement('ul');
+            popularList.classList.add('list-none');
 
-        const popularImageLink = document.createElement('a');
-        popularImageLink.href = `post-detail.html?slug=${popularPost.metadata.slug}`;
-        popularImageLink.classList.add('wrao-pic-w', 'size-214', 'hov-ovelay1', 'm-r-20');
-
-        const popularImage = document.createElement('img');
-        popularImage.src = popularPost.metadata.image_url;
-        popularImage.alt = 'Popular Post Image';
-
-        popularImageLink.appendChild(popularImage);
-        popularItemDiv.appendChild(popularImageLink);
-
-        const popularContentDiv = document.createElement('div');
-        popularContentDiv.classList.add('size-215', 'flex-col-t', 'p-t-8');
-
-        const popularTitleLink = document.createElement('a');
-        popularTitleLink.href = `post-detail.html?slug=${popularPost.metadata.slug}`;
-        popularTitleLink.classList.add('stext-116', 'cl8', 'hov-cl1', 'trans-04');
-        popularTitleLink.textContent = popularPost.metadata.title;
-
-        popularContentDiv.appendChild(popularTitleLink);
-
-        const popularDateSpan = document.createElement('span');
-        popularDateSpan.classList.add('stext-116', 'cl6', 'p-t-20');
-        popularDateSpan.textContent = popularPost.metadata.date;
-
-        popularContentDiv.appendChild(popularDateSpan);
-        popularItemDiv.appendChild(popularContentDiv);
-
-        popularDiv.appendChild(popularItemDiv);
-    });
-
-    sideMenuDiv.appendChild(popularDiv);
-
-
-            // Archive Section in Sidebar
-            const archiveDiv = document.createElement('div');
-            archiveDiv.classList.add('p-t-50');
-
-            const archiveHeading = document.createElement('h4');
-            archiveHeading.classList.add('mtext-112', 'cl2', 'p-b-33');
-            archiveHeading.textContent = 'Archive';
-            archiveDiv.appendChild(archiveHeading);
-
-            const archiveList = document.createElement('ul');
-            archiveList.classList.add('list-none');
-
-            const groupedByYearMonth = {};
-            data.forEach(post => {
-                const [day, month, year] = post.metadata.date.split('-');
-                const yearMonth = `${year}-${month}`;
-                if (!groupedByYearMonth[yearMonth]) {
-                    groupedByYearMonth[yearMonth] = [];
-                }
-                groupedByYearMonth[yearMonth].push(post);
+            // Fetch popular posts
+            data.filter(item => item.metadata.popular).forEach(post => {
+                const popularItem = document.createElement('li');
+                const popularLink = document.createElement('a');
+                popularLink.href = `/post.html?slug=${post.metadata.slug}`;
+                popularLink.textContent = post.metadata.title;
+                popularItem.appendChild(popularLink);
+                popularList.appendChild(popularItem);
             });
 
-            Object.keys(groupedByYearMonth).forEach(yearMonth => {
-                const [year, month] = yearMonth.split('-');
-                const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
+            popularDiv.appendChild(popularList);
+            sideMenuDiv.appendChild(popularDiv);
 
-                const archiveItem = document.createElement('li');
-                const archiveLink = document.createElement('a');
-                archiveLink.href = `/archive.html?month=${month}&year=${year}`;
-                archiveLink.textContent = `${monthName} ${year} (${groupedByYearMonth[yearMonth].length})`;
-                archiveItem.appendChild(archiveLink);
-                archiveList.appendChild(archiveItem);
-            });
-
-            archiveDiv.appendChild(archiveList);
-            sideMenuDiv.appendChild(archiveDiv);
-
+            // Append sidebar to main content div
             sidebarDiv.appendChild(sideMenuDiv);
-            rowDiv.appendChild(sidebarDiv);
+            document.querySelector('.sidebar-container').appendChild(sidebarDiv);
 
+            // Create the sidebar
+            createSidebar();
         } catch (error) {
-            console.error('Error parsing JSON:', error);
+            console.error('Error rendering post or sidebar:', error);
         }
     })
     .catch(error => {
-        console.error('Error fetching JSON:', error);
+        console.error('Error fetching JSON data:', error);
     });
-
-createSidebar();
